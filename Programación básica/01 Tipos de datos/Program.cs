@@ -147,3 +147,24 @@ int numeroNormal = (int)numeroGrande;  // Casting de long a int
 int valor = 300;
 byte valorByte = (byte)valor;  // ⚠️ 300 no cabe en byte (0-255)
 Console.WriteLine(valorByte);  // 44 (resultado inesperado por desbordamiento)
+
+int? edadDesconocida = null;   // El ? permite que sea null
+double? peso = null;
+bool? respuesta = null;        // No ha respondido
+
+// Asignar un valor después
+//edadDesconocida = 25;
+
+// Comprobar si tiene valor
+if (edadDesconocida.HasValue)
+{
+    Console.WriteLine($"Edad: {edadDesconocida.Value}");
+}
+else
+{
+    Console.WriteLine("Edad desconocida");
+}
+
+// Operador ?? (null-coalescing): valor por defecto si es null
+int edadFinal = edadDesconocida ?? 0;  // Si es null, usa 0
+Console.WriteLine($"Edad final: {edadFinal}");
