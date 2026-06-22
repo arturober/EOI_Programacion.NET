@@ -25,3 +25,19 @@ Console.WriteLine(precio + "€");
 bool cierto = false;
 Console.WriteLine("¿Es cierto?: " + cierto);
 
+// double: el tipo decimal más común
+double pi = 3.141592653589793;
+double altura = 1.75;
+
+// float: menos precisión, necesita la "f" al final
+float velocidad = 120.5f;
+
+// decimal: alta precisión para dinero (necesita la "m" al final)
+decimal salario = 2500.50m;
+
+Console.WriteLine("Pi: " + pi);
+Console.WriteLine($"Pi: {pi}");
+Console.WriteLine($"Altura: {altura} metros");
+Console.WriteLine($"Velocidad: {velocidad} km/h");
+Console.WriteLine($"Precio: {precio}€");
+Console.WriteLine($"Salario: {salario}€");
