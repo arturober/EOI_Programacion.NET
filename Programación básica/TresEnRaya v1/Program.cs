@@ -36,7 +36,7 @@ for (int i = 0; i < 3; i++) // 3 filas
 {
     for (int j = 0; j < 3; j++) // 3 columnas
     {
-        Console.Write(tresenraya[i, j]); // Imprime cada ficha
+        Console.Write(tresenraya[i, j]); // Imprime cada casilla
     }
     Console.WriteLine();
 }
