@@ -134,4 +134,16 @@ else
     Console.WriteLine("Eso no es un número válido.");
 }
 
-Console.Write("No ha pasado nada");
+Console.WriteLine("No ha pasado nada");
+
+double precio6 = 9.99;
+int precioRedondeado = (int)precio6;  // Casting: se pierden los decimales
+Console.WriteLine(precioRedondeado); // 9 (NO redondea, TRUNCA)
+
+long numeroGrande = 1000;
+int numeroNormal = (int)numeroGrande;  // Casting de long a int
+
+// Cuidado con el desbordamiento:
+int valor = 300;
+byte valorByte = (byte)valor;  // ⚠️ 300 no cabe en byte (0-255)
+Console.WriteLine(valorByte);  // 44 (resultado inesperado por desbordamiento)
