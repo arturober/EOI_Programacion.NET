@@ -35,7 +35,10 @@ float velocidad = 120.5f;
 // decimal: alta precisión para dinero (necesita la "m" al final)
 decimal salario = 2500.50m;
 
+// Sin interpolación
 Console.WriteLine("Pi: " + pi);
+
+// Con interpolación
 Console.WriteLine($"Pi: {pi}");
 Console.WriteLine($"Altura: {altura} metros");
 Console.WriteLine($"Velocidad: {velocidad} km/h");
