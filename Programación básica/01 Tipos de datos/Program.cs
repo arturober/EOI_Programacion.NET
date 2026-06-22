@@ -69,3 +69,69 @@ El sonido es bueno. Viene con diafragmas de 50 mm realmente se notan. Cuando jue
 El micrófono también es otro detalle que me ha gustado mucho. 🎤 Se escucha muy claro y la cancelación de ruido pasiva ayuda a que solo se me oiga a mí, sin ruidos de fondo molestos. Además, es flexible, así que puedo ajustarlo a la posición que prefiera sin problemas. Esto es genial si estás en una partida online y necesitas que tu equipo te escuche perfectamente. Lo que no me gustó del micrófono, es que no se puede quitar, viene fijo, al igual que el cable de audio, que no se puede cambiar.
 """;
 Console.WriteLine(comentario);
+
+// Secuencias de escape
+Console.WriteLine("Primera línea\nSegunda línea");
+Console.WriteLine("Nombre:\tAna");
+Console.WriteLine("Ruta: C:\\Users\\Ana\\Documentos");
+
+// Alternativa: cadena verbatim con @
+string ruta = @"C:\Users\Ana\Documentos";  // No necesita \\
+Console.WriteLine(ruta);
+
+var edad2 = 25;              // El compilador deduce que es int
+var nombre2 = "Ana";         // El compilador deduce que es string
+var precio2 = 9.99;          // El compilador deduce que es double
+var activo2 = true;          // El compilador deduce que es bool
+
+// Es exactamente equivalente a:
+int edad3 = 25;
+string nombre3 = "Ana";
+double precio3 = 9.99;
+bool activo3 = true;
+
+
+const int DIAS_SEMANA = 7;
+const string MONEDA = "EUR";
+const int MAYORIA_EDAD = 18;
+
+Console.WriteLine($"Pi vale: {PI}");
+Console.WriteLine($"Una semana tiene {DIAS_SEMANA} días");
+
+// Pedir el nombre
+Console.Write("¿Cómo te llamas? ");
+string nombre4 = Console.ReadLine();
+
+// Pedir la edad (ReadLine devuelve string, hay que convertir a int)
+Console.Write("¿Cuántos años tienes? ");
+string edadTexto = Console.ReadLine();
+int edad = int.Parse(edadTexto);
+
+// Pedir la altura
+Console.Write("¿Cuánto mides (en metros)? ");
+string alturaTexto = Console.ReadLine();
+double altura4 = double.Parse(alturaTexto);
+
+// Mostrar los datos
+Console.WriteLine();
+Console.WriteLine("═══════════════════════════");
+Console.WriteLine($"  Nombre: {nombre4}");
+Console.WriteLine($"  Edad: {edad} años");
+Console.WriteLine($"  Altura: {altura4} m");
+Console.WriteLine("═══════════════════════════");
+
+
+Console.Write("Introduce un número: ");
+string entrada = Console.ReadLine();
+
+// TryParse devuelve true si la conversión fue exitosa
+if (int.TryParse(entrada, out int numero))
+{
+    Console.WriteLine($"Has introducido el número: {numero}");
+}
+else
+{
+    Console.WriteLine("Eso no es un número válido.");
+}
+
+Console.Write("No ha pasado nada");
