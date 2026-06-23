@@ -84,3 +84,26 @@ Console.WriteLine($"edad <= 18: {edad <= required}");// False
 string nombre = "Ana";
 Console.WriteLine($"nombre == \"Ana\": {nombre == "Ana"}");  // True
 Console.WriteLine($"nombre != \"Luis\": {nombre != "Luis"}");// True
+
+// Operadores lógicos
+Console.WriteLine("\nOperadores lógicos:");
+
+int edad2 = 25;
+bool tieneCarnet = true;
+bool tieneMultas = false;
+
+// AND: Puede conducir si tiene edad Y carnet
+bool puedeConducir = (edad2 >= 18) && tieneCarnet;
+Console.WriteLine($"¿Puede conducir? {puedeConducir}");  // True
+
+// OR: Tiene restricción si es menor de edad O tiene multas
+bool tieneRestriccion = (edad2 < 18) || tieneMultas;
+Console.WriteLine($"¿Tiene restricción? {tieneRestriccion}");  // False
+
+// NOT: No tiene multas
+bool sinMultas = !tieneMultas;
+Console.WriteLine($"¿Está sin multas? {sinMultas}");  // True
+
+// Combinados
+bool conductorEjemplar = puedeConducir && !tieneMultas;
+Console.WriteLine($"¿Conductor ejemplar? {conductorEjemplar}");  // True
