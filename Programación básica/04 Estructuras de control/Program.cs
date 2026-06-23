@@ -80,3 +80,42 @@ for (int i = 0; i < 5; i++)
 {
     Console.WriteLine($"Iteración {i}");
 }
+
+// Equivalente a un bucle while
+Console.WriteLine("\nBucle while equivalente al for anterior:");
+
+int j = 0;
+while (j < 5)
+{
+    Console.WriteLine($"Iteración {j}");
+    j++;
+}
+
+
+// Break y continue
+Console.WriteLine("\nBreak y continue:");
+
+Console.WriteLine("\nBreak:");
+// Buscar el primer número divisible por 7 entre 1 y 100
+for (int i = 1; i <= 100; i++)
+{
+    if (i % 7 == 0)
+    {
+        Console.WriteLine($"Primer múltiplo de 7: {i}");
+        break;  // Sale del bucle
+    }
+}
+// Salida: Primer múltiplo de 7: 7
+
+Console.WriteLine("\nContinue:");
+// Mostrar solo los números impares del 1 al 10
+for (int i = 1; i <= 10; i++)
+{
+    if (i % 2 == 0)
+    {
+        continue;  // Salta los pares
+    }
+    Console.Write($"{i} ");
+}
+// Salida: 1 3 5 7 9
+
