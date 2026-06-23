@@ -8,24 +8,58 @@ int tesorosTotales = 4;
 char[,] mapa = {
     // 0    1    2    3    4    5    6    7    8    9   10
     { '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' }, // 0
-    { '#', ' ', ' ', ' ', '#', '*', ' ', ' ', ' ', '*', '#' }, // 1 
+    { '#', ' ', ' ', ' ', '#', '*', ' ', ' ', ' ', ' ', '#' }, // 1 
     { '#', ' ', '#', ' ', '#', ' ', '#', '#', '#', ' ', '#' }, // 2
     { '#', ' ', '#', ' ', ' ', ' ', '#', ' ', '#', ' ', '#' }, // 3
     { '#', '*', '#', ' ', ' ', ' ', ' ', ' ', '#', ' ', '#' }, // 4
     { '#', ' ', '#', '#', '#', '#', '#', ' ', '#', ' ', '#' }, // 5
     { '#', ' ', ' ', ' ', ' ', ' ', '#', ' ', '#', '*', '#' }, // 6
     { '#', '#', '#', '#', '#', ' ', '#', ' ', '#', ' ', '#' }, // 7
-    { '#', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', '*', '#' }, // 8
+    { '#', ' ', ' ', ' ', ' ', ' ', '#', ' ', ' ', ' ', '#' }, // 8
     { '#', ' ', '#', '#', '#', '#', '#', '#', '#', ' ', '#' }, // 9
-    { '#', '*', ' ', ' ', '*', ' ', ' ', ' ', ' ', ' ', '#' }, // 10
+    { '#', ' ', ' ', ' ', '*', ' ', ' ', ' ', ' ', ' ', '#' }, // 10
     { '#', '#', '#', '#', '#', '#', '#', '#', '#', 'S', '#' }  // 11
 };
 
-for(int fila = 0; fila < mapa.GetLength(0); fila++)
+while (jugando)
 {
-    for(int columna = 0; columna < mapa.GetLength(1); columna++)
+    // Limpiar la consola y mostrar el estado del juego
+    Console.Clear();
+    Console.WriteLine("=== Laberinto ===");
+    Console.WriteLine($"Tesoros recolectados: {tesorosRecolectados}/{tesorosTotales}");
+
+    // Mostrar el mapa
+    for(int fila = 0; fila < mapa.GetLength(0); fila++)
     {
-        Console.Write(mapa[fila, columna] + " ");
+        for(int columna = 0; columna < mapa.GetLength(1); columna++)
+        {
+            if (fila == jugadorY && columna == jugadorX)
+            {
+                Console.Write("@ "); // Representa al jugador
+            }
+            else
+            {
+                Console.Write(mapa[fila, columna] + " ");
+            }
+        }
+        Console.WriteLine();
     }
-    Console.WriteLine();
+
+    // Solicitar al jugador que introduzca un movimiento
+    ConsoleKeyInfo tecla = Console.ReadKey(true);
+
+    int nuevaX = jugadorX;
+    int nuevaY = jugadorY;
+
+    switch(tecla.Key)
+    {
+        case ConsoleKey.UpArrow: nuevaY--; break;
+        case ConsoleKey.DownArrow: nuevaY++; break;
+        case ConsoleKey.LeftArrow: nuevaX--; break;
+        case ConsoleKey.RightArrow: nuevaX++; break;
+        case ConsoleKey.Escape: jugando = false; break;
+    }
+
+    jugadorX = nuevaX;
+    jugadorY = nuevaY;
 }
