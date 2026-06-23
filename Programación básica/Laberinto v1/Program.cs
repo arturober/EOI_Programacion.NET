@@ -60,6 +60,11 @@ while (jugando)
         case ConsoleKey.Escape: jugando = false; break;
     }
 
-    jugadorX = nuevaX;
-    jugadorY = nuevaY;
+    char casillaDestino = mapa[nuevaY, nuevaX];
+
+    if (casillaDestino != '#')
+    {
+        jugadorX = nuevaX;
+        jugadorY = nuevaY;    
+    }
 }
