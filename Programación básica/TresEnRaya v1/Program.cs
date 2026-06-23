@@ -1,46 +1,109 @@
-﻿char[,] tresenraya = {
-    // 0    1     2  
-    { 'X', '-',  '-' }, // 0
-    { '-', 'X',  '-' }, // 1
-    { '-', '-',  'X' }  // 2
+﻿// ====================================================================
+// JUEGO: 3 EN RAYA (Humano vs Máquina) - VERSIÓN SIN VALIDACIÓN DE ENTRADAS
+// Conceptos aplicados: Arrays 2D, Bucles (while, for), Condicionales, 
+// Constantes, int.Parse() y generación de números aleatorios (Random).
+// ====================================================================
+
+bool jugando = true;
+bool hayGanador = false;
+char turno = 'X';      
+int turnosJugados = 0; 
+const int TURNOS_MAXIMOS = 9;
+Random azar = new Random();
+
+char[,] tablero = {
+    { '-', '-', '-' },
+    { '-', '-', '-' },
+    { '-', '-', '-' } 
 };
 
-
-Console.WriteLine("Imprimimos las casilla del tablero una a una:");
-
-// Fila 0
-Console.Write(tresenraya[0, 0]); // Columna 0 // X
-Console.Write(tresenraya[0, 1]); // Columna 1 // -
-Console.Write(tresenraya[0, 2]); // Columna 2 // -
-
-Console.WriteLine(); // Salto de línea
-
-// Fila 1
-Console.Write(tresenraya[1, 0]); // Columna 0 // -
-Console.Write(tresenraya[1, 1]); // Columna 1 // X
-Console.Write(tresenraya[1, 2]); // Columna 2 // -
-
-Console.WriteLine(); // Salto de línea
-
-// Fila 2
-Console.Write(tresenraya[2, 0]); // Columna 0 // -
-Console.Write(tresenraya[2, 1]); // Columna 1 // -
-Console.Write(tresenraya[2, 2]); // Columna 2 // X
-
-Console.WriteLine(); // Salto de línea
-
-
-Console.WriteLine("Imprimimos todo el tablero con un bucle:");
-
-for (int i = 0; i < 3; i++) // 3 filas
+while (jugando)
 {
-    for (int j = 0; j < 3; j++) // 3 columnas
+    Console.Clear();
+    Console.WriteLine("=== 3 EN RAYA: VERSIÓN SIMPLIFICADA ===\n");
+    
+    // 1. DIBUJAR EL TABLERO
+    for (int fila = 0; fila < 3; fila++)
     {
-        Console.Write(tresenraya[i, j]); // Imprime cada casilla
+        for (int columna = 0; columna < 3; columna++)
+        {
+            Console.Write(tablero[fila, columna] + " ");
+        }
+        Console.WriteLine(); 
     }
-    Console.WriteLine();
-}
+    Console.WriteLine(); 
 
-// X - - 
-// - X - 
-// - - X
+    // 2. EVALUAR SI ALGUIEN GANÓ EN EL TURNO ANTERIOR
+    if (hayGanador)
+    {
+        Console.WriteLine($"¡Fin del juego! Ha ganado: {turno}");
+        break; 
+    }
+    else if (turnosJugados == TURNOS_MAXIMOS)
+    {
+        Console.WriteLine("¡Es un EMPATE!");
+        break; 
+    }
+
+    // 3. ELEGIR CASILLA (Bucle hasta elegir una vacía)
+    int filaElegida = -1;
+    int columnaElegida = -1;
+    bool valido = false;
+
+    while (!valido)
+    {
+        if (turno == 'X')
+        {
+            // TURNO HUMANO: Usamos Parse directo (¡Peligro si escribes letras!)
+            Console.WriteLine("Tu turno (X).");
+            Console.Write("Fila (0, 1 o 2): ");
+            filaElegida = int.Parse(Console.ReadLine()!);
+            
+            Console.Write("Columna (0, 1 o 2): ");
+            columnaElegida = int.Parse(Console.ReadLine()!);
+        }
+        else
+        {
+            // TURNO MÁQUINA: Elige al azar
+            Console.WriteLine("La Máquina (O) está pensando...");
+            filaElegida = azar.Next(0, 3);
+            columnaElegida = azar.Next(0, 3);
+        }
+
+        // LÓGICA COMPARTIDA: Ambos comprueban la casilla de la misma forma
+        if (tablero[filaElegida, columnaElegida] == '-')
+        {
+            valido = true; // Casilla libre, salimos del bucle
+            
+            if (turno == 'O') 
+            {
+                Console.WriteLine("Pulsa Intro para ver su jugada...");
+                Console.ReadLine(); // Pausa solo para la máquina
+            }
+        }
+        else if (turno == 'X')
+        {
+            // Solo avisamos al humano del error, la máquina reintenta en silencio
+            Console.WriteLine("¡Error! Casilla ocupada, prueba de nuevo.\n");
+        }
+    }
+
+    // 4. APLICAR EL MOVIMIENTO
+    tablero[filaElegida, columnaElegida] = turno;
+    turnosJugados++; 
+
+    // 5. COMPROBAR VICTORIA
+    for (int i = 0; i < 3; i++)
+    {
+        if (tablero[i, 0] == turno && tablero[i, 1] == turno && tablero[i, 2] == turno) { hayGanador = true; }
+        if (tablero[0, i] == turno && tablero[1, i] == turno && tablero[2, i] == turno) { hayGanador = true; }
+    }
+    if (tablero[0, 0] == turno && tablero[1, 1] == turno && tablero[2, 2] == turno) { hayGanador = true; }
+    if (tablero[0, 2] == turno && tablero[1, 1] == turno && tablero[2, 0] == turno) { hayGanador = true; }
+
+    // 6. CAMBIAR TURNO
+    if (!hayGanador && turnosJugados < TURNOS_MAXIMOS)
+    {
+        turno = (turno == 'X') ? 'O' : 'X';
+    }
+}

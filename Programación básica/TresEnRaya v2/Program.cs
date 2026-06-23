@@ -1,5 +1,6 @@
 ﻿// ====================================================================
 // JUEGO: 3 EN RAYA (Humano vs Máquina Aleatoria)
+// VERSIÓN CON VALIDACIÓN DE ENTRADAS PARA EL HUMANO
 // Conceptos aplicados: Arrays 2D, Bucles, Condicionales, TryParse
 // y generación de números aleatorios (Random).
 // ====================================================================
