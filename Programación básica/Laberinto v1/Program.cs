@@ -61,6 +61,11 @@ while (jugando)
         case ConsoleKey.Escape: jugando = false; break;
     }
 
+    if ((nuevaY < 0 || nuevaY >= mapa.GetLength(0)) || (nuevaX < 0 || nuevaX >= mapa.GetLength(1)))
+    {
+        continue; // Saltar las siguientes instrucciones y esperar la siguiente entrada del jugador
+    }
+
     char casillaDestino = mapa[nuevaY, nuevaX];
 
     if (casillaDestino != '#')
