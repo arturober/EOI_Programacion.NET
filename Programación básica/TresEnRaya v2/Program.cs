@@ -78,7 +78,7 @@ while (jugando)
             if (int.TryParse(entradaFila, out filaElegida) && int.TryParse(entradaColumna, out columnaElegida))
             {
                 // Validamos que no se salga del tablero
-                if (filaElegida >= 0 && filaElegida <= 2 && columnaElegida >= 0 && columnaElegida <= 2)
+                if ((filaElegida >= 0 && filaElegida <= 2) && (columnaElegida >= 0 && columnaElegida <= 2))
                 {
                     // Validamos que la casilla esté vacía
                     if (tablero[filaElegida, columnaElegida] == '-')
