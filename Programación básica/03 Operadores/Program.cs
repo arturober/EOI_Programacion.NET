@@ -131,3 +131,40 @@ Console.WriteLine($"{numero3} es {paridad}");  // "7 es impar"
 double nota = 6.5;
 string resultado = (nota >= 5.0) ? "APROBADO" : "SUSPENSO";
 Console.WriteLine($"Nota {nota}: {resultado}");  // "Nota 6.5: APROBADO"
+
+// Operador null-coalescing (??)
+Console.WriteLine("\nOperador null-coalescing (??):");
+
+string? nombre5 = null;
+string saludo = nombre5 ?? "Desconocido";
+Console.WriteLine(saludo);  // "Desconocido"
+
+nombre5 = "Ana";
+saludo = nombre5 ?? "Desconocido";
+Console.WriteLine(saludo);  // "Ana"
+
+// Con números nulables
+int? edad5 = null;
+int edadFinal = edad5 ?? 18;
+Console.WriteLine(edadFinal);  // 18
+
+
+// Operador null-conditional (?.)
+Console.WriteLine("\nOperador null-conditional (?.):");
+
+string? texto = null;
+
+// Sin operador ?. esto daría NullReferenceException:
+// int longitud = texto.Length;  // ❌ ERROR
+
+// Con ?. es seguro:
+int? longitud = texto?.Length;
+Console.WriteLine(longitud);  // (nada, es null)
+
+texto = "Hola";
+longitud = texto?.Length;
+Console.WriteLine(longitud);  // 4
+
+// Combinando ?. con ??
+int longitudFinal = texto?.Length ?? 0;
+Console.WriteLine(longitudFinal);  // 4
