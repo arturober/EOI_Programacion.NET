@@ -1,5 +1,7 @@
 ﻿// ====================================================================
-// JUEGO: 3 EN RAYA (Humano vs Máquina) - VERSIÓN SIN VALIDACIÓN DE ENTRADAS
+// JUEGO: 3 EN RAYA (Humano vs Máquina) 
+// VERSIÓN SIMPLE, SIN VALIDACIÓN DE ENTRADAS
+// El ordenador elige al azar una casilla vacía para colocar su ficha.
 // Conceptos aplicados: Arrays 2D, Bucles (while, for), Condicionales, 
 // Constantes, int.Parse() y generación de números aleatorios (Random).
 // ====================================================================

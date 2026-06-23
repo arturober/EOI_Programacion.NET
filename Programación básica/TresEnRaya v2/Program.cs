@@ -1,6 +1,7 @@
 ﻿// ====================================================================
-// JUEGO: 3 EN RAYA (Humano vs Máquina Aleatoria)
+// JUEGO: 3 EN RAYA (Humano vs Máquina)
 // VERSIÓN CON VALIDACIÓN DE ENTRADAS PARA EL HUMANO
+// El ordenador elige al azar una casilla vacía para colocar su ficha.
 // Conceptos aplicados: Arrays 2D, Bucles, Condicionales, TryParse
 // y generación de números aleatorios (Random).
 // ====================================================================
