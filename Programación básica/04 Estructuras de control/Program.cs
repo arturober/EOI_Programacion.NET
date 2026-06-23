@@ -35,3 +35,48 @@ while (contador <= 5)
     contador++;
 }
 Console.WriteLine("¡Fin del bucle!");
+
+
+// Un switch muy simple
+Console.WriteLine("\nSwitch muy simple:");
+
+string opcion = "";
+
+while (opcion != "4")
+{
+    Console.WriteLine("\n═══ MENÚ ═══");
+    Console.WriteLine("1. Saludar");
+    Console.WriteLine("2. Mostrar fecha");
+    Console.WriteLine("3. Mostrar hora");
+    Console.WriteLine("4. Salir");
+    Console.Write("Elige una opción: ");
+    opcion = Console.ReadLine()!;
+
+    switch (opcion)
+    {
+        case "1":
+            Console.WriteLine("¡Hola, bienvenido!");
+            break;
+        case "2":
+            Console.WriteLine($"Hoy es: {DateTime.Now:dd/MM/yyyy}");
+            break;
+        case "3":
+            Console.WriteLine($"Son las: {DateTime.Now:HH:mm:ss}");
+            break;
+        case "4":
+            Console.WriteLine("¡Hasta luego!");
+            break;
+        default:
+            Console.WriteLine("Opción no válida.");
+            break;
+    }
+}
+
+// Bucle for muy simple
+Console.WriteLine("\nBucle for muy simple:");
+
+// Sintaxis: for (inicialización; condición; actualización)
+for (int i = 0; i < 5; i++)
+{
+    Console.WriteLine($"Iteración {i}");
+}
