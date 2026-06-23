@@ -46,6 +46,7 @@ while (jugando)
     }
 
     // Solicitar al jugador que introduzca un movimiento
+    Console.WriteLine("\nUsa las flechas del teclado para moverte (Pulsa ESC para salir).");
     ConsoleKeyInfo tecla = Console.ReadKey(true);
 
     int nuevaX = jugadorX;
@@ -65,6 +66,12 @@ while (jugando)
     if (casillaDestino != '#')
     {
         jugadorX = nuevaX;
-        jugadorY = nuevaY;    
+        jugadorY = nuevaY;  
+
+        if (casillaDestino == '*')
+        {
+            tesorosRecolectados++;
+            mapa[nuevaY, nuevaX] = ' '; // Eliminar el tesoro del mapa
+        }  
     }
 }
