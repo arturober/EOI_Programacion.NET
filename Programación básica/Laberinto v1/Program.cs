@@ -74,4 +74,11 @@ while (jugando)
             mapa[nuevaY, nuevaX] = ' '; // Eliminar el tesoro del mapa
         }  
     }
+
+    if ((casillaDestino == 'S') && (tesorosRecolectados == tesorosTotales))
+    {
+        Console.Clear();
+        Console.WriteLine("¡Felicidades! Has recolectado todos los tesoros y has salido del laberinto.");
+        jugando = false;
+    }
 }
