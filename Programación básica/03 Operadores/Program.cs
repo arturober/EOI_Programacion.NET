@@ -168,3 +168,25 @@ Console.WriteLine(longitud);  // 4
 // Combinando ?. con ??
 int longitudFinal = texto?.Length ?? 0;
 Console.WriteLine(longitudFinal);  // 4
+
+// Precedencia de operadores
+Console.WriteLine("\nPrecedencia de operadores:");
+
+// Sin paréntesis: sigue la precedencia
+int resultado1 = 2 + 3 * 4;     // 2 + 12 = 14 (multiplicación primero)
+
+// Con paréntesis: fuerza el orden
+int resultado2 = (2 + 3) * 4;   // 5 * 4 = 20
+
+Console.WriteLine(resultado1);  // 14
+Console.WriteLine(resultado2);  // 20
+
+bool tienePermiso = true;
+
+// Confuso (¿cuál se evalúa primero?)
+bool resultado6 = edad > 18 && nombre != "" || tienePermiso;
+Console.WriteLine(resultado6);  // True
+
+// Claro (los paréntesis aclaran la intención)
+bool resultado7 = (edad > 18 && nombre != "") || tienePermiso;
+Console.WriteLine(resultado7);  // True
