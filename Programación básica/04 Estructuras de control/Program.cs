@@ -23,3 +23,15 @@ else
     Console.WriteLine("Eres menor de edad.");
 }
 
+// Bucle while muy simple
+Console.WriteLine("\nBucle while muy simple:");
+
+// Contar del 1 al 5
+int contador = 1;
+
+while (contador <= 5)
+{
+    Console.WriteLine($"Contador: {contador}");
+    contador++;
+}
+Console.WriteLine("¡Fin del bucle!");
