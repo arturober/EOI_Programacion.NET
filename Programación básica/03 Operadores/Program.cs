@@ -107,3 +107,27 @@ Console.WriteLine($"¿Está sin multas? {sinMultas}");  // True
 // Combinados
 bool conductorEjemplar = puedeConducir && !tieneMultas;
 Console.WriteLine($"¿Conductor ejemplar? {conductorEjemplar}");  // True
+
+// Operador ternario
+Console.WriteLine("\nOperador ternario:");
+
+// Sintaxis: condición ? valorSiVerdadero : valorSiFalso
+
+int edad3 = 20;
+string mensaje = (edad3 >= 18) ? "Mayor de edad" : "Menor de edad";
+Console.WriteLine(mensaje);  // "Mayor de edad"
+
+// Es equivalente a:
+// if (edad3 >= 18)
+//     mensaje = "Mayor de edad";
+// else
+//     mensaje = "Menor de edad";
+
+// Más ejemplos
+int numero3 = 7;
+string paridad = (numero3 % 2 == 0) ? "par" : "impar";
+Console.WriteLine($"{numero3} es {paridad}");  // "7 es impar"
+
+double nota = 6.5;
+string resultado = (nota >= 5.0) ? "APROBADO" : "SUSPENSO";
+Console.WriteLine($"Nota {nota}: {resultado}");  // "Nota 6.5: APROBADO"
