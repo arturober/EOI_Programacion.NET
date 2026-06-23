@@ -129,3 +129,12 @@ for (int i = 0; i < 3; i++) // 3 filas
 // O - - 
 // O X - 
 // O - X
+
+// Arrays con elementos de diferentes tipos
+object[] arrayDeObjetos = { 1, "Hola", 3.14, true, 'A' };
+
+Console.WriteLine(arrayDeObjetos[0]); // 1
+Console.WriteLine(arrayDeObjetos[1]); // Hola
+Console.WriteLine(arrayDeObjetos[2]); // 3.14
+Console.WriteLine(arrayDeObjetos[3]); // True
+Console.WriteLine(arrayDeObjetos[4]); // A
