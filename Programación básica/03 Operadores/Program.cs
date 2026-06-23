@@ -31,7 +31,7 @@ Console.WriteLine(contador);  // 10
 
 // Pre-incremento vs Post-incremento
 
-Console.WriteLine("Pre-incremento vs Post-incremento:");
+Console.WriteLine("\nPre-incremento vs Post-incremento:");
 
 int x = 5;
 Console.WriteLine(x++);  // Muestra 5, DESPUÉS incrementa a 6
@@ -40,3 +40,47 @@ Console.WriteLine(x);    // 6
 int y = 5;
 Console.WriteLine(++y);  // Incrementa PRIMERO a 6, muestra 6
 Console.WriteLine(y);    // 6
+
+Console.WriteLine("\nOperadores de asignación compuesta:");
+
+// Operadores de asignación compuesta
+int puntos = 100;
+
+// puntos = puntos + 50; 
+puntos += 50;    // puntos = 100 + 50 = 150
+Console.WriteLine($"Después de sumar 50: {puntos}");
+
+// puntos = puntos - 30;
+puntos -= 30;    // puntos = 150 - 30 = 120
+Console.WriteLine($"Después de restar 30: {puntos}");
+
+// puntos = puntos * 2;
+puntos *= 2;     // puntos = 120 * 2 = 240
+Console.WriteLine($"Después de multiplicar por 2: {puntos}");
+
+// puntos = puntos / 3;
+puntos /= 3;     // puntos = 240 / 3 = 80
+Console.WriteLine($"Después de dividir entre 3: {puntos}");
+
+// puntos = puntos % 7;
+puntos %= 7;     // puntos = 80 % 7 = 3 (80 = 7×11 + 3)
+Console.WriteLine($"Resto de dividir entre 7: {puntos}");
+
+
+// Operadores de comparación
+Console.WriteLine("\nOperadores de comparación:");
+
+int edad = 20;
+int required = 18;
+
+Console.WriteLine($"edad == 20: {edad == 20}");     // True
+Console.WriteLine($"edad != 18: {edad != 18}");     // True
+Console.WriteLine($"edad > 18:  {edad > required}");// True
+Console.WriteLine($"edad < 18:  {edad < required}");// False
+Console.WriteLine($"edad >= 18: {edad >= required}");// True
+Console.WriteLine($"edad <= 18: {edad <= required}");// False
+
+// Comparación de strings
+string nombre = "Ana";
+Console.WriteLine($"nombre == \"Ana\": {nombre == "Ana"}");  // True
+Console.WriteLine($"nombre != \"Luis\": {nombre != "Luis"}");// True
