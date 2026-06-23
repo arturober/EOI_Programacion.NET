@@ -66,7 +66,9 @@ for (int i = 0; i < filas; i++)
     Console.WriteLine();
 }
 
-
+// Ejercicio para practicar: Crear un array de 7 elementos que contenga los días de la semana. 
+// Pedir al usuario que introduzca un número del 0 al 6 y mostrar el día correspondiente. 
+// Si el número no es válido, mostrar un mensaje de error.
 Console.Write("Introduce el día de la semana (0-6): ");
 int dia = int.Parse(Console.ReadLine()!);
 
