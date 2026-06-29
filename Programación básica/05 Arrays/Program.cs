@@ -63,3 +63,72 @@ else
   Console.WriteLine($"{buscar} no encontrado...");
 }
 
+// Búsqueda con Exists
+int[] edades = [23, 23, 16, 93, 39, 12];
+bool existeMenor = Array.Exists(edades, n => n < 18); // True
+
+// Ordenar arrays
+Array.Sort(numeros2);
+Console.WriteLine(string.Join(", ", numeros2)); // 5, 12, 23, 53, 92
+
+Array.Sort(nombres);
+Console.WriteLine(string.Join(", ", nombres));
+
+string[] palabras = ["pelota", "aro", "zorro", "casamiento", "melonar", "arboleda"];
+// Ordenar alfabéticamente a la inversa
+Array.Sort(palabras);
+Array.Reverse(palabras);
+Console.WriteLine(string.Join(", ", palabras));
+
+// Ordenar por longitud de palabra
+Array.Sort(palabras, (p1, p2) => p1.Length - p2.Length);
+Console.WriteLine(string.Join(", ", palabras));
+
+
+var c = Console.ReadKey(true).KeyChar;
+Console.WriteLine(c);
+
+/* EJERCICIO 1 (Parte 2) */
+Console.WriteLine(" --- EJERCICIO 1 (Parte 2) --- ");
+
+string[] nombresConsola = new string[10];
+
+int contador = 0;
+
+while (contador < nombresConsola.Length)
+{
+  Console.Write($"Nombre {contador + 1}: ");
+  var nombre = Console.ReadLine();
+
+  if (string.IsNullOrWhiteSpace(nombre))
+  {
+    Console.WriteLine("El nombre está vacío");
+  }
+  else if (Array.Exists(nombresConsola, n => n == nombre))
+  {
+    Console.WriteLine("El nombre ya está repetido");
+  }
+  else {
+    nombresConsola[contador++] = nombre;
+  }
+}
+
+// RANGOS
+Console.WriteLine(" --- RANGOS --- ");
+char[] letras = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+char[] letras2 = letras[3..6]; // Copiamos posiciones de la 3 (incluida) a la 6 (no incluida)
+
+Console.WriteLine(string.Join(',', letras2));
+Console.WriteLine(string.Join(',', letras[3..])); // Desde la 3 (incluida)
+Console.WriteLine(string.Join(',', letras[..3])); // Has la 3 (no incluida)
+Console.WriteLine(string.Join(',', letras[^3..])); // Las 3 últimas posiciones
+
+// Patrones de lista
+Console.WriteLine(" --- Patrones de lista --- ");
+bool[] interruptores = [true, false, false, true];
+
+if ( interruptores is [true, false, false, true] )
+{
+  Console.WriteLine("Los interruptores son correctos");
+}
+
