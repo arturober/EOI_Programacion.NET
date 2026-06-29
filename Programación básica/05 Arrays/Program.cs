@@ -132,3 +132,9 @@ if ( interruptores is [true, false, false, true] )
   Console.WriteLine("Los interruptores son correctos");
 }
 
+string texto = """
+  Contenido del archivo
+  con varias líneas.
+  """;
+
+var file = new System.IO.StreamReader("archivo.txt");
