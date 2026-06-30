@@ -38,6 +38,14 @@ for(int i = 0; i < nombres.Length; i++)
   Console.WriteLine($"{nombres[i]} - Media: {media:F2}");
 }
 
+/*** Recorrer string ***/
+Console.WriteLine(" --- Recorrer string --- ");
 
+string frase = "Hola qué tal";
+Console.WriteLine(frase[3]);
+Console.WriteLine(frase[3..8]);
 
-
+for(int i = 0; i < frase.Length; i++)
+{
+  Console.WriteLine(frase[i]);
+}
