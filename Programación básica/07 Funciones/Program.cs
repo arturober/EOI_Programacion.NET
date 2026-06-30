@@ -67,3 +67,41 @@ int total2 = SumaArray2(5, 6, 2, 7, 12);
 Console.WriteLine($"Total array: {total2}");
 
 Console.WriteLine("Programa terminado");
+
+// Ejercicio 2 - Parte 1
+
+void LongitudCadena(string cadena, int a, int b)
+{
+  if (cadena.Length >= a && cadena.Length <= b)
+  {
+    Console.WriteLine("Longitud cadena se encuentra entre los 2 numeros.");
+  }
+  else
+  {
+    Console.WriteLine("Longitud cadena no se encuentra entre los 2 numeros.");
+  }
+}
+
+LongitudCadena("Cuerpoespialidoso", 10, 20);
+LongitudCadena("Hola", 10, 17);
+
+/*** Parámetros por referencia ***/
+void CambiaNum(ref int n)
+{
+  n = 99;
+}
+
+int num = 1;
+CambiaNum(ref num);
+Console.WriteLine(num); // 99 (Cuidado con ref!)
+
+/*** Parámetros no primitivos ***/
+void CambiaArray(int[] nums)
+{
+  nums[0] = 99;
+}
+
+int[] arrayNums = [1,2,3,4];
+CambiaArray(arrayNums);
+Console.WriteLine(string.Join(", ", arrayNums)); // 99, 2, 3, 4 (Cuidado con las modificaciones internas)
+
