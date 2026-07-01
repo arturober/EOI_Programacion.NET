@@ -1,4 +1,6 @@
 ﻿
+using ResultadoBuscar = (bool Encontrado, int Posicion);
+
 void Saluda()
 {
   Console.WriteLine("Hello, World!");
@@ -95,13 +97,58 @@ int num = 1;
 CambiaNum(ref num);
 Console.WriteLine(num); // 99 (Cuidado con ref!)
 
-/*** Parámetros no primitivos ***/
+/*** Parámetros no primitivos. Se pueden modificar a nivel interno ***/
 void CambiaArray(int[] nums)
 {
   nums[0] = 99;
 }
 
-int[] arrayNums = [1,2,3,4];
+int[] arrayNums = [1, 2, 3, 4];
 CambiaArray(arrayNums);
 Console.WriteLine(string.Join(", ", arrayNums)); // 99, 2, 3, 4 (Cuidado con las modificaciones internas)
 
+/*** Parámetro de salida (out). Permite que la función devuelva más de un valor. No es recomendable usarlo ***/
+bool BuscaValor(int[] arrayBuscar, int valor, out int posicion)
+{
+  bool encontrado = false;
+  posicion = -1; // Por si no lo encuentra
+  for (int i = 0; i < arrayBuscar.Length && !encontrado; i++)
+  {
+    if (arrayBuscar[i] == valor)
+    {
+      posicion = i;
+      encontrado = true;
+    }
+  }
+  return encontrado;
+}
+
+int[] array = [5, 12, 42, 15, 8];
+int posicion;
+bool encontrado = BuscaValor(array, 15, out posicion);
+if (encontrado)
+{
+  System.Console.WriteLine($"Encontrado el valor 15 en la posición {posicion}");
+}
+
+/*** Ejemplo de devolución de 2 valores usando tuplas ***/
+ResultadoBuscar BuscaValor2(int[] arrayBuscar, int valor)
+{
+  bool encontrado = false;
+  posicion = -1; // Por si no lo encuentra
+  for (int i = 0; i < arrayBuscar.Length && !encontrado; i++)
+  {
+    if (arrayBuscar[i] == valor)
+    {
+      posicion = i;
+      encontrado = true;
+    }
+  }
+  return (encontrado, posicion);
+}
+
+ResultadoBuscar res = BuscaValor2(array, 15);
+if (res.Encontrado)
+{
+  Console.WriteLine($"Encontrado el valor 15 en la posición {res.Posicion}");
+}
