@@ -189,7 +189,7 @@ finales sin caer en un bucle infinito.
 
 int FactorialRecursivo(int num)
 {
-  if(num == 1) return 1;
+  if (num == 1) return 1;
 
   return num * FactorialRecursivo(--num);
 }
@@ -200,10 +200,10 @@ Console.WriteLine(factorial5);
 int BusquedaOrdenada(int[] array, int numero, int posIni, int posFin)
 {
   int medio = (posFin - posIni) / 2 + posIni;
-  if(posIni > posFin) return -1;
-  else if(array[medio] == numero) return medio; // Encontrado (devolvemos posición)
-  else if(posFin == posIni) return -1; // No encontrado (el array ya no se puede dividir más)
-  else if(array[medio] < numero)
+  if (posIni > posFin) return -1;
+  else if (array[medio] == numero) return medio; // Encontrado (devolvemos posición)
+  else if (posFin == posIni) return -1; // No encontrado (el array ya no se puede dividir más)
+  else if (array[medio] < numero)
   { // El número está más arriba
     return BusquedaOrdenada(array, numero, medio + 1, posFin);
   }
@@ -216,3 +216,36 @@ int BusquedaOrdenada(int[] array, int numero, int posIni, int posFin)
 int[] numeros = [1, 5, 12, 18, 23, 32, 34, 46, 76, 89];
 int posNum = BusquedaOrdenada(numeros, 46, 0, numeros.Length - 1);
 Console.WriteLine($"Posición encontrado: {posNum}");
+
+// Ejercicio 8 - Parte 1
+Console.WriteLine("--- Ejercicio 8 - Parte 1 ---");
+
+string SeleccionaPalabra(string[] palabras)
+{
+  int pos = new Random().Next(0, palabras.Length);
+  return palabras[pos];
+}
+
+const int intentos = 3;
+bool acertado = false;
+string[] palabras = ["moto", "casa", "coche", "perro", "cebolla", "cine", "mano"];
+string palabra = SeleccionaPalabra(palabras);
+
+for (int i = 0; i < intentos && !acertado; i++)
+{
+  Console.Write("Adivina la palabra: ");
+  var adivina = Console.ReadLine();
+  if (palabra == adivina)
+  {
+    acertado = true;
+  }
+}
+
+if (acertado)
+{
+  Console.WriteLine("Enhorabuena!, has acertado.");
+}
+else
+{
+  Console.WriteLine($"Has fallado. La palabra era: {palabra}");
+}
