@@ -152,3 +152,67 @@ if (res.Encontrado)
 {
   Console.WriteLine($"Encontrado el valor 15 en la posición {res.Posicion}");
 }
+
+/***** Funciones flecha / lambda *****/
+// Función local / flecha: Solo pueden tener una única instrucción (return implícito)
+int SumarFlecha(int n1, int n2) => n1 + n2;
+
+Console.WriteLine($"3 + 4 =  {SumarFlecha(3, 4)}");
+
+// Función o expresión lambda: Se apoyan en tipos "delegados" y se pueden pasar por parámetro (son variables)
+Func<int, int, int> multiplicaLambda = (n1, n2) => n1 * n2;
+Action saluda = () => Console.WriteLine("Hola!");
+Predicate<int> esMenorEdad = (edad) => edad < 18;
+
+Console.WriteLine($"3 * 4 =  {multiplicaLambda(3, 4)}");
+saluda();
+Console.WriteLine($"16 es menor de edad: {esMenorEdad(16)}");
+
+string[] nombres = ["Paco", "Pepe", "Ana", "María", "Sara"];
+// Posición del primer nombre que empieza por A
+int primeroA = Array.FindIndex(nombres, n => n.StartsWith('A'));
+if (primeroA != -1)
+{
+  Console.WriteLine($"Nombre con 'A' encontrado en {primeroA} -> {nombres[primeroA]}");
+}
+
+string[] nombresP = nombres.Where(n => n.StartsWith('P')).ToArray();
+
+/**** Ejemplo Recursividad
+La recursividad es una técnica de programación en la que una función se llama a sí misma
+para resolver un problema dividiéndolo en subtareas más pequeñas y similares. Funciona de
+manera análoga a las muñecas rusas (matrioskas): cada llamada abre una versión más pequeña del problema,
+y el proceso continúa de forma ordenada hasta alcanzar un caso base, que es la condición de parada
+obligatoria que detiene las llamadas y permite que la función empiece a resolver y devolver los resultados
+finales sin caer en un bucle infinito.
+****/
+
+int FactorialRecursivo(int num)
+{
+  if(num == 1) return 1;
+
+  return num * FactorialRecursivo(--num);
+}
+
+int factorial5 = FactorialRecursivo(5);
+Console.WriteLine(factorial5);
+
+int BusquedaOrdenada(int[] array, int numero, int posIni, int posFin)
+{
+  int medio = (posFin - posIni) / 2 + posIni;
+  if(posIni > posFin) return -1;
+  else if(array[medio] == numero) return medio; // Encontrado (devolvemos posición)
+  else if(posFin == posIni) return -1; // No encontrado (el array ya no se puede dividir más)
+  else if(array[medio] < numero)
+  { // El número está más arriba
+    return BusquedaOrdenada(array, numero, medio + 1, posFin);
+  }
+  else
+  { // El número está más abajo
+    return BusquedaOrdenada(array, numero, posIni, medio - 1);
+  }
+}
+
+int[] numeros = [1, 5, 12, 18, 23, 32, 34, 46, 76, 89];
+int posNum = BusquedaOrdenada(numeros, 46, 0, numeros.Length - 1);
+Console.WriteLine($"Posición encontrado: {posNum}");
