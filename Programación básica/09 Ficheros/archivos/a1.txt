@@ -1,0 +1,2 @@
+Contenido del archivo
+con varias líneas.

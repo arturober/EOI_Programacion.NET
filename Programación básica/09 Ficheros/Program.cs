@@ -97,13 +97,87 @@ void EscribirFichero3(string ruta)
   writer.Close();
 }
 
+void Ejercicio1(string ruta)
+{
+  string[] lineas = File.ReadAllLines(ruta);
+  int suma = 0;
+  foreach (var linea in lineas)
+  {
+    suma += int.Parse(linea);
+  }
+  Console.WriteLine($"Total: {suma}");
+}
+
+void Ejercicio1bis(string ruta)
+{
+  int suma = File.ReadAllLines(ruta).Sum(int.Parse);
+  Console.WriteLine($"Total: {suma}");
+}
+
+void Ejercicio3(string ruta)
+{
+  string[] lineas = File.ReadAllLines(ruta);
+  double notaMin = 10, notaMax = 0, media = 0;
+  string nombreMin = "", nombreMax = "";
+  foreach (var linea in lineas)
+  {
+    string[] datos = linea.Split(";");
+    string nombre = datos[0];
+    double nota = double.Parse(datos[1]);
+    media += nota;
+    if(nota < notaMin)
+    {
+      notaMin = nota;
+      nombreMin = nombre;
+    }
+    if(nota > notaMax)
+    {
+      notaMax = nota;
+      nombreMax = nombre;
+    }
+  }
+  media /= lineas.Length;
+  Console.WriteLine($"Media: {media}");
+  Console.WriteLine($"Nota mínima: {nombreMin} -> {notaMin}");
+  Console.WriteLine($"Nota máxima: {nombreMax} -> {notaMax}");
+}
+
+void Ejercicio3bis(string ruta)
+{
+  string[] lineas = File.ReadAllLines(ruta);
+  string[] nombres = new string[lineas.Length];
+  double[] notas = new double[lineas.Length];
+  for (int i = 0; i < lineas.Length; i++)
+  {
+    string[] datos = lineas[i].Split(";");
+    nombres[i] = datos[0];
+    notas[i] = double.Parse(datos[1]);
+  }
+  Console.WriteLine($"Media: {notas.Average()}");
+  double notaMin = notas.Min();
+  double notaMax = notas.Max();
+  int indexMin = notas.IndexOf(notaMin);
+  int indexMax = notas.IndexOf(notaMax);
+  Console.WriteLine($"Nota mínima: {nombres[indexMin]} -> {notaMin}");
+  Console.WriteLine($"Nota máxima: {nombres[indexMax]} -> {notaMax}");
+}
+
 string ruta = Path.Join("archivos", "prueba.txt");
 // LeerFichero(ruta);
 // LeerFichero2(ruta);
 // LeerFichero3(ruta);
 // LeerFichero4(ruta);
-EscribirFichero(Path.Join("archivos", "a1.txt"));
-EscribirFichero2(Path.Join("archivos", "a2.txt"));
-EscribirFichero3(Path.Join("archivos", "a3.txt"));
+// EscribirFichero(Path.Join("archivos", "a1.txt"));
+// EscribirFichero2(Path.Join("archivos", "a2.txt"));
+// EscribirFichero3(Path.Join("archivos", "a3.txt"));
+// Ejercicio1(Path.Join("archivos", "numeros.txt"));
+// Ejercicio1bis(Path.Join("archivos", "numeros.txt"));
+// Ejercicio3(Path.Join("archivos", "notas.txt"));
+Ejercicio3bis(Path.Join("archivos", "notas.txt"));
+
+int[] nums = [23, 43, 65, 12, 87, 3, 7];
+int min = nums.Min();
+int minIndex = nums.IndexOf(min);
+System.Console.WriteLine();
 Console.WriteLine("Programa terminado");
 
