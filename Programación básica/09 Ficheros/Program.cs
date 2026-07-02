@@ -13,12 +13,11 @@ Console.WriteLine(ruta3);
 void LeerFichero(string ruta)
 {
   string? line;
-  var file = new StreamReader(ruta); // Abrimos archivo en modo lectura
+  using var file = new StreamReader(ruta); // Abrimos archivo en modo lectura
   while ((line = file.ReadLine()) != null)
   {
     Console.WriteLine(line);
   }
-  file.Close();
 }
 
 /**
@@ -89,12 +88,11 @@ void EscribirFichero3(string ruta)
     "Línea 2",
     "Línea 3"
   ];
-  var writer = new StreamWriter(ruta, true);
+  using var writer = new StreamWriter(ruta, true);
   foreach (string linea in lineas)
   {
     writer.WriteLine(linea);
   }
-  writer.Close();
 }
 
 void Ejercicio1(string ruta)
@@ -161,6 +159,8 @@ void Ejercicio3bis(string ruta)
   Console.WriteLine($"Nota mínima: {nombres[indexMin]} -> {notaMin}");
   Console.WriteLine($"Nota máxima: {nombres[indexMax]} -> {notaMax}");
 }
+
+
 
 string ruta = Path.Join("archivos", "prueba.txt");
 // LeerFichero(ruta);
