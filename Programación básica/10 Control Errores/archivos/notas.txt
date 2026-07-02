@@ -1,0 +1,5 @@
+Pepe;5,46
+María;7,57
+Juan;8,5
+Pedro;4,35
+Ana;8,12
