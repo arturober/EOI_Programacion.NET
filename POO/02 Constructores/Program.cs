@@ -1,4 +1,8 @@
-﻿var producto = new Producto("Silla", 45.34);
+﻿/***********************************************************************************
+* Creación de objetos básica utilizando constructores para inicializar propiedades
+***********************************************************************************/
+
+var producto = new Producto("Silla", 45.34);
 Console.WriteLine(producto.Nombre);
 Console.WriteLine(producto.Precio);
 var producto2 = new Producto("Mesa", 102.3);
