@@ -1,4 +1,4 @@
-class Producto
+class Producto(string nombre, double precio)
 {
   public string? Nombre
   {
@@ -8,6 +8,7 @@ class Producto
       ArgumentException.ThrowIfNullOrWhiteSpace(value);
       field = value;
     }
-  }
-  public double Precio { get; set => field = value < 0.0 ? 0.0 : value; }
+  } = nombre;
+
+  public double Precio { get; set => field = value < 0.0 ? 0.0 : value; } = precio;
 }
