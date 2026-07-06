@@ -14,3 +14,7 @@ gacela.Comer();
 var gerente = new Gerente(3);
 gerente.Ascender();
 Console.WriteLine(gerente.NombreRango);
+
+// Ejercicios 1 y 2
+var tiendaLicores = new TiendaLicores();
+tiendaLicores.Bienvenida();
