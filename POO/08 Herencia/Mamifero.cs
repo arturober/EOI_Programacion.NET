@@ -7,4 +7,6 @@ class Mamifero(string nombre, double peso, bool carnivoro) : Animal(nombre, peso
     base.Comer(); // Ejecuta el método comer original (Animal)
     Console.WriteLine($"He comido: {(Carnivoro ? "carne" : "hierba")}");
   }
+
+    public override string TipoAnimal() => "Mamífero";
 }

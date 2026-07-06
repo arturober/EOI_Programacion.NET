@@ -8,4 +8,6 @@ class Ave(string nombre, double peso, bool puedeVolar) : Animal(nombre, peso)
     Peso *= 1.05;
     Console.WriteLine($"Pio pio. He comido y ahora peso {Peso} kilos");
   }
+
+  public override string TipoAnimal() => "Ave";
 }
