@@ -1,6 +1,6 @@
 class Persona
 {
-  private bool feliz;
+  public static int NumPersonas { get; private set; } = 0;
   public string Nombre { get; set; }
   public int Edad { get; set => field = value < 0 ? field : value; }
 
@@ -12,27 +12,35 @@ class Persona
   {
     Nombre = nombre;
     Edad = edad;
-    var random = new Random();
-    feliz = random.Next(0, 2) > 0;
+    NumPersonas++;
   }
 
-  // Constructor de copia
   public Persona(Persona p)
   {
     Nombre = p.Nombre;
     Edad = p.Edad;
     Direccion = p.Direccion != null ? new Direccion(p.Direccion) : null;
     Telefonos = (string[])p.Telefonos.Clone();
-    feliz = p.feliz;
+    NumPersonas++;
+  }
+
+  public static Persona PersonaGenerica()
+  {
+    return new Persona("Anónimo", 20);
   }
 
   public void Saluda()
   {
-    Console.WriteLine($"{Nombre} tiene {Edad} años y {(feliz == false ? "no" : "sí")} está feliz");
+    Console.WriteLine($"{Nombre} tiene {Edad} años");
     if (Direccion != null)
     {
       Console.WriteLine($"Vivo en la calle {Direccion.Calle}, número {Direccion.Numero} ({Direccion.CP})");
     }
     Console.WriteLine($"Mis teléfonos son: {String.Join(", ", Telefonos)}");
+  }
+
+  public static void MostrarEstadisticas()
+  {
+    Console.WriteLine($"Hay {NumPersonas} personas creadas");
   }
 }

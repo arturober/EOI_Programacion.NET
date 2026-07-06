@@ -14,7 +14,5 @@ persona2.Telefonos[1] = "57456654565";
 
 persona2.Direccion?.Numero = 17; // Cambiamos objeto interno (dirección)
 
-
 persona.Saluda();
 persona2.Saluda();
-
