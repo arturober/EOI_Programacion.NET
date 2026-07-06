@@ -39,6 +39,11 @@ class Persona
     Console.WriteLine($"Mis teléfonos son: {String.Join(", ", Telefonos)}");
   }
 
+  public bool EstoyEnArray(Persona[] personas)
+  {
+    return Array.IndexOf(personas, this) != -1;
+  }
+
   public static void MostrarEstadisticas()
   {
     Console.WriteLine($"Hay {NumPersonas} personas creadas");
