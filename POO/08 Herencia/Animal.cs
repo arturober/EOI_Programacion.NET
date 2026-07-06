@@ -1,4 +1,4 @@
-abstract class Animal(string nombre, double peso) : object
+abstract class Animal(string nombre, double peso)
 {
   public double Peso { get; set; } = peso;
   public string Nombre { get; init; } = nombre;
