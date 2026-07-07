@@ -41,3 +41,19 @@ Console.WriteLine(gerente.NombreRango);
 // Ejercicios 1 y 2
 var tiendaLicores = new TiendaLicores();
 tiendaLicores.Bienvenida();
+
+/** Ejercicios 5 y 7 **/
+Console.WriteLine("--------- Ejercicios 5 y 7 -----------");
+Figura[] figuras = [
+  new Cuadrado(4.5),
+  new Circulo(3),
+  new Circulo(6.5),
+  new Cuadrado(3.67),
+  new Cuadrado(8),
+  new Circulo(6.1)
+];
+
+foreach(Figura figura in figuras)
+{
+  Console.WriteLine(figura);
+}
