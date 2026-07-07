@@ -37,7 +37,7 @@ Console.WriteLine(string.Join(", ", numeros)); // 888, 1, 2, 3, 4, 5, 6, 10, 20,
 List<string> palabras = ["mesa", "casa", "ratón"];
 List<string> palabras2 = ["zanahoria", "lámpara", "puerta"];
 // Concatenación con spread (no modifica la lista original)
-List<string> palabras3 = [..palabras, ..palabras2];
+List<string> palabras3 = [.. palabras, .. palabras2];
 Console.WriteLine(string.Join(", ", palabras3)); // mesa, casa, ratón, zanahoria, lámpara, puerta
 
 Console.WriteLine("--------- Borrar elementos --------");
@@ -87,3 +87,15 @@ Console.WriteLine("--------- Comprobaciones --------");
 Console.WriteLine(numeros.TrueForAll(n => n % 2 == 1)); // True
 Console.WriteLine(nombres.TrueForAll(n => n.StartsWith('A'))); // False
 Console.WriteLine(nombres.Any(n => n.StartsWith('A'))); // True
+
+// EJERCICIO 1
+Console.WriteLine("--------- Ejercicio 1 --------");
+
+List<int> listaNumero = [10, 20, 30, 40];
+listaNumero.AddRange(50,60);
+listaNumero.Remove(20);
+listaNumero.InsertRange(1, 25, 26);
+listaNumero.Reverse();
+Console.WriteLine(string.Join(",", listaNumero));
+
+
