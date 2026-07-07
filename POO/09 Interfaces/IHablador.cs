@@ -1,0 +1,4 @@
+interface IHablador
+{
+  void Hablar();
+}
