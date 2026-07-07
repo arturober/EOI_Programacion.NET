@@ -86,4 +86,4 @@ Console.WriteLine(string.Join(", ", nombres)); // Teodoro, Alfredo, Manuel, MarÃ
 Console.WriteLine("--------- Comprobaciones --------");
 Console.WriteLine(numeros.TrueForAll(n => n % 2 == 1)); // True
 Console.WriteLine(nombres.TrueForAll(n => n.StartsWith('A'))); // False
-
+Console.WriteLine(nombres.Any(n => n.StartsWith('A'))); // True
