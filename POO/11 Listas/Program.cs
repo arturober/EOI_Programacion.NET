@@ -98,4 +98,14 @@ listaNumero.InsertRange(1, 25, 26);
 listaNumero.Reverse();
 Console.WriteLine(string.Join(",", listaNumero));
 
+// Listas de objetos
+Console.WriteLine("--------- Listas de objetos --------");
+List<IFigura> figuras = [new Circulo(3), new Cuadrado(3), new Cuadrado(5.4), new Circulo(4.2), new Cuadrado(7), new Circulo(5)];
+Console.WriteLine(string.Join(", ", figuras));
+
+List<double> areas = figuras.ConvertAll(f => f.Area);
+Console.WriteLine(string.Join(", ", areas));
+
+figuras.Sort((f1, f2) => f1.Area.CompareTo(f2.Area)); // Ordenamos por área
+Console.WriteLine(string.Join(", ", figuras));
 
