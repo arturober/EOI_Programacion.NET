@@ -58,4 +58,9 @@ class Persona: ICloneable, IHablador
   {
     Console.WriteLine($"Hola, me llamo {Nombre}");
   }
+
+  public override string ToString()
+  {
+    return $"{Nombre}, {Edad} años";
+  }
 }
