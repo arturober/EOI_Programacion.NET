@@ -82,3 +82,8 @@ nombres.Sort((n1, n2) => n1.Length - n2.Length);
 Console.WriteLine(string.Join(", ", nombres)); // Ana, Paco, María, Manuel, Alfredo, Teodoro
 nombres.Reverse();
 Console.WriteLine(string.Join(", ", nombres)); // Teodoro, Alfredo, Manuel, María, Paco, Ana
+
+Console.WriteLine("--------- Comprobaciones --------");
+Console.WriteLine(numeros.TrueForAll(n => n % 2 == 1)); // True
+Console.WriteLine(nombres.TrueForAll(n => n.StartsWith('A'))); // False
+
