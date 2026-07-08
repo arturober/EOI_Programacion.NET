@@ -20,6 +20,7 @@ foreach (var palabra in traducciones.Keys)
 }
 
 Console.WriteLine(traducciones.ContainsKey("silla"));
-System.Console.Write("Palabra a traducir: ");
+Console.Write("Palabra a traducir: ");
 string buscar = Console.ReadLine()!;
 Console.WriteLine(traducciones.GetValueOrDefault(buscar, "Palabra no encontrada"));
+traducciones.Remove("ordenador"); // Borramos la clave "ordenador"
