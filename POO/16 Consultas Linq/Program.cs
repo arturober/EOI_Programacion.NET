@@ -37,6 +37,15 @@ Console.WriteLine("Colección con 10 números aleatorios");
 var aleatorios = Enumerable.Repeat(0, 10).Select(n => new Random().Next() % 100);
 Console.WriteLine(string.Join(",", aleatorios));
 
+var avg = nums.Where(n => n > 10).Average();
+Console.WriteLine("Media números mayores a 10: " + avg);
+
+var saltarMientrasMenorASeis = nums.SkipWhile(n => n < 6);
+Console.WriteLine(string.Join(",", saltarMientrasMenorASeis));
+
+var primerosMenoresASeis = nums.TakeWhile(n => n < 6);
+Console.WriteLine(string.Join(",", primerosMenoresASeis));
+
 // Ejemplos con personas
 Console.WriteLine("-------- Ejemplos con personas -----");
 
@@ -69,3 +78,12 @@ Console.WriteLine(string.Join(" - ", personasOrdenadas2));
 
 var listaNombres = personas.Select(p => p.Nombre);
 Console.WriteLine(string.Join(", ", listaNombres));
+
+// Ordenar por nombre, y a igual nombre, por edad
+var personasOrdenadasNombre = personas.OrderBy(p => p.Nombre).ThenBy(p => p.Edad);
+Console.WriteLine(string.Join(", ", personasOrdenadasNombre));
+
+var mayoresEdad = personas.Where(p => p.Edad >= 18).ToList();
+Console.WriteLine(string.Join(", ", mayoresEdad));
+
+
