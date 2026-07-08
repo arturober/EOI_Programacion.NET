@@ -3,8 +3,12 @@
   { "silla", "chair" },
   { "mesa", "table" },
   { "puerta", "door" },
-  { "casa", "house" }
+  { "casa", "house" },
+  { "árbol", "tree" },
+  { "comida", "food" }
 };
+
+traducciones.Remove("árbol");
 
 traducciones.Add("ordenador", "computer");
 
@@ -24,3 +28,16 @@ Console.Write("Palabra a traducir: ");
 string buscar = Console.ReadLine()!;
 Console.WriteLine(traducciones.GetValueOrDefault(buscar, "Palabra no encontrada"));
 traducciones.Remove("ordenador"); // Borramos la clave "ordenador"
+
+/** Ejemplo gestión de tareas **/
+var agenda = new Dictionary<DateTime, Tarea>
+{
+  { DateTime.Now.AddDays(3), new Tarea("Ir a comprar") },
+  { DateTime.Parse("12/10/2026"), new Tarea("Cumpleaños de mi mapache") },
+  { DateTime.Now.AddHours(5), new Tarea("Sacar la basura") }
+};
+foreach (var pair in agenda)
+{
+  Console.WriteLine($"{pair.Key} -> {pair.Value}");
+}
+
