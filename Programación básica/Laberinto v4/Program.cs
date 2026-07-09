@@ -113,7 +113,15 @@ void CargarNivel()
     {
         mapa = CargarMapaDesdeFichero(rutaFichero);    
     }
-    catch (Exception error) {
+    catch (Exception error)
+    {
+        jugando = false;
+        Console.Clear();
+        Console.WriteLine("\nError al cargar el nivel: " + error.Message);
+        Console.WriteLine("Asegúrate de que el fichero de nivel existe y tiene el formato correcto.");
+        Console.WriteLine("Presiona cualquier tecla para salir...");
+        Console.ReadKey();
+        return;
     }
 
     tesorosTotales = ContarTesoros();
@@ -257,6 +265,11 @@ char [,] CargarMapaDesdeFichero(string rutaFichero)
         {
             char simbolo = lineas[fila][columna];
 
+            if (!EsSimboloValidoEnFichero(simbolo))
+            {
+                throw new Exception($"Símbolo incorrecto '{simbolo}' en el fichero de nivel {nivelActual}.");
+            }
+
             if (simbolo == INICIO_JUGADOR)
             {
                 jugadorX = columna;
@@ -364,4 +377,11 @@ int ContarTesoros()
     }
 
     return contador;
+}
+
+bool EsSimboloValidoEnFichero(char simbolo)
+{
+    return simbolo == PARED || simbolo == SUELO_FICHERO || simbolo == TESORO || simbolo == TRAMPA ||
+           simbolo == TRAMPA_INVISIBLE || simbolo == BOMBA || simbolo == SALIDA ||
+           simbolo == LLAVE || simbolo == PUERTA || simbolo == INICIO_JUGADOR;
 }
