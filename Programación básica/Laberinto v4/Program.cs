@@ -78,6 +78,18 @@ while (jugando)
     IntentoMoverJugador(destinoX, destinoY);
 }
 
+TimeSpan tiempoTotal = DateTime.Now - tiempoInicio;
+int segundosTotales = (int)tiempoTotal.TotalSeconds;
+int puntuacion = tesorosTotalesPartida * 10 + vidas * 5 + bombas * 2 - segundosTotales - movimientos;
+
+Console.WriteLine("Introduce tu nombre para guardar la puntuación:");
+string nombreJugador = Console.ReadLine() ?? "Jugador";
+
+string resultadoFinal = ObtenerResultadoFinal();
+
+GuardarPuntuacion(nombreJugador, puntuacion, segundosTotales, movimientos, resultadoFinal);
+
+
 void CrearFicherosDeNivelSiNoExisten()
 {
 }
@@ -310,5 +322,28 @@ void ProcesarCasilla(char casilla)
         nivelActual++;
         debeCargarNivel = true;
         mensaje = "¡Has encontrado la salida! Pasando al siguiente nivel.";
+    }
+}
+
+void GuardarPuntuacion(string nombre, int puntuacion, int tiempo, int movimientos, string resultadoFinal)
+{
+    string linea = $"{nombre},{puntuacion},{tiempo},{movimientos},{resultadoFinal}";
+
+    File.AppendAllText(FICHERO_RANKING, linea + Environment.NewLine);
+}
+
+string ObtenerResultadoFinal()
+{
+    if (victoriaFinal)
+    {
+        return "Victoria";
+    }
+    else if (vidas <= 0)
+    {
+        return "Derrota";
+    }
+    else
+    {
+        return "Rendición";
     }
 }
