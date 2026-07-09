@@ -114,6 +114,23 @@ while (jugando)
         case ConsoleKey.LeftArrow: nuevoX--; break;
         case ConsoleKey.RightArrow: nuevoX++; break;
         case ConsoleKey.Escape: jugando = false; break;
+        case ConsoleKey.Spacebar:
+            if (bombas > 0)
+            {
+                bombas--;
+
+                for (int fila = 1; fila < mapa.GetLength(0) - 1; fila++)
+                {
+                    for (int columna = 1; columna < mapa.GetLength(1) - 1; columna++)
+                    {
+                        if (mapa[fila, columna] == '#')
+                        {
+                            mapa[fila, columna] = ' '; // Elimina la trampa del mapa
+                        }
+                    }
+                }                
+            }
+            continue; // Evita que el jugador se mueva después de usar la bomba
     }
 
     if ((nuevoY < 0 || nuevoY >= mapa.GetLength(0)) || (nuevoX < 0 || nuevoX >= mapa.GetLength(1)))
