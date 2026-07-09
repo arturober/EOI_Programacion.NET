@@ -155,6 +155,30 @@ void DibujarInterfaz()
 
 void UsarBomba()
 {
+    if (bombas <= 0) {
+        mensaje = "No tienes bombas disponibles.";
+        return;
+    }
+    
+    bombas--;
+
+    for (int fila = jugadorY - 1; fila <= jugadorY + 1; fila++)
+    {
+        for (int columna = jugadorX - 1; columna <= jugadorX + 1; columna++)
+        {
+            if (EstaDentroDelMapa(columna, fila))
+            {
+                char casilla = mapa[fila, columna];
+
+                bool esBorde = fila == 0 || fila == mapa.GetLength(0) - 1 || columna == 0 || columna == mapa.GetLength(1) - 1;
+
+                if (!esBorde && casilla == PARED)
+                {
+                    mapa[fila, columna] = VACIO;
+                }
+            }
+        }
+    }
 }
 
 bool CalcularDestino(ConsoleKey tecla, ref int destinoX, ref int destinoY)
