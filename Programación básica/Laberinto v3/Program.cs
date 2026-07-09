@@ -140,7 +140,19 @@ while (jugando)
             tesorosRecolectados++;
             mapa[nuevoY, nuevoX] = ' '; // Elimina el tesoro del mapa
         }
+        else if (casillaDestino == 'T')
+        {
+            vidas--;
+            // Reinicia la posición del jugador
+            jugadorX = 1; 
+            jugadorY = 1;
 
+            if (vidas <= 0)
+            {
+                Console.WriteLine("¡Has perdido todas tus vidas! Fin del juego.");
+                jugando = false;
+            }
+        }
         else if (casillaDestino == 'S')
         {
             nivelActual++;
