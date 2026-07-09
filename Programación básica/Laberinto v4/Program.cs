@@ -82,6 +82,24 @@ TimeSpan tiempoTotal = DateTime.Now - tiempoInicio;
 int segundosTotales = (int)tiempoTotal.TotalSeconds;
 int puntuacion = tesorosTotalesPartida * 10 + vidas * 5 + bombas * 2 - segundosTotales - movimientos;
 
+if (puntuacion < 0)
+{
+    puntuacion = 0;
+}
+
+if (victoriaFinal)
+{
+    Console.WriteLine("\n¡Felicidades! Has completado todos los niveles.");
+}
+else if (vidas <= 0)
+{
+    Console.WriteLine("\n¡Has perdido todas tus vidas! Fin del juego.");
+}
+else
+{
+    Console.WriteLine("\nTe has rendido. Fin del juego.");
+}
+
 Console.WriteLine("Introduce tu nombre para guardar la puntuación:");
 string nombreJugador = Console.ReadLine() ?? "Jugador";
 
