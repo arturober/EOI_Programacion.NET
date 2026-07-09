@@ -119,6 +119,59 @@ while(jugando)
         continue; // Saltar las siguientes instrucciones y esperar la siguiente entrada del jugador
     }
 
-    jugadorX = nuevaX;
-    jugadorY = nuevaY;
+    char casillaDestino = mapa[nuevaY, nuevaX];
+
+    if (casillaDestino == 'S' && tesorosRecolectados < tesorosTotales)
+    {
+        Console.WriteLine("\n¡Debes recoger todos los tesoros antes de salir! Presiona cualquier tecla para continuar...");
+        Console.ReadKey(true);
+        continue;
+    }
+
+    if (casillaDestino != '#')
+    {
+        jugadorX = nuevaX;
+        jugadorY = nuevaY;
+
+        if (casillaDestino == '*')
+        {
+            tesorosRecolectados++;
+            mapa[nuevaY, nuevaX] = ' '; // Eliminar el tesoro del mapa
+        }
+
+        if (casillaDestino == 'S')
+        {
+            nivelActual++;
+            cargarNuevoNivel = true;
+        }
+    }
+}
+
+Console.Clear();
+
+if (victoriaFinal)
+{
+    Console.WriteLine("¡Felicidades! Has completado todos los niveles del laberinto.");
+
+    TimeSpan tiempoTotal = DateTime.Now - tiempoInicio;
+    int segundosTotales = (int)tiempoTotal.TotalSeconds;
+
+    Console.WriteLine($"Tiempo total: ({segundosTotales} segundos)");
+
+    if (segundosTotales < 30)
+    {
+        Console.WriteLine("¡Increíble! Has completado el laberinto en menos de 30 segundos.");
+    }
+    else if (segundosTotales < 60)
+    {
+        Console.WriteLine("¡Buen trabajo! Has completado el laberinto en menos de un minuto.");
+    }
+    else
+    {
+        Console.WriteLine("Has completado el laberinto, pero podrías mejorar tu tiempo.");
+    }
+}
+else
+{
+    Console.WriteLine("Has salido del juego. ¡Hasta la próxima!");
 }
