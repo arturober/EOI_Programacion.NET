@@ -116,7 +116,7 @@ void CargarNivel()
     catch (Exception error) {
     }
 
-    //tesorosTotales = ContarTesoros();
+    tesorosTotales = ContarTesoros();
 
     debeCargarNivel = false;
 
@@ -346,4 +346,22 @@ string ObtenerResultadoFinal()
     {
         return "Rendición";
     }
+}
+
+int ContarTesoros()
+{
+    int contador = 0;
+
+    for (int fila = 0; fila < mapa.GetLength(0); fila++)
+    {
+        for (int columna = 0; columna < mapa.GetLength(1); columna++)
+        {
+            if (mapa[fila, columna] == TESORO)
+            {
+                contador++;
+            }
+        }
+    }
+
+    return contador;
 }
