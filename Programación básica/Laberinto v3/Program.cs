@@ -153,6 +153,11 @@ while (jugando)
                 jugando = false;
             }
         }
+        else if (casillaDestino == 'B')
+        {
+            bombas++;
+            mapa[nuevoY, nuevoX] = ' '; // Elimina la bomba del mapa
+        }
         else if (casillaDestino == 'S')
         {
             nivelActual++;
