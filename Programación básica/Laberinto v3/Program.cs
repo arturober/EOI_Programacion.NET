@@ -182,3 +182,32 @@ while (jugando)
         }
     }
 }
+
+Console.Clear();
+
+if (victoriaFinal)
+{
+    Console.WriteLine("¡Felicidades! Has completado todos los niveles del laberinto.");
+
+    TimeSpan tiempoTotal = DateTime.Now - tiempoInicio;
+    int segundosTotales = (int)tiempoTotal.TotalSeconds;
+
+    Console.WriteLine($"Tiempo total: ({segundosTotales} segundos)");
+
+    if (segundosTotales < 30)
+    {
+        Console.WriteLine("¡Increíble! Has completado el juego en menos de 30 segundos.");
+    }
+    else if (segundosTotales < 60)
+    {
+        Console.WriteLine("¡Bien hecho! Has completado el juego en menos de 60 segundos.");
+    }
+    else
+    {
+        Console.WriteLine("¡Buen trabajo! Has completado el juego, pero deberías intentar mejorar tu tiempo.");
+    }
+}
+else
+{
+    Console.WriteLine("Gracias por jugar. ¡Hasta la próxima!");
+}
