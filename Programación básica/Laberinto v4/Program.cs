@@ -121,6 +121,7 @@ void DibujarInterfaz()
     Console.WriteLine("Vidas: " + vidas);
     Console.WriteLine("Bombas: " + bombas);
     Console.WriteLine("Tesoros: " + tesorosRecolectados);
+    Console.WriteLine("Tienes llave: " + (tieneLlave ? "Sí" : "No"));
     Console.WriteLine("Movimientos: " + movimientos);
     Console.WriteLine();
 
