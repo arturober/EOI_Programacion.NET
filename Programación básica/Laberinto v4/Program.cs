@@ -115,6 +115,15 @@ void DibujarInterfaz()
 {
     Console.Clear();
 
+    Console.WriteLine();
+    Console.WriteLine("Laberinto v4");
+    Console.WriteLine("Nivel: " + nivelActual + "/" + nivelesTotales);
+    Console.WriteLine("Vidas: " + vidas);
+    Console.WriteLine("Bombas: " + bombas);
+    Console.WriteLine("Tesoros: " + tesorosRecolectados);
+    Console.WriteLine("Movimientos: " + movimientos);
+    Console.WriteLine();
+
     for (int fila = 0; fila < mapa.GetLength(0); fila++)
     {
         for (int columna = 0; columna < mapa.GetLength(1); columna++)
@@ -125,11 +134,23 @@ void DibujarInterfaz()
             }
             else
             {
-                Console.Write(mapa[fila, columna] + " ");
+                char casilla = mapa[fila, columna];
+                if (casilla == TRAMPA_INVISIBLE)
+                {
+                    Console.Write(VACIO + " ");
+                }
+                else
+                {
+                    Console.Write(casilla + " ");
+                }
             }
         }
         Console.WriteLine();
     }
+
+    Console.WriteLine();
+    Console.WriteLine($"{TESORO}: tesoro, {TRAMPA}: trampa, {BOMBA}: bomba, {LLAVE}: llave, {PUERTA}: puerta, {SALIDA}: salida");
+    Console.WriteLine("Mensaje: " + mensaje);
 }
 
 void UsarBomba()
@@ -158,8 +179,30 @@ void IntentoMoverJugador(int destinoX, int destinoY)
 
     char casillaDestino = mapa[destinoY, destinoX];
 
+    if (casillaDestino == PARED)
+    {
+        mensaje = "No puedes atravesar paredes.";
+        return;
+    }
+
+    if (casillaDestino == PUERTA && !tieneLlave)
+    {
+        mensaje = "Necesitas una llave para abrir la puerta.";
+        return;
+    }
+
+    if (casillaDestino == SALIDA && tesorosRecolectados < tesorosTotales)
+    {
+        mensaje = "Debes recoger todos los tesoros antes de salir.";
+        return;
+    }
+
     jugadorX = destinoX;
     jugadorY = destinoY;
+
+    movimientos++;
+
+    ProcesarCasilla(casillaDestino);
 }
 
 char [,] CargarMapaDesdeFichero(string rutaFichero)
@@ -183,6 +226,10 @@ char [,] CargarMapaDesdeFichero(string rutaFichero)
                 jugadorY = fila;
                 simbolo = VACIO;
             }
+            else if (simbolo == SUELO_FICHERO)
+            {
+                simbolo = VACIO;
+            }
 
             mapa[fila, columna] = simbolo;
         }
@@ -194,4 +241,49 @@ char [,] CargarMapaDesdeFichero(string rutaFichero)
 bool EstaDentroDelMapa(int x, int y)
 {
     return (x >= 0 && x < mapa.GetLength(1)) && (y >= 0 && y < mapa.GetLength(0));
+}
+
+void ProcesarCasilla(char casilla)
+{
+    if (casilla == TESORO)
+    {
+        tesorosRecolectados++;
+        tesorosTotalesPartida++;
+        mapa[jugadorY, jugadorX] = VACIO;
+        mensaje = "Has recogido un tesoro. Tesoros recogidos: " + tesorosRecolectados + "/" + tesorosTotales;
+    }
+    else if (casilla == BOMBA)
+    {
+        bombas++;
+        mapa[jugadorY, jugadorX] = VACIO;
+        mensaje = "Has recogido una bomba. Bombas disponibles: " + bombas;
+    }
+    else if (casilla == LLAVE)
+    {
+        tieneLlave = true;
+        mapa[jugadorY, jugadorX] = VACIO;
+        mensaje = "Has recogido una llave. Ahora puedes abrir puertas.";
+    }
+    else if (casilla == TRAMPA || casilla == TRAMPA_INVISIBLE)
+    {
+        vidas--;
+
+        if (vidas <= 0)
+        {
+            jugando = false;
+            mensaje = "¡Has perdido todas tus vidas! Fin del juego.";
+            return;
+        }
+
+        jugadorX = 1;
+        jugadorY = 1;
+
+        mensaje = "¡Has caído en una trampa! Has perdido una vida. Vidas restantes: " + vidas;
+    }
+    else if (casilla == SALIDA)
+    {
+        nivelActual++;
+        debeCargarNivel = true;
+        mensaje = "¡Has encontrado la salida! Pasando al siguiente nivel.";
+    }
 }
