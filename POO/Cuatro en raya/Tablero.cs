@@ -95,7 +95,7 @@ class Tablero
 
     public bool HayGanador(char ficha)
     {
-        // Comprobar filas
+        // Comprobar filas // X X X X
         for (int fila = 0; fila < Filas; fila++)
         {
             for (int columna = 0; columna <= Columnas - 4; columna++)
@@ -111,6 +111,10 @@ class Tablero
         }
 
         // Comprobar columnas
+        // X
+        // X
+        // X
+        // X
         for (int columna = 0; columna < Columnas; columna++)
         {
             for (int fila = 0; fila <= Filas - 4; fila++)
@@ -126,6 +130,10 @@ class Tablero
         }
 
         // Comprobar diagonales (de izquierda a derecha)
+        // X
+        //   X
+        //     X
+        //       X
         for (int fila = 0; fila <= Filas - 4; fila++)
         {
             for (int columna = 0; columna <= Columnas - 4; columna++)
@@ -141,6 +149,10 @@ class Tablero
         }
 
         // Comprobar diagonales (de derecha a izquierda)
+        //       X
+        //     X
+        //   X
+        // X
         for (int fila = 0; fila <= Filas - 4; fila++)
         {
             for (int columna = 3; columna < Columnas; columna++)
