@@ -23,17 +23,13 @@ using Godot;
 // 0 o un texto como "left".
 enum AccionJugador
 {
-    // Desplaza la nave una columna hacia la izquierda.
-    Izquierda,
+    Izquierda, // Desplaza la nave una columna hacia la izquierda.
 
-    // Desplaza la nave una columna hacia la derecha.
-    Derecha,
+    Derecha, // Desplaza la nave una columna hacia la derecha.
 
-    // Crea una bala en la posición actual de la nave.
-    Disparar,
+    Disparar, // Crea una bala en la posición actual de la nave.
 
-    // Cierra el juego, tanto durante la partida como después de una derrota.
-    Salir
+    Salir // Cierra el juego, tanto durante la partida como después de una derrota.
 }
 
 // EntradaGodot no almacena estado, por lo que se declara static.
