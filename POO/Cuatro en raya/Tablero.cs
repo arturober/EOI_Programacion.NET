@@ -68,4 +68,28 @@ class Tablero
             _ => "⚪"   // Emoji para casilla vacía
         };
     }
+
+    public bool ColumnaEsValida(int columna)
+    {
+        return columna >= 0 && columna < Columnas && casillas[0, columna] == Vacio;
+    }
+
+    public bool ColocarFicha(int columna, char ficha)
+    {
+        if (!ColumnaEsValida(columna))
+        {
+            return false;
+        }
+
+        for (int fila = Filas - 1; fila >= 0; fila--)
+        {
+            if (casillas[fila, columna] == Vacio)
+            {
+                casillas[fila, columna] = ficha;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

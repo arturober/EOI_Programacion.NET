@@ -17,5 +17,13 @@ class Juego
         
         tablero.InicializarTablero();
         tablero.Mostrar();
+
+        Jugador jugadorActual = jugadorHumano;
+
+        int columna = jugadorActual.ElegirColumna(tablero);
+
+        tablero.ColocarFicha(columna, jugadorActual.Ficha);
+
+        tablero.Mostrar();
     }
 }
