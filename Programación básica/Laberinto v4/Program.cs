@@ -145,11 +145,6 @@ bool debeCargarNivel = true;
 //
 // Si no existen, los creamos automáticamente.
 //
-// Esto facilita mucho el uso en clase, porque el alumnado puede ejecutar
-// el programa directamente sin crear primero los ficheros a mano.
-//
-// Después de la primera ejecución, los alumnos podrán abrir:
-//
 // - niveles/nivel1.txt
 // - niveles/nivel2.txt
 // - niveles/nivel3.txt
@@ -368,7 +363,6 @@ Console.ReadKey();
 // - niveles/nivel2.txt
 // - niveles/nivel3.txt
 //
-// Esto permite que los alumnos modifiquen los niveles sin tocar el código.
 
 void CargarNivel()
 {
@@ -579,8 +573,6 @@ char[,] CargarMapaDesdeFichero(string rutaFichero)
 // --------------------------------------------------------------------
 //
 // Comprueba si un carácter del fichero de nivel está permitido.
-//
-// Esto ayuda a detectar errores cuando los alumnos editan el mapa.
 //
 // Por ejemplo, si alguien escribe una letra que no existe en la leyenda,
 // el programa mostrará un error claro.
@@ -1242,8 +1234,6 @@ void MostrarRanking()
 // Importante:
 //
 // Si un fichero ya existe, NO lo sobrescribe.
-// Así, si un alumno modifica un nivel, el programa no lo borra
-// al volver a ejecutarse.
 
 void CrearFicherosDeNivelesSiNoExisten()
 {
