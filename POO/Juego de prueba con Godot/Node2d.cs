@@ -1,7 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 
-public partial class Juego : Node2D
+public partial class Node2d : Node2D
 {
     // Posición de la nave.
     private Vector2 nave = new Vector2(400, 550);
