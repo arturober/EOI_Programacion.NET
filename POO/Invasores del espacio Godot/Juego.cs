@@ -118,7 +118,7 @@ public partial class Juego : Node2D
     private static readonly Color ColorAlien = new Color(0.30f, 0.90f, 0.30f);
 
     // Color con el que se dibujan las balas y el mensaje de nuevo récord.
-    private static readonly Color ColorBala = new Color(1.00f, 0.90f, 0.10f);
+    private static readonly Color ColorBala = new Color(1.00f, 0.00f, 0.00f);
 
     // Color utilizado para destacar la pantalla de derrota.
     private static readonly Color ColorPeligro = new Color(1.00f, 0.20f, 0.20f);
