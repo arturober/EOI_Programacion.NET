@@ -92,4 +92,81 @@ class Tablero
 
         return false;
     }
+
+    public bool HayGanador(char ficha)
+    {
+        // Comprobar filas
+        for (int fila = 0; fila < Filas; fila++)
+        {
+            for (int columna = 0; columna <= Columnas - 4; columna++)
+            {
+                if (casillas[fila, columna] == ficha &&
+                    casillas[fila, columna + 1] == ficha &&
+                    casillas[fila, columna + 2] == ficha &&
+                    casillas[fila, columna + 3] == ficha)
+                {
+                    return true;
+                }
+            }
+        }
+
+        // Comprobar columnas
+        for (int columna = 0; columna < Columnas; columna++)
+        {
+            for (int fila = 0; fila <= Filas - 4; fila++)
+            {
+                if (casillas[fila, columna] == ficha &&
+                    casillas[fila + 1, columna] == ficha &&
+                    casillas[fila + 2, columna] == ficha &&
+                    casillas[fila + 3, columna] == ficha)
+                {
+                    return true;
+                }
+            }
+        }
+
+        // Comprobar diagonales (de izquierda a derecha)
+        for (int fila = 0; fila <= Filas - 4; fila++)
+        {
+            for (int columna = 0; columna <= Columnas - 4; columna++)
+            {
+                if (casillas[fila, columna] == ficha &&
+                    casillas[fila + 1, columna + 1] == ficha &&
+                    casillas[fila + 2, columna + 2] == ficha &&
+                    casillas[fila + 3, columna + 3] == ficha)
+                {
+                    return true;
+                }
+            }
+        }
+
+        // Comprobar diagonales (de derecha a izquierda)
+        for (int fila = 0; fila <= Filas - 4; fila++)
+        {
+            for (int columna = 3; columna < Columnas; columna++)
+            {
+                if (casillas[fila, columna] == ficha &&
+                    casillas[fila + 1, columna - 1] == ficha &&
+                    casillas[fila + 2, columna - 2] == ficha &&
+                    casillas[fila + 3, columna - 3] == ficha)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool EstaLleno()
+    {
+        for (int columna = 0; columna < Columnas; columna++)
+        {
+            if (casillas[0, columna] == Vacio)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -16,14 +16,35 @@ class Juego
         Console.WriteLine("Bienvenido al juego de Cuatro en Raya!");
         
         tablero.InicializarTablero();
-        tablero.Mostrar();
 
         Jugador jugadorActual = jugadorHumano;
 
-        int columna = jugadorActual.ElegirColumna(tablero);
+        bool partidaTerminada = false;
+        
+        while (!partidaTerminada)
+        {
+            tablero.Mostrar();
 
-        tablero.ColocarFicha(columna, jugadorActual.Ficha);
+            int columna = jugadorActual.ElegirColumna(tablero);
 
-        tablero.Mostrar();
+            tablero.ColocarFicha(columna, jugadorActual.Ficha);
+
+            if (tablero.HayGanador(jugadorActual.Ficha))
+            {
+                Console.WriteLine($"¡Ha ganado {jugadorActual.Nombre}!");
+                tablero.Mostrar();
+                partidaTerminada = true;
+            }
+            else if (tablero.EstaLleno())
+            {
+                Console.WriteLine("¡Empate! El tablero está lleno.");
+                tablero.Mostrar();
+                partidaTerminada = true;
+            }
+            else
+            {
+                jugadorActual = (jugadorActual == jugadorHumano) ? jugadorOrdenador : jugadorHumano;
+            }
+        }
     }
 }
