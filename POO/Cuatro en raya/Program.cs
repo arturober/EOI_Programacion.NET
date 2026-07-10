@@ -1,1 +1,8 @@
-﻿Console.WriteLine("Gracias por jugar a Space Invaders.");
+﻿static class Program
+{
+    static void Main(string[] args)
+    {
+        Juego juego = new Juego();
+        juego.Iniciar();
+    }
+}
