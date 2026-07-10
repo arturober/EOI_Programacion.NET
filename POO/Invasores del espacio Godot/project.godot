@@ -1,0 +1,27 @@
+; Proyecto de Godot generado completamente por código.
+; No utiliza imágenes, fuentes, sonidos ni otros recursos externos.
+
+config_version=5
+
+[application]
+
+config/name="Invasores del espacio Godot"
+run/main_scene="res://Juego.tscn"
+
+[display]
+
+window/size/viewport_width=1040
+window/size/viewport_height=760
+window/size/window_width_override=1040
+window/size/window_height_override=760
+window/stretch/mode="canvas_items"
+
+[dotnet]
+
+project/assembly_name="InvasoresDelEspacioGodot"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0.018, 0.025, 0.07, 1)
