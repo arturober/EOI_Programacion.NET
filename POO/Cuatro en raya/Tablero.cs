@@ -30,6 +30,7 @@ class Tablero
 
         for (int fila = 0; fila < Filas; fila++)
         {
+            Console.Write(" ");
             for (int columna = 0; columna < Columnas; columna++)
             {
                 MostrarCasilla(casillas[fila, columna]);
@@ -44,7 +45,7 @@ class Tablero
 
         for (int columna = 1; columna <= Columnas; columna++)
         {
-            Console.Write($"  {columna}");
+            Console.Write($"   {columna}");
         }
         Console.WriteLine();
     }
@@ -53,7 +54,7 @@ class Tablero
     {
         Console.BackgroundColor = ConsoleColor.Blue;
 
-        Console.Write(" " + ObtenerEmojiDeFicha(ficha));
+        Console.Write(" " + ObtenerEmojiDeFicha(ficha) + " ");
 
         Console.ResetColor();
     }
