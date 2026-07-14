@@ -26,6 +26,10 @@ class ProgramaAgenda
                         CrearPersona(conexion);
                         break;
 
+                    case "2":
+                        MostrarPersonas(conexion);
+                        break;
+
                     case "0":
                         salir = true;
                         break;
@@ -66,6 +70,7 @@ class ProgramaAgenda
         Console.WriteLine("------------------");
         Console.WriteLine("Seleccione una opción:");
         Console.WriteLine("1. Añadir persona");
+        Console.WriteLine("2. Mostrar personas");
         Console.WriteLine("0. Salir");
         Console.WriteLine("------------------");
     }
@@ -108,5 +113,30 @@ class ProgramaAgenda
                 Console.WriteLine("Error al añadir la persona.");
             }
         }
+    }
+
+    static bool MostrarPersonas(SqliteConnection conexion)
+    {
+        string sql = "SELECT * FROM personas ORDER BY id";
+
+        using (SqliteCommand comando = new SqliteCommand(sql, conexion))
+        {
+            using (SqliteDataReader lector = comando.ExecuteReader())
+            {
+                if (!lector.HasRows)
+                {
+                    Console.WriteLine("No hay personas en la agenda.");
+                    return false;
+                }
+
+                Console.WriteLine("Personas en la agenda:");
+                while (lector.Read())
+                {
+                    Console.WriteLine($"{lector["id"]} - {lector["nombre"]} ({lector["telefono"]})");
+                }
+            }
+        }
+
+        return true;
     }
 }
