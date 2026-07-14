@@ -34,6 +34,10 @@ class ProgramaAgenda
                         ModificarPersona(conexion);
                         break;
 
+                    case "4":
+                        EliminarPersona(conexion);
+                        break;
+
                     case "0":
                         salir = true;
                         break;
@@ -76,6 +80,7 @@ class ProgramaAgenda
         Console.WriteLine("1. Añadir persona");
         Console.WriteLine("2. Mostrar personas");
         Console.WriteLine("3. Modificar persona");
+        Console.WriteLine("4. Eliminar persona");
         Console.WriteLine("0. Salir");
         Console.WriteLine("------------------");
     }
@@ -189,6 +194,43 @@ class ProgramaAgenda
             else
             {
                 Console.WriteLine("Error al modificar la persona. Asegúrate de que el ID es correcto.");
+            }
+        }
+    }
+
+    static void EliminarPersona(SqliteConnection conexion)
+    {
+        bool hayPersonas = MostrarPersonas(conexion);
+
+        if (!hayPersonas)
+        {
+            return;
+        }
+
+        int id = LeerNumeroEntero("ID de la persona que quieres eliminar: ");
+
+        Console.Write($"¿Seguro que quieres eliminar la persona con el ID {id}? (s/n): ");
+        string respuesta = (Console.ReadLine()??"").Trim().ToLower();
+        if (respuesta != "s")
+        {
+            Console.WriteLine("Operación cancelada.");
+            return;
+        }
+
+        string sql = "DELETE FROM personas WHERE id = @id";
+
+        using (SqliteCommand comando = new SqliteCommand(sql, conexion))
+        {
+            comando.Parameters.AddWithValue("@id", id);
+            int filas = comando.ExecuteNonQuery();
+
+            if (filas == 1)
+            {
+                Console.WriteLine("Persona eliminada con éxito.");
+            }
+            else
+            {
+                Console.WriteLine("Error al eliminar la persona. Asegúrate de que el ID es correcto.");
             }
         }
     }
