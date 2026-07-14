@@ -38,6 +38,10 @@ class ProgramaAgenda
                         EliminarPersona(conexion);
                         break;
 
+                    case "5":
+                        BuscarPersona(conexion);
+                        break;
+
                     case "0":
                         salir = true;
                         break;
@@ -81,6 +85,7 @@ class ProgramaAgenda
         Console.WriteLine("2. Mostrar personas");
         Console.WriteLine("3. Modificar persona");
         Console.WriteLine("4. Eliminar persona");
+        Console.WriteLine("5. Buscar persona");
         Console.WriteLine("0. Salir");
         Console.WriteLine("------------------");
     }
@@ -231,6 +236,33 @@ class ProgramaAgenda
             else
             {
                 Console.WriteLine("Error al eliminar la persona. Asegúrate de que el ID es correcto.");
+            }
+        }
+    }
+
+    static void BuscarPersona(SqliteConnection conexion)
+    {
+        string nombre = LeerTextoObligatorio("Introduce el nombre a buscar: ");
+
+        string sql = "SELECT * FROM personas WHERE nombre LIKE @nombre ORDER BY id";
+
+        using (SqliteCommand comando = new SqliteCommand(sql, conexion))
+        {
+            comando.Parameters.AddWithValue("@nombre", "%" + nombre + "%");
+
+            using (SqliteDataReader lector = comando.ExecuteReader())
+            {
+                if (!lector.HasRows)
+                {
+                    Console.WriteLine("No se encontraron personas con ese nombre.");
+                    return;
+                }
+
+                Console.WriteLine("Resultados de la búsqueda:");
+                while (lector.Read())
+                {
+                    Console.WriteLine($"{lector["id"]} - {lector["nombre"]} ({lector["telefono"]})");
+                }
             }
         }
     }
