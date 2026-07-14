@@ -30,6 +30,10 @@ class ProgramaAgenda
                         MostrarPersonas(conexion);
                         break;
 
+                    case "3":
+                        ModificarPersona(conexion);
+                        break;
+
                     case "0":
                         salir = true;
                         break;
@@ -71,6 +75,7 @@ class ProgramaAgenda
         Console.WriteLine("Seleccione una opción:");
         Console.WriteLine("1. Añadir persona");
         Console.WriteLine("2. Mostrar personas");
+        Console.WriteLine("3. Modificar persona");
         Console.WriteLine("0. Salir");
         Console.WriteLine("------------------");
     }
@@ -138,5 +143,53 @@ class ProgramaAgenda
         }
 
         return true;
+    }
+
+    static int LeerNumeroEntero(string mensaje)
+    {
+        while (true)
+        {
+            Console.Write(mensaje);
+            string input = Console.ReadLine() ?? "";
+            bool esNumero = int.TryParse(input, out int numero);
+            if (esNumero && numero > 0)
+            {
+                return numero;
+            }
+            Console.WriteLine("Número no válido. Inténtalo de nuevo.");
+        }
+    }
+
+    static void ModificarPersona(SqliteConnection conexion)
+    {
+        bool hayPersonas = MostrarPersonas(conexion);
+
+        if (!hayPersonas)
+        {
+            return;
+        }
+
+        int id = LeerNumeroEntero("ID de la persona que quieres modificar: ");
+        string nombre = LeerTextoObligatorio("Introduce el nuevo nombre: ");
+        string telefono = LeerTextoObligatorio("Introduce el nuevo teléfono: ");
+
+        string sql = "UPDATE personas SET nombre = @nombre, telefono = @telefono WHERE id = @id";
+
+        using (SqliteCommand comando = new SqliteCommand(sql, conexion))
+        {
+            comando.Parameters.AddWithValue("@nombre", nombre);
+            comando.Parameters.AddWithValue("@telefono", telefono);
+            comando.Parameters.AddWithValue("@id", id);
+            int filas = comando.ExecuteNonQuery();
+
+            if (filas == 1)
+            {
+                Console.WriteLine("Persona modificada con éxito.");
+            }
+            else
+            {
+                Console.WriteLine("Error al modificar la persona. Asegúrate de que el ID es correcto.");
+            }
+        }
     }
 }
