@@ -34,11 +34,11 @@ class GestorTareas
                     break;
 
                 case "2":
-                    //MostrarTareas();
+                    MostrarTareas();
                     break;
 
                 case "3":
-                    //ModificarTarea();
+                    ModificarTarea();
                     break;
 
                 case "4":
@@ -175,5 +175,114 @@ class GestorTareas
         {
             Console.WriteLine(tarea.ToString());
         }
+    }
+
+    private void MostrarTareas()
+    {
+        Console.Clear();
+        Console.WriteLine();
+        Console.WriteLine("=== LISTA DE TAREAS ===");
+
+        List<Tarea> tareas = Tarea.Listar(conexion);
+        MostrarLista(tareas);
+    }
+
+    private void ModificarTarea()
+    {
+        Console.Clear();
+        Console.WriteLine();
+        Console.WriteLine("=== MODIFICAR TAREA ===");
+
+        List<Tarea> tareas = Tarea.Listar(conexion);
+        MostrarLista(tareas);
+
+        if (tareas.Count == 0)
+        {
+            return;
+        }
+
+        int idTarea = TextoUtil.LeerEnteroPositivo("Introduce el ID de la tarea a modificar: ");
+        Tarea? tareaAModificar = Tarea.BuscarPorId(conexion, idTarea);
+
+        if (tareaAModificar == null)
+        {
+            Console.WriteLine("No se encontró una tarea con ese ID.");
+            return;
+        }
+
+        Console.WriteLine("Título actual: " + tareaAModificar.Titulo);
+        Console.Write("Nuevo título (Enter para conservar): ");
+        string nuevoTitulo = Console.ReadLine()?.Trim() ?? tareaAModificar.Titulo;
+
+        Console.WriteLine("Descripción actual: " + tareaAModificar.Descripcion);
+        Console.Write("Nueva descripción (Enter para conservar): ");
+        string nuevaDescripcion = Console.ReadLine()?.Trim() ?? tareaAModificar.Descripcion;
+
+        Categoria? nuevaCategoria = tareaAModificar.Categoria;
+        Console.WriteLine("Categoría actual: " + tareaAModificar.Categoria.Nombre);
+        bool cambiarCategoria = TextoUtil.Confirmar("¿Deseas cambiar la categoría?");
+        if (cambiarCategoria)
+        {
+            Categoria? seleccionada = SeleccionarCategoria();
+            if (seleccionada == null)
+            {
+                nuevaCategoria = tareaAModificar.Categoria;
+            }
+        }
+
+        bool nuevoEstado = LeerEstado(tareaAModificar.Completada);
+
+        tareaAModificar.Titulo = nuevoTitulo;
+        tareaAModificar.Descripcion = nuevaDescripcion;
+        tareaAModificar.Completada = nuevoEstado;
+        tareaAModificar.Categoria = nuevaCategoria;
+
+        if (tareaAModificar.Actualizar(conexion))
+        {
+            Console.WriteLine("Tarea modificada con éxito.");
+        }
+        else
+        {
+            Console.WriteLine("Error al modificar la tarea.");
+        }
+    }
+
+    private bool LeerEstado(bool estadoActual)
+    {
+        bool estado = estadoActual;
+        bool opcionValida = false;
+
+        while (!opcionValida)
+        {
+            string textoActual = estadoActual ? "completada" : "pendiente";
+
+            Console.WriteLine("Estado actual: " + textoActual);
+
+            Console.Write("Nuevo estado (c=completada, p=pendiente, Enter para conservar): ");
+
+            string opcion = (Console.ReadLine() ?? "").Trim().ToLower();
+
+            if (opcion == "")
+            {
+                estado = estadoActual;
+                opcionValida = true;
+            }
+            else if (opcion == "c")
+            {
+                estado = true;
+                opcionValida = true;
+            }
+            else if (opcion == "p")
+            {
+                estado = false;
+                opcionValida = true;
+            }
+            else
+            {
+                Console.WriteLine("Opción no válida. Inténtalo de nuevo.");
+            }
+        }
+
+        return estado;
     }
 }
