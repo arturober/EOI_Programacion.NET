@@ -9,6 +9,7 @@ class Program
             conexion.Open();
 
             GestorCategorias gestorCategorias = new GestorCategorias(conexion);
+            GestorTareas gestorTareas = new GestorTareas(conexion);
 
             bool salir = false;
             while (!salir)
@@ -17,6 +18,7 @@ class Program
                 Console.WriteLine();
                 Console.WriteLine("=== MENÚ PRINCIPAL ===");
                 Console.WriteLine("1. Gestionar categorías");
+                Console.WriteLine("2. Gestionar tareas");
                 Console.WriteLine("0. Salir");
                 Console.Write("Seleccione una opción: ");
 
@@ -26,6 +28,10 @@ class Program
                 {
                     case "1":
                         gestorCategorias.MostrarMenu();
+                        break;
+
+                    case "2":
+                        gestorTareas.MostrarMenu();
                         break;
 
                     case "0":

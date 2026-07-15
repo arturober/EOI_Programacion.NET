@@ -55,8 +55,7 @@ class GestorCategorias
 
             if (!volver)
             {
-                Console.WriteLine("Presione cualquier tecla para continuar...");
-                Console.ReadKey();
+                TextoUtil.Pausar();
             }
         }
     }
