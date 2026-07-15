@@ -14,6 +14,7 @@ class Program
             while (!salir)
             {
                 Console.Clear();
+                Console.WriteLine();
                 Console.WriteLine("=== MENÚ PRINCIPAL ===");
                 Console.WriteLine("1. Gestionar categorías");
                 Console.WriteLine("0. Salir");

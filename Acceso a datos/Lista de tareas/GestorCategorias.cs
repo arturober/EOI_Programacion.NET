@@ -15,6 +15,7 @@ class GestorCategorias
         while (!volver)
         {
             Console.Clear();
+            Console.WriteLine();
             Console.WriteLine("=== GESTOR DE CATEGORÍAS ===");
             Console.WriteLine("1. Crear categoría");
             Console.WriteLine("2. Mostrar categorías");
@@ -48,7 +49,7 @@ class GestorCategorias
                     break;
 
                 default:
-                    Console.WriteLine("Opción no válida. Intente nuevamente.");
+                    Console.WriteLine("Opción no válida. Inténtalo de nuevo.");
                     break;
             }
 
@@ -84,8 +85,6 @@ class GestorCategorias
                 Console.WriteLine("Error al insertar la categoría.");
             }
         }
-
-        TextoUtil.Pausar();
     }
 
     private void EliminarCategoria()
@@ -100,7 +99,6 @@ class GestorCategorias
         if (categorias.Count == 0)
         {
             Console.WriteLine("No hay categorías disponibles.");
-            TextoUtil.Pausar();
             return;
         }
 
@@ -111,7 +109,6 @@ class GestorCategorias
         if (categoria == null)
         {
             Console.WriteLine("No se encontró una categoría con ese ID.");
-            TextoUtil.Pausar();
             return;
         }
 
@@ -131,8 +128,6 @@ class GestorCategorias
         {
             Console.WriteLine("Operación cancelada. La categoría no se ha eliminado.");
         }
-
-        TextoUtil.Pausar();
     }
 
     private void MostrarLista(List<Categoria> categorias)
