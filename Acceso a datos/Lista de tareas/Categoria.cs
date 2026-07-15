@@ -137,4 +137,22 @@ class Categoria
 
         return null;
     }
+
+    public bool Actualizar(SqliteConnection conexion)
+    {
+        bool actualizada = false;
+
+        string sql = "UPDATE categorias SET nombre = @nombre, descripcion = @descripcion WHERE id = @id";
+
+        using (SqliteCommand comando = new SqliteCommand(sql, conexion))
+        {
+            comando.Parameters.AddWithValue("@nombre", nombre.Trim());
+            comando.Parameters.AddWithValue("@descripcion", descripcion.Trim());
+            comando.Parameters.AddWithValue("@id", id);
+            int filasAfectadas = comando.ExecuteNonQuery();
+            actualizada = filasAfectadas > 0;
+        }
+
+        return actualizada;
+    }
 }

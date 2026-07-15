@@ -33,11 +33,11 @@ class GestorCategorias
                     break;
 
                 case "2":
-                    //MostrarCategorias();
+                    MostrarCategorias();
                     break;
 
                 case "3":
-                    //ModificarCategoria();
+                    ModificarCategoria();
                     break;
 
                 case "4":
@@ -138,6 +138,67 @@ class GestorCategorias
         foreach (Categoria categoria in categorias)
         {
             Console.WriteLine(categoria.ToString());
+        }
+    }
+
+    private void MostrarCategorias()
+    {
+        Console.Clear();
+        Console.WriteLine("=== LISTA DE CATEGORÍAS ===");
+        Console.WriteLine("============================");
+
+        List<Categoria> categorias = Categoria.Listar(conexion);
+        MostrarLista(categorias);
+
+        if (categorias.Count == 0)
+        {
+            Console.WriteLine("No hay categorías disponibles.");
+        }
+    }
+
+    private void ModificarCategoria()
+    {
+        Console.Clear();
+        Console.WriteLine("=== MODIFICAR CATEGORÍA ===");
+        Console.WriteLine("============================");
+
+        List<Categoria> categorias = Categoria.Listar(conexion);
+        MostrarLista(categorias);
+
+        if (categorias.Count == 0)
+        {
+            Console.WriteLine("No hay categorías disponibles.");
+            return;
+        }
+
+        int idCategoria = TextoUtil.LeerEnteroPositivo("Introduce el ID de la categoría a modificar: ");
+
+        Categoria? categoria = Categoria.BuscarPorId(conexion, idCategoria);
+
+        if (categoria == null)
+        {
+            Console.WriteLine("No se encontró una categoría con ese ID.");
+            return;
+        }
+
+        Console.WriteLine("Nombre actual: " + categoria.Nombre);
+        Console.Write("Nuevo nombre (Enter para conservar): ");
+        string nuevoNombre = Console.ReadLine()?.Trim() ?? categoria.Nombre;
+
+        Console.WriteLine("Descripción actual: " + categoria.Descripcion);
+        Console.Write("Nueva descripción (Enter para conservar): ");
+        string nuevaDescripcion = Console.ReadLine()?.Trim() ?? categoria.Descripcion   ;
+
+        categoria.Nombre = nuevoNombre;
+        categoria.Descripcion = nuevaDescripcion;
+
+        if (categoria.Actualizar(conexion))
+        {
+            Console.WriteLine("Categoría modificada correctamente.");
+        }
+        else
+        {
+            Console.WriteLine("Error al modificar la categoría.");
         }
     }
 }
