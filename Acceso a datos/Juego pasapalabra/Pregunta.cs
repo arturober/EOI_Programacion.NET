@@ -148,8 +148,9 @@ class Pregunta
     public static List<Pregunta> ObtenerRosco(SqliteConnection conexion, int temaId)
     {
         List<Pregunta> rosco = new List<Pregunta>();
+        string letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
 
-        for (char letra = 'A'; letra <= 'Z'; letra++)
+        foreach (char letra in letras)
         {
             Pregunta? pregunta = ObtenerAleatoria(conexion, letra, temaId);
             if (pregunta != null)

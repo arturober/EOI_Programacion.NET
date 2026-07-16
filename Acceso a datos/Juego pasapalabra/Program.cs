@@ -15,6 +15,7 @@ class Program
 
             GestorTemas gestorTemas = new GestorTemas(conexion);
             //GestorPalabras gestorPalabras = new GestorPalabras(conexion);
+            JuegoPasapalabra juego = new JuegoPasapalabra(conexion);
 
             bool salir = false;
             while (!salir)
@@ -28,10 +29,14 @@ class Program
                 Console.WriteLine("0. Salir");
                 Console.Write("Seleccione una opción: ");
 
-                string opcion = Console.ReadLine() ?? "";
+                string opcion = Console.ReadLine() ?? " ";
 
                 switch (opcion)
                 {
+                    case "1":
+                        juego.Jugar();
+                        break;
+
                     case "2":
                         gestorTemas.MostrarMenu();
                         break;
