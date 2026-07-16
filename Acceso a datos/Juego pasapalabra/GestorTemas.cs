@@ -29,7 +29,7 @@ class GestorTemas
             switch (opcion)
             {
                 case "1":
-                    //InsertarTema();
+                    InsertarTema();
                     break;
 
                 case "2":
@@ -41,7 +41,7 @@ class GestorTemas
                     break;
 
                 case "4":
-                    //EliminarTema();
+                    EliminarTema();
                     break;
 
                 case "0":
@@ -82,5 +82,74 @@ class GestorTemas
         }
 
         Console.WriteLine();
+    }
+
+    private void InsertarTema()
+    {
+        Console.Clear();
+        Console.WriteLine("=== INSERTAR TEMA ===");
+
+        string nombre = TextoUtil.LeerTextoObligatorio("Introduce el nombre del tema: ");
+
+        if (Tema.Existe(conexion, nombre))
+        {
+            Console.WriteLine("Ya existe un tema con ese nombre. No se puede insertar.");
+        }
+        else
+        {
+            string descripcion = TextoUtil.LeerTextoObligatorio("Introduce la descripción del tema: ");
+
+            Tema nuevoTema = new Tema(nombre, descripcion);
+            if (nuevoTema.Insertar(conexion))
+            {
+                Console.WriteLine("Tema insertado correctamente.");
+            }
+            else
+            {
+                Console.WriteLine("Error al insertar el tema.");
+            }
+        }
+    }
+
+    private void EliminarTema()
+    {
+        Console.Clear();
+        Console.WriteLine("=== ELIMINAR TEMA ===");
+        Console.WriteLine("=====================");
+
+        List<Tema> temas = Tema.Listar(conexion);
+        MostrarLista(temas);
+
+        if (temas.Count == 0)
+        {
+            Console.WriteLine("No hay temas disponibles.");
+            return;
+        }
+
+        int id = TextoUtil.LeerEnteroPositivo("Introduce el ID del tema a eliminar: ");
+
+        Tema? tema = Tema.BuscarPorId(conexion, id);
+        if (tema == null)
+        {
+            Console.WriteLine("No se encontró un tema con ese ID.");
+            return;
+        }
+
+        bool confirmacion = TextoUtil.Confirmar($"¿Estás seguro de que deseas eliminar el tema '{tema.Nombre}'?");
+        if (confirmacion)
+        {
+            if (tema.Borrar(conexion))
+            {
+                Console.WriteLine("Tema eliminado correctamente.");
+            }
+            else
+            {
+                Console.WriteLine("Error al eliminar el tema.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Operación cancelada. El tema no se ha eliminado.");
+        }
     }
 }
