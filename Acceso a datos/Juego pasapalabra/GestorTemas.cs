@@ -37,7 +37,7 @@ class GestorTemas
                     break;
 
                 case "3":
-                    //ModificarTema();
+                    ModificarTema();
                     break;
 
                 case "4":
@@ -88,6 +88,7 @@ class GestorTemas
     {
         Console.Clear();
         Console.WriteLine("=== INSERTAR TEMA ===");
+        Console.WriteLine("=====================");
 
         string nombre = TextoUtil.LeerTextoObligatorio("Introduce el nombre del tema: ");
 
@@ -150,6 +151,57 @@ class GestorTemas
         else
         {
             Console.WriteLine("Operación cancelada. El tema no se ha eliminado.");
+        }
+    }
+
+    private void ModificarTema()
+    {
+        Console.Clear();
+        Console.WriteLine("=== MODIFICAR TEMA ===");
+        Console.WriteLine("======================");
+
+        List<Tema> temas = Tema.Listar(conexion);
+        MostrarLista(temas);
+
+        if (temas.Count == 0)
+        {
+            Console.WriteLine("No hay temas disponibles.");
+            return;
+        }
+
+        int id = TextoUtil.LeerEnteroPositivo("Introduce el ID del tema a modificar: ");
+
+        Tema? tema = Tema.BuscarPorId(conexion, id);
+        if (tema == null)
+        {
+            Console.WriteLine("No se encontró un tema con ese ID.");
+            return;
+        }
+
+        Console.WriteLine("Nombre actual: " + tema.Nombre);
+        Console.Write("Nuevo nombre (Enter para conservar): ");
+        string nuevoNombre = Console.ReadLine()?.Trim() ?? tema.Nombre;
+
+        if (nuevoNombre != tema.Nombre && Tema.Existe(conexion, nuevoNombre))
+        {
+            Console.WriteLine("Ya existe un tema con ese nombre. No se puede modificar.");
+            return;
+        }
+
+        Console.WriteLine("Descripción actual: " + tema.Descripcion);
+        Console.Write("Nueva descripción (Enter para conservar): ");
+        string nuevaDescripcion = Console.ReadLine()?.Trim() ?? tema.Descripcion;
+
+        tema.Nombre = nuevoNombre;
+        tema.Descripcion = nuevaDescripcion;
+
+        if (tema.Actualizar(conexion))
+        {
+            Console.WriteLine("Tema modificado correctamente.");
+        }
+        else
+        {
+            Console.WriteLine("Error al modificar el tema.");
         }
     }
 }
