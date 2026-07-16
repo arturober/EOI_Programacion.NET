@@ -20,6 +20,8 @@ La base de datos incluida contiene **5 temas** y **135 preguntas en español de 
 - Corrección de respuestas ignorando mayúsculas, tildes y espacios repetidos.
 - La `ñ` sigue siendo diferente de la `n`.
 - Resultado final con aciertos, fallos y preguntas pendientes.
+- Títulos, menús, avisos y rosco destacados mediante colores de consola.
+- Los símbolos `?`, `+` y `-` se conservan para no depender solamente del color.
 - CRUD completo de preguntas.
 - CRUD completo de temas.
 - Protección para impedir borrar un tema que todavía contiene preguntas.
@@ -57,7 +59,7 @@ La dependencia utilizada es:
 ## Estructura del proyecto
 
 ```text
-PasapalabraConSQLiteMapeado/
+PasapalabraConSQLiteColores/
 │
 ├── Program.cs
 ├── BaseDatos.cs
@@ -155,6 +157,23 @@ Contiene métodos auxiliares para:
 - Validar letras del rosco.
 - Leer textos, números y confirmaciones.
 - Pausar la consola.
+- Escribir textos, títulos, opciones y mensajes con colores reutilizables.
+
+
+## Uso de colores en la consola
+
+Los colores se centralizan en `TextoUtil.cs` para evitar repetir instrucciones como `Console.ForegroundColor` por todo el proyecto.
+
+Los métodos principales son:
+
+```csharp
+TextoUtil.MostrarTitulo("JUEGO DE PASAPALABRA");
+TextoUtil.MostrarCorrecto("¡Respuesta correcta!");
+TextoUtil.MostrarError("Respuesta incorrecta.");
+TextoUtil.MostrarAviso("Operación cancelada.");
+```
+
+Cada método recupera el color normal de la consola después de escribir. Así, los cambios son sencillos de localizar y modificar por el alumnado.
 
 ## Base de datos
 
@@ -329,7 +348,14 @@ ELIGE UN TEMA
 ...
 ```
 
-Durante la partida el rosco utiliza estos símbolos:
+Durante la partida el rosco utiliza colores y símbolos:
+
+- Amarillo: letra actual.
+- Verde: respuesta correcta.
+- Rojo: respuesta incorrecta.
+- Cian oscuro: pregunta pendiente.
+
+Los símbolos se mantienen para que el estado también se entienda en una consola sin colores:
 
 ```text
 [A?]  Pregunta pendiente
@@ -466,7 +492,7 @@ Este proyecto permite practicar:
 - Añadir niveles de dificultad.
 - Restar puntos por fallos.
 - Permitir dos jugadores.
-- Añadir colores a las letras del rosco.
+- Permitir elegir una combinación de colores desde un menú.
 - Evitar que se repitan preguntas entre partidas.
 - Exportar preguntas a CSV.
 - Importar preguntas desde un fichero.
