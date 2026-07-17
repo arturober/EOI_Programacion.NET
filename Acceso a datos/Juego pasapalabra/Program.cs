@@ -14,7 +14,7 @@ class Program
             conexion.Open();
 
             GestorTemas gestorTemas = new GestorTemas(conexion);
-            //GestorPalabras gestorPalabras = new GestorPalabras(conexion);
+            GestorPreguntas gestorPreguntas = new GestorPreguntas(conexion);
             JuegoPasapalabra juego = new JuegoPasapalabra(conexion);
 
             bool salir = false;
@@ -25,7 +25,7 @@ class Program
                 Console.WriteLine("=== MENÚ PRINCIPAL ===");
                 Console.WriteLine("1. Jugar");
                 Console.WriteLine("2. Gestionar temas");
-                Console.WriteLine("3. Gestionar palabras");
+                Console.WriteLine("3. Gestionar preguntas");
                 Console.WriteLine("0. Salir");
                 Console.Write("Seleccione una opción: ");
 
@@ -42,7 +42,7 @@ class Program
                         break;
 
                     case "3":
-                        //gestorPalabras.MostrarMenu();
+                        gestorPreguntas.MostrarMenu();
                         break;
 
                     case "0":

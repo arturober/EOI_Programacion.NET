@@ -21,7 +21,7 @@ class TextoUtil
             sb.Append(NormalizarCaracter(c));
         }
 
-        // Convertir a minúsculas y luego capitalizar la primera letra de cada palabra
+        // Convertir todo el texto a minúsculas para poder compararlo
         texto = sb.ToString().ToLower();
 
         return texto;

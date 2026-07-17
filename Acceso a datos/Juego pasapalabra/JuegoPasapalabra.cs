@@ -47,7 +47,7 @@ class JuegoPasapalabra
                 continue;
             }
 
-            if (respuesta.Equals(preguntaActual.Respuesta, StringComparison.OrdinalIgnoreCase))
+            if (TextoUtil.SonIguales(respuesta, preguntaActual.Respuesta))
             {
                 estados[preguntaActual.Letra] = "correcta";
                 pendientes--;

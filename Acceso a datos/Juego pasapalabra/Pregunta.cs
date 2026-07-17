@@ -48,7 +48,7 @@ class Pregunta
 
     public override string ToString()
     {
-        return $"{id}. {letra} - {respuesta} - {definicion} - {tema.Nombre}";
+        return $"{letra} - {respuesta} (Id: {id}) - {definicion} - {tema.Nombre}";
     }
 
     public string ObtenerEnunciado()
