@@ -84,7 +84,7 @@ class Pregunta
     {
         List<Pregunta> preguntas = new List<Pregunta>();
 
-        string sql = ConsultaBase() + " ORDER BY t.nombre, p.letra, p.respuesta";
+        string sql = ConsultaBase() + " ORDER BY p.letra, p.respuesta, p.definicion";
         using (SqliteCommand comando = new SqliteCommand(sql, conexion))
         {
             using (SqliteDataReader reader = comando.ExecuteReader())
