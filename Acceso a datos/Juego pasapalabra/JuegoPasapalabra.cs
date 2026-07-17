@@ -65,7 +65,65 @@ class JuegoPasapalabra
             TextoUtil.Pausar();
         }
 
+        // Al terminar o abandonar la partida, mostramos el resultado final.
+        MostrarResultado(rosco, estados, salir);
+    }
+
+    private void MostrarResultado(
+        List<Pregunta> rosco,
+        Dictionary<char, string> estados,
+        bool partidaAbandonada)
+    {
+        int aciertos = 0;
+        int fallos = 0;
+        int pendientes = 0;
+
+        foreach (Pregunta pregunta in rosco)
+        {
+            string estado = estados[pregunta.Letra];
+
+            if (estado == "correcta")
+            {
+                aciertos++;
+            }
+            else if (estado == "incorrecta")
+            {
+                fallos++;
+            }
+            else
+            {
+                pendientes++;
+            }
+        }
+
+        Console.Clear();
+        Console.WriteLine();
+        Console.WriteLine("=== RESULTADO DE LA PARTIDA ===");
+        Console.WriteLine();
+
         MostrarRosco(rosco, estados);
+
+        Console.WriteLine();
+        Console.WriteLine("Aciertos: " + aciertos);
+        Console.WriteLine("Fallos: " + fallos);
+        Console.WriteLine("Pendientes: " + pendientes);
+        Console.WriteLine("Total de preguntas: " + rosco.Count);
+        Console.WriteLine();
+
+        if (partidaAbandonada)
+        {
+            Console.WriteLine("Has abandonado la partida antes de terminar.");
+        }
+        else if (fallos == 0)
+        {
+            Console.WriteLine("¡Enhorabuena! Has completado el rosco sin fallos.");
+        }
+        else
+        {
+            Console.WriteLine("Has completado la partida.");
+        }
+
+        TextoUtil.Pausar();
     }
 
     private void MostrarRosco(List<Pregunta> rosco, Dictionary<char, string> estados, char? letraActual = null)
