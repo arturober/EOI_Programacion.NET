@@ -24,7 +24,7 @@
                             <i class="bi bi-pencil"></i> Editar
                         </a>
 
-                        <form method="post" asp-page-handler="Eliminar">
+                        <form class="formulario-eliminar" method="post" asp-page-handler="Eliminar">
                             <input type="hidden" name="id" value="@persona.Id" />
                             <button type="submit" class="btn btn-sm btn-outline-danger">
                                 <i class="bi bi-trash"></i> Eliminar
