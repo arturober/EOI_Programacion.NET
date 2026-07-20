@@ -10,12 +10,27 @@
 
 </head>
 <body>
+    <header class="navbar navabar-expand-md sticky-top bg-white border-bottom shadow-sm">
+        <nav class="container">
+            <a class="navbar-brand fw-bold text-primary" asp-page="/Index">
+                <i class="bi bi-person-plus me-2"></i>Agenda de teléfonos
+            </a>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+            <a class="btn btn-primary" asp-page="/Crear">
+                <i class="bi bi-person-plus me-2"></i>Añadir contacto
+            </a>
+        </nav>
+
+    </header>
+
+    <main role="main" class="container flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <footer class="border-top bg-white py-4 text-center text-secondary">
+        <i class="bi bi-code-slash me-2"></i>
+        Desarrollado con C#, Razor Pages, Bootstrap, SQLite, y SweetAlert2
+    </footer>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
