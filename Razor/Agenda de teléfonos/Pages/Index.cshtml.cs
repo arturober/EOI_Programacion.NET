@@ -14,4 +14,13 @@ public class IndexModel : PageModel
         using SqliteConnection conexion = BaseDatos.Inicializar();
         Personas = Persona.Listar(conexion);
     }
+
+    public IActionResult OnPostEliminar(int id)
+    {
+        using SqliteConnection conexion = BaseDatos.Inicializar();
+
+        Persona? persona = Persona.BuscarPorId(conexion, id);
+        persona.Borrar(conexion);
+        return RedirectToPage();
+    }
 }

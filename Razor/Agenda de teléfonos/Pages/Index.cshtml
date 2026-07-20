@@ -23,9 +23,13 @@
                         <a class="btn btn-sm btn-outline-primary" asp-page="/Editar" asp-route-id="@persona.Id">
                             <i class="bi bi-pencil"></i> Editar
                         </a>
-                        <button class="btn btn-sm btn-outline-danger" onclick="confirmarEliminacion(@persona.Id)">
-                            <i class="bi bi-trash"></i> Eliminar
-                        </button>
+
+                        <form method="post" asp-page-handler="Eliminar">
+                            <input type="hidden" name="id" value="@persona.Id" />
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                        </form>
                     </td>
                 </tr>
             }

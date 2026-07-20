@@ -35,5 +35,27 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
 
+
+    <script>
+        // SweetAlert pide confirmación antes de enviar un formulario de eliminación.
+        document.querySelectorAll(".formulario-eliminar").forEach(formulario => {
+            formulario.addEventListener("submit", evento => {
+                evento.preventDefault();
+
+                Swal.fire({
+                    title: `¿Quieres eliminar a ${formulario.dataset.nombre}?`,
+                    text: "Esta operación no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar",
+                }).then(resultado => {
+                    if (resultado.isConfirmed) {
+                        formulario.submit();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
