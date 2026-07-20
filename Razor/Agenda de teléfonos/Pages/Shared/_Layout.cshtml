@@ -3,13 +3,12 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Agenda_de_teléfonos</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet" />
-
+    <title>@ViewData["Title"] - Agenda de teléfonos</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" />
 </head>
-<body>
+<body class="bg-light min-vh-100 d-flex flex-column">
     <header class="navbar navbar-expand-md sticky-top bg-white border-bottom shadow-sm">
         <nav class="container">
             <a class="navbar-brand fw-bold text-primary" asp-page="/Index">
@@ -23,39 +22,51 @@
 
     </header>
 
-    <main role="main" class="container flex-grow-1">
+    <main role="main" class="container py-5 flex-grow-1">
         @RenderBody()
     </main>
 
     <footer class="border-top bg-white py-4 text-center text-secondary">
         <i class="bi bi-code-slash me-2"></i>
-        Desarrollado con C#, Razor Pages, Bootstrap, SQLite, y SweetAlert2
+        Desarrollado con C#, Razor Pages, Bootstrap, SQLite y SweetAlert2
     </footer>
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
 
+    @{
+        string? mensaje = TempData["Mensaje"] as string;
+        string? error = TempData["Error"] as string;
+    }
 
     <script>
-        // SweetAlert pide confirmación antes de enviar un formulario de eliminación.
-        document.querySelectorAll(".formulario-eliminar").forEach(formulario => {
-            formulario.addEventListener("submit", evento => {
-                evento.preventDefault();
-
-                Swal.fire({
-                    title: `¿Quieres eliminar a ${formulario.dataset.nombre}?`,
-                    text: "Esta operación no se puede deshacer.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonText: "Sí, eliminar",
-                    cancelButtonText: "Cancelar",
-                }).then(resultado => {
-                    if (resultado.isConfirmed) {
-                        formulario.submit();
-                    }
-                });
+        @if (mensaje != null || error != null)
+        {
+            <text>
+            Swal.fire({
+                icon: "@(error == null ? "success" : "error")",
+                title: "@(error == null ? "Operación completada" : "Ha ocurrido un problema")",
+                text: @Json.Serialize(error ?? mensaje ?? ""),
+                confirmButtonText: "Aceptar"
             });
-        });
+            </text>
+        }
+
+        function confirmarEliminacion(formulario) {
+            Swal.fire({
+                title: "¿Eliminar contacto?",
+                text: `Se eliminará a ${formulario.dataset.nombre}. Esta operación no se puede deshacer.`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
+                reverseButtons: true
+            }).then(resultado => {
+                if (resultado.isConfirmed) formulario.submit();
+            });
+
+            return false;
+        }
     </script>
 </body>
 </html>

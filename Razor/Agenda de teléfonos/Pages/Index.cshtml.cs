@@ -1,18 +1,22 @@
+using AgendaTelefonos.Datos;
+using AgendaTelefonos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using AgendaContactosWeb.Models;
 using Microsoft.Data.Sqlite;
 
-namespace Agenda_de_teléfonos.Pages;
+namespace AgendaTelefonos.Pages;
 
 public class IndexModel : PageModel
 {
-    public List<Persona> Personas { get; set; } = new List<Persona>();
+    public List<Persona> Personas { get; private set; } = new List<Persona>();
+
+    [BindProperty(SupportsGet = true)]
+    public string Busqueda { get; set; } = "";
 
     public void OnGet()
     {
         using SqliteConnection conexion = BaseDatos.Inicializar();
-        Personas = Persona.Listar(conexion);
+        Personas = Persona.Listar(conexion, Busqueda);
     }
 
     public IActionResult OnPostEliminar(int id)
@@ -20,10 +24,16 @@ public class IndexModel : PageModel
         using SqliteConnection conexion = BaseDatos.Inicializar();
 
         Persona? persona = Persona.BuscarPorId(conexion, id);
-        if (persona != null)
+
+        if (persona == null || !persona.Borrar(conexion))
         {
-            persona.Borrar(conexion);
+            TempData["Error"] = "El contacto ya no existe.";
         }
-        return RedirectToPage();
+        else
+        {
+            TempData["Mensaje"] = "El contacto se ha eliminado correctamente.";
+        }
+
+        return RedirectToPage(new { busqueda = Busqueda });
     }
 }

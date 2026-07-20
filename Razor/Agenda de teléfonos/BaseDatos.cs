@@ -1,13 +1,16 @@
 using Microsoft.Data.Sqlite;
 
+namespace AgendaTelefonos.Datos;
+
+// Esta clase se ocupa únicamente de abrir la conexión con SQLite.
 public static class BaseDatos
 {
-    private static string rutaBD = "Data Source=agenda.db";
-
-
     public static SqliteConnection Inicializar()
     {
-        SqliteConnection conexion = new SqliteConnection(rutaBD);
+        string ruta = Path.Combine(Directory.GetCurrentDirectory(), "agenda.db");
+        string cadenaConexion = $"Data Source={ruta}";
+
+        SqliteConnection conexion = new SqliteConnection(cadenaConexion);
         conexion.Open();
         return conexion;
     }
