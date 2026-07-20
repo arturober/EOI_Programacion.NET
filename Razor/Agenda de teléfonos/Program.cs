@@ -5,12 +5,9 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+BaseDatos.Inicializar();
 
 app.UseRouting();
-
-app.UseAuthorization();
-
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
