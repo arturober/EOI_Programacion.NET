@@ -20,7 +20,10 @@ public class IndexModel : PageModel
         using SqliteConnection conexion = BaseDatos.Inicializar();
 
         Persona? persona = Persona.BuscarPorId(conexion, id);
-        persona.Borrar(conexion);
+        if (persona != null)
+        {
+            persona.Borrar(conexion);
+        }
         return RedirectToPage();
     }
 }
