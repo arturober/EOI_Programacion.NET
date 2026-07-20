@@ -14,13 +14,33 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        function showAlert() {
+        function mostrarAlerta() {
             Swal.fire({
                 title: '¡Alerta!',
                 text: 'Esta es una alerta de ejemplo.',
                 icon: 'warning',
                 confirmButtonText: 'Aceptar'
             });
+        }
+
+        function pedirConfirmacion() {
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, eliminarlo'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire(
+                        '¡Eliminado!',
+                        'El registro ha sido eliminado.',
+                        'success'
+                    )
+                }
+            })
         }
     </script>
 </head>
@@ -29,9 +49,14 @@
 
         <h1>Ejemplos de Sweet Alert</h1>
 
-        <button type="button" class="btn btn-primary" onclick="showAlert()">
+        <button type="button" class="btn btn-primary" onclick="mostrarAlerta()">
             <i class="bi bi-exclamation-triangle me-2"></i>
             Mostrar alerta
+        </button>
+
+        <button type="button" class="btn btn-danger" onclick="pedirConfirmacion()">
+            <i class="bi bi-trash me-2"></i>
+            Pedir confirmación
         </button>
 
     </div>
