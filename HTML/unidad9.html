@@ -6,16 +6,79 @@
     <title>Formularios</title>
 </head>
 <body>
-    <h1>Formulario para buscar en google</h1>
+    <h1>Formularios para buscar en google</h1>
 
+    <h2>Formulario de búsqueda muy sencillo</h2>
 
     <!-- https://www.google.com/search?q=partido+de+espa%C3%B1a -->
     <form action="https://www.google.com/search" method="get">
-        <label for="buscar">Buscar en Google:</label>
+        <label for="buscar">Buscar en Google:</label><br>
         <input type="text" id="buscar" name="q" required>
         <button type="submit">Buscar</button>
     </form>
 
+    <h2>Formulario de búsqueda de imágenes con filtros</h2>
+
+    <!-- https://www.google.com/search?q=manzanas&tbs=isz:i -->
+    <form action="https://www.google.com/search" method="get">
+        <input type="hidden" name="tbm" value="isch">
+
+        <fieldset>
+            <legend>Tamaño</legend>
+            <select name="tbs">
+                <option selected disabled>Cualquier tamaño</option>
+                <option value="isz:l">Grande</option>
+                <option value="isz:m">Mediano</option>
+                <option value="isz:i">Icono</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Color</legend>
+            <select name="tbs">
+                <option selected disabled>Cualquier color</option>  
+                <option value="ic:color">Color</option>
+                <option value="ic:gray">Blanco y negro</option>
+                <option value="ic:trans">Transparente</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Tipo</legend>
+            <select name="tbs">
+                <option selected disabled>Cualquier tipo</option>
+                <option value="itp:clipart">Imagen prediseñada</option>
+                <option value="itp:lineart">Dibujo lineal</option>
+                <option value="itp:animated">GIF</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Fecha</legend>
+            <select name="tbs">
+                <option selected disabled>Cualquier fecha</option>
+                <option value="qdr:d">Último día</option>
+                <option value="qdr:w">Última semana</option>
+                <option value="qdr:m">Último mes</option>
+                <option value="qdr:y">Último año</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Licencia</legend>
+            <select name="tbs">
+                <option selected disabled>Cualquier licencia</option>
+                <option value="il:cl">Creative Commons</option>
+                <option value="il:ol">Comercial y otros tipos</option>
+            </select>
+        </fieldset>
+
+        <br>
+
+        <label for="buscar">Buscar imágenes:</label><br>
+        <input type="text" id="buscar" name="q" required>
+        <button type="submit">Buscar imágenes</button>
+    </form>
     
 </body>
 </html>
