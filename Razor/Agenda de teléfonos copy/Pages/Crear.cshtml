@@ -15,6 +15,21 @@
                     <span class="input-group-text"><i class="bi bi-person"></i></span>
                     <input asp-for="Persona.Nombre" class="form-control" placeholder="Nombre y apellidos" autofocus /> 
                 </div>
+                <span asp-validation-for="Persona.Nombre" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Persona.Telefono" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                    <input asp-for="Persona.Telefono" class="form-control" type="tel" placeholder="Número de teléfono" />
+                </div>
+                <span asp-validation-for="Persona.Telefono" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-floppy me-2"></i>Guardar
+                </button>
+                <a asp-page="/Index" class="btn btn-outline-secondary">Cancelar</a>
             </div>
         </form>
     </div>
