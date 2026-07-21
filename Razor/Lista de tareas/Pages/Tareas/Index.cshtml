@@ -1,0 +1,108 @@
+@page
+@model TareasIndexModel
+@{
+    ViewData["Title"] = "Tareas";
+}
+
+<div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <p class="text-primary fw-bold small mb-1">GESTIÓN DE TAREAS</p>
+        <h1 class="h2 mb-0"><i class="bi bi-list-check me-2"></i>Mis tareas</h1>
+    </div>
+    <a class="btn btn-primary" asp-page="Crear"
+       title="Nueva tarea" aria-label="Nueva tarea">
+        <i class="bi bi-plus-lg"></i>
+    </a>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <label asp-for="CategoriaId" class="form-label fw-bold">
+        <i class="bi bi-funnel me-1"></i>Mostrar categoría
+    </label>
+    <select asp-for="CategoriaId" class="form-select" onchange="this.form.submit()">
+        <option value="">Todas las categorías</option>
+        @foreach (Categoria categoria in Model.Categorias)
+        {
+            <option value="@categoria.Id">@categoria.Nombre</option>
+        }
+    </select>
+</form>
+
+@if (Model.Tareas.Count == 0)
+{
+    <div class="alert alert-light border text-center py-5">
+        <i class="bi bi-inbox fs-1 d-block text-secondary mb-2"></i>
+        No hay tareas que mostrar.
+    </div>
+}
+else
+{
+    <div class="table-responsive rounded shadow-sm border">
+        <table class="table table-hover align-middle mb-0 bg-white">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">Tarea</th>
+                    <th scope="col" class="d-none d-lg-table-cell">Categoría</th>
+                    <th scope="col" class="text-end">
+                        <span class="d-none d-sm-inline">Acciones</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Tarea tarea in Model.Tareas)
+                {
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-start gap-3">
+                                @if (tarea.Completada)
+                                {
+                                    <i class="bi bi-check-circle-fill fs-4 text-success flex-shrink-0"
+                                       title="Completada" aria-label="Completada"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-hourglass-split fs-4 text-warning flex-shrink-0"
+                                       title="Pendiente" aria-label="Pendiente"></i>
+                                }
+
+                                <div class="text-break">
+                                    <strong class="d-block @(tarea.Completada ? "text-secondary text-decoration-line-through" : "")">
+                                        @tarea.Titulo
+                                    </strong>
+                                    <small class="d-block text-secondary">@tarea.Descripcion</small>
+                                    <span class="badge rounded-pill text-bg-light border d-lg-none mt-1">
+                                        <i class="bi bi-tag me-1"></i>@tarea.Categoria.Nombre
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                            <span class="badge rounded-pill text-bg-light border">
+                                <i class="bi bi-tag me-1"></i>@tarea.Categoria.Nombre
+                            </span>
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <a class="btn btn-sm btn-outline-primary"
+                               asp-page="Modificar" asp-route-id="@tarea.Id"
+                               title="Modificar" aria-label="Modificar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <form method="post" asp-page-handler="Eliminar"
+                                  class="d-inline ms-1"
+                                  data-elemento="la tarea" data-nombre="@tarea.Titulo"
+                                  onsubmit="return confirmarEliminacion(this)">
+                                <input type="hidden" name="id" value="@tarea.Id" />
+                                <input type="hidden" name="CategoriaId"
+                                       value="@Model.CategoriaId" />
+                                <button class="btn btn-sm btn-outline-danger" type="submit"
+                                        title="Eliminar" aria-label="Eliminar">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

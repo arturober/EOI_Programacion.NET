@@ -1,0 +1,64 @@
+@page
+@model PasapalabraRazor.Pages.Jugar.IndexModel
+@{
+    ViewData["Title"] = "Elegir tema";
+}
+
+<div class="text-center mb-4">
+    <p class="text-primary fw-bold small mb-1">NUEVA PARTIDA</p>
+    <h1 class="h2"><i class="bi bi-controller me-2"></i>Elige un tema</h1>
+    <p class="text-secondary mb-0">
+        Solo se puede jugar con una selección que contenga las 27 letras.
+    </p>
+</div>
+
+@if (Model.Error != "")
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>@Model.Error
+    </div>
+}
+
+<div class="vstack gap-3 col-xl-9 mx-auto">
+    <form method="post" class="card shadow-sm">
+        <input type="hidden" name="temaId" value="0" />
+        <div class="card-body d-flex flex-column flex-md-row align-items-md-center gap-3">
+            <i class="bi bi-stars fs-2 text-primary flex-shrink-0"></i>
+            <div class="flex-grow-1">
+                <h2 class="h5 mb-1">Todos los temas</h2>
+                <p class="text-secondary mb-0">Mezcla preguntas de toda la base de datos.</p>
+            </div>
+            <span class="badge rounded-pill text-bg-light border text-nowrap">
+                @Model.LetrasTotales / 27 letras
+            </span>
+            <button class="btn btn-primary" type="submit"
+                    disabled="@(Model.LetrasTotales != 27)"
+                    title="Jugar con todos los temas" aria-label="Jugar con todos los temas">
+                <i class="bi bi-play-fill"></i>
+            </button>
+        </div>
+    </form>
+
+    @foreach (PasapalabraRazor.Pages.Jugar.TemaConLetras item in Model.Temas)
+    {
+        <form method="post" class="card shadow-sm">
+            <input type="hidden" name="temaId" value="@item.Tema.Id" />
+            <div class="card-body d-flex flex-column flex-md-row align-items-md-center gap-3">
+                <i class="bi bi-tag-fill fs-2 text-primary flex-shrink-0"></i>
+                <div class="flex-grow-1 text-break">
+                    <h2 class="h5 mb-1">@item.Tema.Nombre</h2>
+                    <p class="text-secondary mb-0">@item.Tema.Descripcion</p>
+                </div>
+                <span class="badge rounded-pill text-bg-light border text-nowrap">
+                    @item.Letras / 27 letras
+                </span>
+                <button class="btn btn-primary" type="submit"
+                        disabled="@(item.Letras != 27)"
+                        title="Jugar con @item.Tema.Nombre"
+                        aria-label="Jugar con @item.Tema.Nombre">
+                    <i class="bi bi-play-fill"></i>
+                </button>
+            </div>
+        </form>
+    }
+</div>

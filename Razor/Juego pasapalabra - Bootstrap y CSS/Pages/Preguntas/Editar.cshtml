@@ -1,0 +1,68 @@
+@page "{id:int}"
+@model PasapalabraRazor.Pages.Preguntas.EditarModel
+@{
+    ViewData["Title"] = "Modificar pregunta";
+}
+
+<div class="card shadow-sm col-lg-8 mx-auto">
+    <div class="card-body p-4">
+        <p class="text-primary fw-bold small mb-1">EDITAR PREGUNTA</p>
+        <h1 class="h2 mb-4"><i class="bi bi-pencil-square me-2"></i>Modificar pregunta</h1>
+
+        <form method="post">
+            <input asp-for="PreguntaFormulario.Id" type="hidden" />
+
+            @if (ViewData.ModelState[""]?.Errors.Count > 0)
+            {
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            }
+
+            <div class="row g-3 mb-3">
+                <div class="col-12 col-md-4">
+                    <label asp-for="PreguntaFormulario.Letra" class="form-label fw-bold">Letra del rosco</label>
+                    <select asp-for="PreguntaFormulario.Letra" class="form-select">
+                        @foreach (char letra in TextoUtil.LetrasRosco)
+                        {
+                            <option value="@letra">@letra</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-12 col-md-8">
+                    <label asp-for="TemaId" class="form-label fw-bold">Tema</label>
+                    <select asp-for="TemaId" class="form-select">
+                        @foreach (Tema tema in Model.Temas)
+                        {
+                            <option value="@tema.Id">@tema.Nombre</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="PreguntaFormulario.Respuesta" class="form-label fw-bold"></label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-chat-left-text"></i></span>
+                    <input asp-for="PreguntaFormulario.Respuesta" class="form-control" autofocus />
+                </div>
+                <span asp-validation-for="PreguntaFormulario.Respuesta" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="PreguntaFormulario.Definicion" class="form-label fw-bold"></label>
+                <textarea asp-for="PreguntaFormulario.Definicion" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="PreguntaFormulario.Definicion" class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary"
+                        title="Guardar" aria-label="Guardar">
+                    <i class="bi bi-floppy"></i>
+                </button>
+                <a asp-page="Index" class="btn btn-outline-secondary"
+                   title="Cancelar" aria-label="Cancelar">
+                    <i class="bi bi-x-lg"></i>
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

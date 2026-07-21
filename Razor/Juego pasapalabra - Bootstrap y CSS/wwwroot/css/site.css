@@ -1,0 +1,154 @@
+/* Bootstrap se ocupa del diseño general. Este archivo solo dibuja el rosco. */
+
+.marca-circulo {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    color: white;
+    background: var(--bs-primary);
+    font-size: 0.8rem;
+}
+
+.mini-rosco {
+    --diametro: min(350px, 78vw);
+    --tamano-letra: clamp(26px, 7vw, 34px);
+    --radio: calc(var(--diametro) / 2 - var(--tamano-letra) / 2 - 4px);
+    position: relative;
+    width: var(--diametro);
+    height: var(--diametro);
+    border-radius: 50%;
+    background: radial-gradient(circle, white 0 46%, #e7f4ff 47% 67%, transparent 68%);
+    filter: drop-shadow(0 1rem 1rem rgba(13, 110, 253, 0.15));
+}
+
+.mini-rosco span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: var(--tamano-letra);
+    height: var(--tamano-letra);
+    margin: calc(var(--tamano-letra) / -2);
+    border: 2px solid white;
+    border-radius: 50%;
+    color: white;
+    background: var(--bs-primary);
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
+    font-weight: bold;
+    transform: rotate(calc(var(--i) * 360deg / 27))
+               translateY(calc(var(--radio) * -1))
+               rotate(calc(var(--i) * -360deg / 27));
+}
+
+.mini-rosco strong {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--bs-primary);
+    font-size: clamp(4rem, 16vw, 6rem);
+}
+
+.letra-tabla {
+    display: inline-grid;
+    place-items: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    color: white;
+    background: var(--bs-primary);
+    font-weight: bold;
+}
+
+.rosco {
+    --diametro: min(500px, calc(100vw - 2rem));
+    --tamano-letra: clamp(28px, 8vw, 43px);
+    --radio: calc(var(--diametro) / 2 - var(--tamano-letra) / 2 - 4px);
+    position: relative;
+    width: var(--diametro);
+    height: var(--diametro);
+    border-radius: 50%;
+    background: radial-gradient(circle, white 0 47%, #dfeffc 48% 67%, transparent 68%);
+}
+
+.rosco .letra {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: grid;
+    place-items: center;
+    width: var(--tamano-letra);
+    height: var(--tamano-letra);
+    margin: calc(var(--tamano-letra) / -2);
+    border: 3px solid white;
+    border-radius: 50%;
+    color: white;
+    background: var(--bs-primary);
+    font-size: clamp(0.7rem, 3vw, 1rem);
+    font-weight: bold;
+    box-shadow: 0 3px 7px rgba(13, 61, 102, 0.3);
+    transform: rotate(calc(var(--i) * 360deg / 27))
+               translateY(calc(var(--radio) * -1))
+               rotate(calc(var(--i) * -360deg / 27));
+}
+
+.rosco .correcta {
+    background: var(--bs-success);
+}
+
+.rosco .incorrecta {
+    background: var(--bs-danger);
+}
+
+.rosco .actual {
+    outline: 4px solid var(--bs-warning);
+    transform: rotate(calc(var(--i) * 360deg / 27))
+               translateY(calc(var(--radio) * -1))
+               rotate(calc(var(--i) * -360deg / 27))
+               scale(1.12);
+}
+
+.centro-rosco {
+    position: absolute;
+    inset: 30%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.centro-rosco small {
+    color: var(--bs-secondary-color);
+    font-weight: bold;
+}
+
+.centro-rosco strong {
+    color: var(--bs-primary);
+    font-size: clamp(3.5rem, 14vw, 5.25rem);
+    line-height: 1;
+}
+
+.centro-rosco span {
+    max-width: 9rem;
+    color: var(--bs-secondary-color);
+    font-size: clamp(0.65rem, 2.5vw, 0.85rem);
+}
+
+@media (max-width: 575.98px) {
+    .rosco {
+        --diametro: min(320px, calc(100vw - 2rem));
+        --tamano-letra: clamp(24px, 8vw, 30px);
+    }
+
+    .rosco .letra {
+        border-width: 2px;
+    }
+
+    .rosco .actual {
+        outline-width: 3px;
+    }
+}

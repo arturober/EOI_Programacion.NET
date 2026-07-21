@@ -1,0 +1,70 @@
+@page
+@model CrearTareaModel
+@{
+    ViewData["Title"] = "Nueva tarea";
+}
+
+<div class="card shadow-sm col-lg-7 mx-auto">
+    <div class="card-body p-4">
+        <p class="text-primary fw-bold small mb-1">NUEVA TAREA</p>
+        <h1 class="h2 mb-4"><i class="bi bi-plus-circle me-2"></i>Añadir tarea</h1>
+
+        @if (Model.Categorias.Count == 0)
+        {
+            <div class="alert alert-warning" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                Antes de añadir una tarea debes
+                <a asp-page="/Categorias/Crear">crear una categoría</a>.
+            </div>
+        }
+        else
+        {
+            <form method="post">
+                @if (ViewData.ModelState[""]?.Errors.Count > 0)
+                {
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                }
+
+                <div class="mb-3">
+                    <label asp-for="Tarea.Titulo" class="form-label fw-bold"></label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-card-heading"></i></span>
+                        <input asp-for="Tarea.Titulo" class="form-control"
+                               placeholder="Título de la tarea" autofocus />
+                    </div>
+                    <span asp-validation-for="Tarea.Titulo" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Tarea.Descripcion" class="form-label fw-bold"></label>
+                    <textarea asp-for="Tarea.Descripcion" class="form-control" rows="4"
+                              placeholder="¿Qué hay que hacer?"></textarea>
+                    <span asp-validation-for="Tarea.Descripcion" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="CategoriaId" class="form-label fw-bold">Categoría</label>
+                    <select asp-for="CategoriaId" class="form-select">
+                        <option value="0">Selecciona una categoría</option>
+                        @foreach (Categoria categoria in Model.Categorias)
+                        {
+                            <option value="@categoria.Id">@categoria.Nombre</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CategoriaId" class="text-danger small"></span>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary"
+                            title="Guardar" aria-label="Guardar">
+                        <i class="bi bi-floppy"></i>
+                    </button>
+                    <a asp-page="Index" class="btn btn-outline-secondary"
+                       title="Cancelar" aria-label="Cancelar">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
+                </div>
+            </form>
+        }
+    </div>
+</div>

@@ -1,0 +1,121 @@
+@page
+@model PasapalabraRazor.Pages.Jugar.PartidaModel
+@{
+    ViewData["Title"] = "Partida";
+}
+
+@if (Model.Partida == null)
+{
+    <div class="card card-body shadow-sm text-center py-5 col-lg-7 mx-auto">
+        <i class="bi bi-controller fs-1 text-secondary"></i>
+        <h1 class="h2 mt-3">No hay una partida activa</h1>
+        <div>
+            <a class="btn btn-primary" asp-page="Index">
+                <i class="bi bi-play-fill me-1"></i>Elegir tema
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-center flex-wrap gap-2 mb-4" aria-label="Marcador">
+        <span class="badge rounded-pill text-bg-success fs-6">
+            <i class="bi bi-check-lg me-1"></i>@Model.Partida.Aciertos aciertos
+        </span>
+        <span class="badge rounded-pill text-bg-danger fs-6">
+            <i class="bi bi-x-lg me-1"></i>@Model.Partida.Fallos fallos
+        </span>
+        <span class="badge rounded-pill text-bg-primary fs-6">
+            <i class="bi bi-question-lg me-1"></i>@Model.Partida.Pendientes pendientes
+        </span>
+    </div>
+
+    <section class="row align-items-center g-4 g-xl-5">
+        <div class="col-12 col-lg-6 d-flex justify-content-center">
+            <div class="rosco">
+                @for (int i = 0; i < Model.Partida.Preguntas.Count; i++)
+                {
+                    PreguntaPartida pregunta = Model.Partida.Preguntas[i];
+                    string actual = !Model.Partida.Terminada &&
+                        i == Model.Partida.IndiceActual ? " actual" : "";
+
+                    <span class="letra @pregunta.Estado@actual"
+                          style="--i: @i">@pregunta.Letra</span>
+                }
+
+                <div class="centro-rosco">
+                    @if (Model.Partida.Terminada)
+                    {
+                        <small>RESULTADO</small>
+                        <strong>@Model.Partida.Aciertos</strong>
+                        <span>aciertos</span>
+                    }
+                    else
+                    {
+                        <small>LETRA</small>
+                        <strong>@Model.Partida.PreguntaActual.Letra</strong>
+                        <span>@Model.Partida.PreguntaActual.Tema</span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4 p-xl-5">
+                    @if (Model.Partida.Terminada)
+                    {
+                        <p class="text-primary fw-bold small mb-1">PARTIDA TERMINADA</p>
+                        <h1 class="h2">
+                            @(Model.Partida.Aciertos == 27 ? "¡Rosco perfecto!" : "¡Buen trabajo!")
+                        </h1>
+                        <p class="text-secondary">
+                            Has conseguido <strong>@Model.Partida.Aciertos aciertos</strong>
+                            y has tenido <strong>@Model.Partida.Fallos fallos</strong>.
+                        </p>
+                        <a class="btn btn-primary" asp-page="Index">
+                            <i class="bi bi-arrow-repeat me-1"></i>Jugar otra partida
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-primary fw-bold small mb-1">PREGUNTA ACTUAL</p>
+                        <h1 class="h3">@Model.Partida.PreguntaActual.Enunciado</h1>
+
+                        @if (Model.Mensaje != "")
+                        {
+                            string claseAlerta = Model.TipoMensaje == "correcto"
+                                ? "alert-success"
+                                : Model.TipoMensaje == "error"
+                                    ? "alert-danger"
+                                    : "alert-warning";
+
+                            <div class="alert @claseAlerta mt-3" role="alert">@Model.Mensaje</div>
+                        }
+
+                        <form method="post" autocomplete="off">
+                            <label for="respuesta" class="form-label fw-bold">Tu respuesta</label>
+                            <input id="respuesta" name="respuesta" class="form-control form-control-lg"
+                                   autofocus placeholder="Escribe aquí..." />
+
+                            <div class="d-grid d-sm-flex flex-wrap gap-2 mt-3">
+                                <button class="btn btn-primary" type="submit"
+                                        asp-page-handler="Responder">
+                                    <i class="bi bi-check-lg me-1"></i>Responder
+                                </button>
+                                <button class="btn btn-warning" type="submit"
+                                        asp-page-handler="Pasapalabra">
+                                    <i class="bi bi-skip-forward me-1"></i>Pasapalabra
+                                </button>
+                                <button class="btn btn-outline-danger" type="submit"
+                                        asp-page-handler="Abandonar">
+                                    <i class="bi bi-stop-fill me-1"></i>Terminar
+                                </button>
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}

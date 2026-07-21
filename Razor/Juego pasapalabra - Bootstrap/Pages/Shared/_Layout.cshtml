@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Pasapalabra</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" />
+</head>
+<body class="bg-light min-vh-100 d-flex flex-column">
+    <header class="sticky-top bg-white border-bottom shadow-sm">
+        <nav class="navbar navbar-expand-lg container" aria-label="Navegación principal">
+            <a class="navbar-brand fw-bold text-primary" asp-page="/Index">
+                <i class="bi bi-question-circle-fill me-2"></i>PASAPALABRA
+            </a>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal" aria-expanded="false"
+                    aria-label="Mostrar el menú de navegación">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <div class="navbar-nav ms-lg-3">
+                    <a class="nav-link" asp-page="/Index">
+                        <i class="bi bi-house-door me-1"></i>Inicio
+                    </a>
+                    <a class="nav-link" asp-page="/Jugar/Index">
+                        <i class="bi bi-play-circle me-1"></i>Jugar
+                    </a>
+                    <a class="nav-link" asp-page="/Preguntas/Index">
+                        <i class="bi bi-question-circle me-1"></i>Preguntas
+                    </a>
+                    <a class="nav-link" asp-page="/Temas/Index">
+                        <i class="bi bi-tags me-1"></i>Temas
+                    </a>
+                </div>
+
+                <div class="d-flex gap-2 ms-lg-auto py-2 py-lg-0">
+                    <a class="btn btn-primary" asp-page="/Preguntas/Crear"
+                       title="Nueva pregunta" aria-label="Nueva pregunta">
+                        <i class="bi bi-plus-lg"></i>
+                    </a>
+                    <a class="btn btn-outline-primary" asp-page="/Temas/Crear"
+                       title="Nuevo tema" aria-label="Nuevo tema">
+                        <i class="bi bi-tag"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container py-4 py-md-5 flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <footer class="border-top bg-white py-4 text-center text-secondary">
+        <i class="bi bi-code-slash me-2"></i>
+        Desarrollado con C#, Razor Pages, Bootstrap, SQLite y SweetAlert2
+    </footer>
+
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js"></script>
+
+    @{
+        string? mensaje = TempData["Mensaje"] as string;
+        string? error = TempData["Error"] as string;
+    }
+
+    <script>
+        @if (mensaje != null || error != null)
+        {
+            <text>
+            Swal.fire({
+                icon: "@(error == null ? "success" : "error")",
+                title: "@(error == null ? "Operación completada" : "Ha ocurrido un problema")",
+                text: @Json.Serialize(error ?? mensaje ?? ""),
+                confirmButtonText: "Aceptar"
+            });
+            </text>
+        }
+
+        function confirmarEliminacion(formulario) {
+            Swal.fire({
+                title: "¿Confirmar eliminación?",
+                text: `Se eliminará ${formulario.dataset.elemento} "${formulario.dataset.nombre}". Esta operación no se puede deshacer.`,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar",
+                reverseButtons: true
+            }).then(resultado => {
+                if (resultado.isConfirmed) formulario.submit();
+            });
+
+            return false;
+        }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
