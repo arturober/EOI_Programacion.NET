@@ -1,10 +1,10 @@
 # Lista de tareas con C# y SQLite
 
-Aplicación educativa de consola que permite gestionar una **lista de tareas** mediante **C#**, **.NET 8** y una base de datos **SQLite**.
+Aplicación de consola que permite gestionar una **lista de tareas** mediante **C#**, **.NET 8** y una base de datos **SQLite**.
 
 El proyecto sigue una estructura parecida a la del juego del ahorcado mapeado a clases: cada tabla principal se representa con una clase de C#, los objetos contienen sus propios métodos CRUD y las clases gestoras se ocupan únicamente de los menús y de la interacción con el usuario.
 
-Se ha priorizado que el código sea **sencillo, legible y fácil de modificar por alumnado principiante**, aunque algunas decisiones no sean las más sofisticadas para una aplicación profesional de gran tamaño.
+Se ha priorizado que el código sea **sencillo, legible y fácil de modificar**, aunque algunas decisiones no sean las más sofisticadas para una aplicación profesional de gran tamaño.
 
 ---
 
@@ -471,7 +471,7 @@ No se permite borrar una categoría que todavía contenga tareas. Primero hay qu
 
 ## Uso educativo
 
-Este proyecto puede utilizarse para explicar:
+Este proyecto puede utilizarse para otros proyectos con similares características:
 
 - CRUD completo con dos tablas.
 - Relaciones uno a muchos.
@@ -480,6 +480,6 @@ Este proyecto puede utilizarse para explicar:
 - Composición de objetos.
 - Consultas parametrizadas.
 - Separación entre interfaz y acceso a datos.
-- Validación de entradas por consola.
+- Validación de datos de entrada.
 
-La estructura está pensada para que el alumnado pueda añadir nuevas propiedades y funcionalidades sin tener que comprender primero una arquitectura compleja.
+La estructura está pensada para poder añadir nuevas propiedades y funcionalidades sin tener que comprender primero una arquitectura compleja.
