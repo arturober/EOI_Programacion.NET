@@ -1,8 +1,6 @@
 # Pasapalabra web con C#, Razor Pages y SQLite
 
-Versión web y educativa del juego de Pasapalabra. El proyecto está escrito en
-español de España y prioriza un código claro para estudiantes que están
-aprendiendo C#.
+Versión web del juego de Pasapalabra. El proyecto prioriza un código claro para estudiantes que están aprendiendo C#.
 
 ## Qué incluye
 
@@ -119,7 +117,7 @@ coloca después de la N.
 `TextoUtil.NormalizarParaComparar` elimina las tildes de las vocales para las
 búsquedas y las respuestas, pero conserva la Ñ porque es una letra diferente.
 
-## Qué puede aprender el alumnado
+## ¿Qué se puede aprender con este proyecto?
 
 - Clases, objetos, constructores y propiedades.
 - Listas y expresiones lambda sencillas.
@@ -132,6 +130,6 @@ búsquedas y las respuestas, pero conserva la Ñ porque es una letra diferente.
 - Diseño responsive con Bootstrap.
 - Uso de LibMan para gestionar librerías web.
 
-> La administración no tiene autenticación porque el objetivo es mantener el
-> ejemplo fácil de estudiar. Antes de publicarlo en Internet habría que proteger
+> La administración de las tablas no tiene autenticación porque el objetivo es utilizar
+> un código fácil de entender. Antes de publicarlo en Internet habría que proteger
 > las páginas del CRUD.

@@ -10,7 +10,7 @@ El programa permite guardar personas junto con sus números de teléfono y reali
 * Modificar personas.
 * Eliminar personas.
 
-Este proyecto está especialmente pensado para personas que están aprendiendo C# y quieren iniciarse en el uso de bases de datos relacionales.
+Este proyecto está especialmente pensado para iniciarse en el uso de bases de datos relacionales.
 
 ---
 
@@ -83,7 +83,7 @@ Para identificar a la persona que se quiere modificar, se utiliza su `id`.
 
 Permite borrar una persona de la agenda utilizando su `id`.
 
-Antes de eliminarla, el programa solicita una confirmación para evitar borrados accidentales.
+Antes de eliminarla, se solicita confirmación para evitar borrados accidentales.
 
 ### Buscar personas
 
@@ -177,7 +177,7 @@ agenda.db
 
 Este archivo contiene la base de datos SQLite.
 
-Los datos permanecerán almacenados aunque se cierre el programa.
+Los datos permanecerán almacenados aunque se cierre la aplicación.
 
 ---
 
@@ -252,7 +252,7 @@ Antes de ejecutar instrucciones SQL, es necesario abrir la conexión:
 conexion.Open();
 ```
 
-La conexión se incluye dentro de un bloque `using`:
+La conexión se utiliza dentro de un bloque `using`:
 
 ```csharp
 using (conexion)
