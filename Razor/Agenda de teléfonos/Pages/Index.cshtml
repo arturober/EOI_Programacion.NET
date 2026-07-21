@@ -22,6 +22,7 @@
            placeholder="Escribe un nombre..."
            autocomplete="off"
            autofocus
+           onfocus="this.setSelectionRange(this.value.length, this.value.length); this.onfocus = null"
            oninput="clearTimeout(this.espera); this.espera = setTimeout(() => this.form.requestSubmit(), 300)" />
 </form>
 
