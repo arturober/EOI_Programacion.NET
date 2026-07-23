@@ -5,18 +5,26 @@ using Tareas.Services;
 
 namespace Tareas.Pages;
 
-public class IndexModel(ITareasService tareasService) : PageModel
+public class IndexModel(ITareasService tareasService, ILogger<IndexModel> logger) : PageModel
 {
-  public List<Tarea> Tareas { get; set; } = [];
+  public IReadOnlyList<TareaDto> Tareas { get; set; } = [];
 
-  public void OnGet()
+  public async Task OnGetAsync(CancellationToken ct)
   {
-    Tareas = tareasService.GetTareas();
+    Tareas = await tareasService.GetTareas(ct);
   }
 
-  public IActionResult OnPostToggle(int id)
+  public async Task<IActionResult> OnPostToggleAsync(int id, CancellationToken ct)
   {
-    tareasService.CambiarEstadoTarea(id);
+    await tareasService.CambiarEstadoTarea(id, ct);
+    logger.LogInformation($"Cambiando estado de la tarea {id}");
+    return RedirectToPage();
+  }
+
+  public async Task<IActionResult> OnPostDeleteAsync(int id, CancellationToken ct)
+  {
+    await tareasService.BorrarTarea(id, ct);
+    logger.LogInformation($"Borrando tarea {id}");
     return RedirectToPage();
   }
 }

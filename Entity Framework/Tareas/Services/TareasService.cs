@@ -6,16 +6,39 @@ namespace Tareas.Services;
 
 public class TareasService(AppDbContext db) : ITareasService
 {
-  public List<Tarea> GetTareas(CancellationToken ct = default)
+  public async Task<IReadOnlyList<TareaDto>> GetTareas(CancellationToken ct = default)
   {
-    return db.Tareas.OrderByDescending(t => t.Fecha).ToList();
+    return await db.Tareas
+      .AsNoTracking()
+      .OrderByDescending(t => t.Fecha)
+      .Select(t => new TareaDto(t.Id, t.Descripcion, t.EstaAcabada, t.Fecha))
+      .ToListAsync(ct);
   }
 
-  public bool CambiarEstadoTarea(int id)
+  public async Task<TareaDto> CrearTarea(string descripcion, DateTime? fecha, CancellationToken ct = default)
   {
-    int updatedRows = db.Tareas
+    var tarea = new Tarea
+    {
+      Descripcion = descripcion,
+      Fecha = fecha
+    };
+    await db.Tareas.AddAsync(tarea, ct);
+    db.SaveChanges();
+    return new TareaDto(tarea.Id, tarea.Descripcion, tarea.EstaAcabada, tarea.Fecha);
+  }
+
+  public async Task<bool> CambiarEstadoTarea(int id, CancellationToken ct = default)
+  {
+    int updatedRows = await db.Tareas
       .Where(t => t.Id == id)
-      .ExecuteUpdate(setters => setters.SetProperty(t => t.EstaAcabada, t => !t.EstaAcabada));
+      .ExecuteUpdateAsync(setters => setters.SetProperty(t => t.EstaAcabada, t => !t.EstaAcabada), ct);
     return updatedRows > 0;
+  }
+
+
+  public async Task<bool> BorrarTarea(int id, CancellationToken ct = default)
+  {
+    int deleted = await db.Tareas.Where(t => t.Id == id).ExecuteDeleteAsync(ct);
+    return deleted > 0;
   }
 }

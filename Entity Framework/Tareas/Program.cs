@@ -9,7 +9,7 @@ builder.Services.AddRazorPages();
 
 // Configuramos Entity Framework
 builder.Services.AddDbContextPool<AppDbContext>(options =>
-  options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+  options.UseSqlite("Data Source=app.db"));
 
 builder.Services.AddScoped<ITareasService, TareasService>();
 

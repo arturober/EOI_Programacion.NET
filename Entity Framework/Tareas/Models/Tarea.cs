@@ -12,3 +12,5 @@ public class Tarea
 
   public DateTime? Fecha { get; set; }
 }
+
+public record TareaDto(int Id, string Descripcion, bool EstaAcabada, DateTime? Fecha);
