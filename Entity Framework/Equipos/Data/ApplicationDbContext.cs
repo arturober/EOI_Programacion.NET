@@ -16,6 +16,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     modelBuilder.Entity<Equipo>(entity =>
     {
       entity.Property(e => e.Nombre).HasMaxLength(100);
+      entity.HasMany(e => e.Jugadores)
+        .WithOne(j => j.Equipo)
+        .HasForeignKey(j => j.EquipoId)
+        .OnDelete(DeleteBehavior.Restrict);
     });
 
     modelBuilder.Entity<Jugador>(entity =>

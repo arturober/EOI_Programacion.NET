@@ -24,6 +24,9 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+// 👈 Captura respuestas como 404 y re-ejecuta internamente la petición hacia /NotFound
+app.UseStatusCodePagesWithReExecute("/NotFound");
+
 app.UseHttpsRedirection();
 
 app.UseRouting();
