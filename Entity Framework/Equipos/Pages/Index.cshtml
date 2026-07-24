@@ -1,0 +1,15 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<ul>
+  @foreach(var equipo in Model.Equipos)
+  {
+      <li>
+        @equipo.Nombre
+        (@equipo.NumJugadores)
+      </li>
+  }
+</ul>
