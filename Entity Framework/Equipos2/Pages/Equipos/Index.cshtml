@@ -1,0 +1,78 @@
+@page
+@model global::Equipos.Pages.Equipos.IndexModel
+@{
+    ViewData["Title"] = "Equipos de Competición";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">🛡️ Equipos de Competición</h1>
+        <p class="page-subtitle">Gestiona las organizaciones de eSports y sus plantillas de jugadores</p>
+    </div>
+    <a asp-page="./Create" class="btn-esports btn-primary">
+        <span>➕</span> Nuevo Equipo
+    </a>
+</div>
+
+<form method="get" class="form-group" style="margin-bottom: 2rem;">
+    <div style="display: flex; gap: 0.75rem; max-width: 500px;">
+        <input type="text" asp-for="Search" class="form-control" placeholder="Buscar por nombre o juego..." />
+        <button type="submit" class="btn-esports btn-secondary">🔍 Buscar</button>
+        @if (!string.IsNullOrWhiteSpace(Model.Search))
+        {
+            <a asp-page="./Index" class="btn-esports btn-secondary">Limpiar</a>
+        }
+    </div>
+</form>
+
+@if (!Model.Equipos.Any())
+{
+    <div class="esports-card" style="text-align: center; padding: 3rem;">
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1rem;">No se encontraron equipos registrados.</p>
+        <div>
+            <a asp-page="./Create" class="btn-esports btn-primary">Crear el Primer Equipo</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="cards-grid">
+        @foreach (var equipo in Model.Equipos)
+        {
+            <div class="esports-card">
+                <div class="card-header-flex">
+                    @if (!string.IsNullOrWhiteSpace(equipo.LogoUrl))
+                    {
+                        <img src="@equipo.LogoUrl" alt="@equipo.Nombre" class="team-logo-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                        <div class="team-logo-placeholder" style="display:none;">@equipo.Nombre[0]</div>
+                    }
+                    else
+                    {
+                        <div class="team-logo-placeholder">@equipo.Nombre[0]</div>
+                    }
+                    <div>
+                        <h2 class="card-title">@equipo.Nombre</h2>
+                        <span class="badge-game">🎮 @equipo.Juego</span>
+                    </div>
+                </div>
+
+                <div class="card-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Jugadores</span>
+                        <span class="stat-value">👥 @equipo.CantidadJugadores</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Creado</span>
+                        <span class="stat-value" style="font-size: 0.9rem;">@equipo.FechaCreacion.ToString("dd/MM/yyyy")</span>
+                    </div>
+                </div>
+
+                <div class="card-actions">
+                    <a asp-page="./Details" asp-route-id="@equipo.Id" class="btn-esports btn-secondary btn-xs">👁️ Ver Detalle</a>
+                    <a asp-page="./Edit" asp-route-id="@equipo.Id" class="btn-esports btn-secondary btn-xs">✏️ Editar</a>
+                    <a asp-page="./Delete" asp-route-id="@equipo.Id" class="btn-esports btn-secondary btn-xs" style="color: #f87171;">🗑️ Eliminar</a>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,54 @@
+@page
+@model CreateModel
+@{
+    ViewData["Title"] = "Nuevo Alumno";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Nuevo Alumno</h1>
+                <p class="page-subtitle">Rellena la información básica para dar de alta al estudiante</p>
+            </div>
+            <a asp-page="./Index" class="btn-secondary-custom">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+
+        <div class="card-custom">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="alert-custom alert-danger-custom mb-4" role="alert"></div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Nombre" class="form-label-custom">Nombre Completo</label>
+                    <input asp-for="Input.Nombre" class="form-control-custom" placeholder="Ej: Juan Pérez" />
+                    <span asp-validation-for="Input.Nombre" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Email" class="form-label-custom">Correo Electrónico</label>
+                    <input asp-for="Input.Email" type="email" class="form-control-custom" placeholder="ejemplo@universidad.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Input.Dni" class="form-label-custom">Documento de Identidad (DNI/NIE)</label>
+                    <input asp-for="Input.Dni" class="form-control-custom" placeholder="12345678X" />
+                    <span asp-validation-for="Input.Dni" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a asp-page="./Index" class="btn-secondary-custom">Cancelar</a>
+                    <button type="submit" class="btn-primary-custom">
+                        <i class="bi bi-check-lg"></i> Guardar Alumno
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

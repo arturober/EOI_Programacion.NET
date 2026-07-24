@@ -1,0 +1,95 @@
+@page "{id:guid}"
+@model DetailsModel
+@{
+    ViewData["Title"] = $"Ficha de {Model.Asignatura.Nombre}";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">@Model.Asignatura.Nombre</h1>
+        <p class="page-subtitle">Información detallada de la asignatura y lista de alumnos matriculados</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-page="./Edit" asp-route-id="@Model.Asignatura.Id" class="btn-secondary-custom">
+            <i class="bi bi-pencil-fill"></i> Editar
+        </a>
+        <a asp-page="./Index" class="btn-secondary-custom">
+            <i class="bi bi-arrow-left"></i> Volver
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    <!-- Ficha Asignatura -->
+    <div class="col-lg-4">
+        <div class="card-custom h-100">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-3" style="width: 56px; height: 56px;">
+                    <i class="bi bi-book"></i>
+                </div>
+                <div>
+                    <h5 class="fw-bold m-0">@Model.Asignatura.Nombre</h5>
+                    <code>@Model.Asignatura.Codigo</code>
+                </div>
+            </div>
+
+            <div class="border-top pt-3">
+                <div class="mb-3">
+                    <span class="text-muted small d-block">Créditos ECTS</span>
+                    <strong class="text-primary fs-5">@Model.Asignatura.Creditos ECTS</strong>
+                </div>
+                <div>
+                    <span class="text-muted small d-block">Total Alumnos Matriculados</span>
+                    <strong class="text-dark fs-5">@Model.Asignatura.Alumnos.Count estudiantes</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Alumnos Matriculados -->
+    <div class="col-lg-8">
+        <div class="card-custom">
+            <h4 class="fw-bold mb-3 d-flex align-items-center justify-content-between">
+                <span><i class="bi bi-people-fill text-primary me-2"></i> Alumnos Inscritos</span>
+                <span class="badge-custom badge-primary fs-6">@Model.Asignatura.Alumnos.Count inscritos</span>
+            </h4>
+
+            @if (Model.Asignatura.Alumnos.Count == 0)
+            {
+                <div class="alert alert-light text-center py-4 border">
+                    <p class="text-muted m-0">Aún no hay alumnos matriculados en esta asignatura.</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table-custom">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>DNI</th>
+                                <th class="text-end">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var alumno in Model.Asignatura.Alumnos)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@alumno.Nombre</td>
+                                    <td class="text-muted">@alumno.Email</td>
+                                    <td><code>@alumno.Dni</code></td>
+                                    <td class="text-end">
+                                        <a asp-page="/Alumnos/Details" asp-route-id="@alumno.Id" class="btn btn-sm btn-outline-primary rounded-pill">
+                                            <i class="bi bi-eye-fill me-1"></i> Ver Alumno
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>
