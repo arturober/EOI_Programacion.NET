@@ -1,0 +1,60 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-md-5 rounded-4 shadow-sm bg-white border">
+    <p class="text-primary fw-bold small mb-1">ORGANIZACIÓN PERSONAL</p>
+    <h1 class="display-6 fw-bold">Organiza tus tareas de forma sencilla</h1>
+    <p class="lead text-secondary mb-4">
+        Gestiona tareas y categorías con una aplicación creada con C#, Razor Pages y SQLite.
+    </p>
+
+    <div class="d-flex gap-2">
+        <a class="btn btn-primary" asp-page="/Tareas/Index"
+           title="Ver las tareas" aria-label="Ver las tareas">
+            <i class="bi bi-list-check"></i>
+        </a>
+        <a class="btn btn-outline-primary" asp-page="/Categorias/Index"
+           title="Ver las categorías" aria-label="Ver las categorías">
+            <i class="bi bi-tags"></i>
+        </a>
+    </div>
+</section>
+
+<section class="row g-3 mt-2" aria-label="Resumen">
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm border-0">
+            <div class="card-body d-flex align-items-center gap-3">
+                <i class="bi bi-card-checklist fs-1 text-primary"></i>
+                <div>
+                    <span class="fs-2 fw-bold">@Model.TotalTareas</span>
+                    <p class="mb-0 text-secondary">Tareas totales</p>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm border-0">
+            <div class="card-body d-flex align-items-center gap-3">
+                <i class="bi bi-hourglass-split fs-1 text-warning"></i>
+                <div>
+                    <span class="fs-2 fw-bold">@Model.TareasPendientes</span>
+                    <p class="mb-0 text-secondary">Tareas pendientes</p>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm border-0">
+            <div class="card-body d-flex align-items-center gap-3">
+                <i class="bi bi-tags fs-1 text-success"></i>
+                <div>
+                    <span class="fs-2 fw-bold">@Model.TotalCategorias</span>
+                    <p class="mb-0 text-secondary">Categorías</p>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>

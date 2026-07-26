@@ -1,0 +1,66 @@
+@page
+@model CategoriasIndexModel
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <p class="text-primary fw-bold small mb-1">GESTIÓN DE CATEGORÍAS</p>
+        <h1 class="h2 mb-0"><i class="bi bi-tags me-2"></i>Mis categorías</h1>
+    </div>
+    <a class="btn btn-primary" asp-page="Crear"
+       title="Nueva categoría" aria-label="Nueva categoría">
+        <i class="bi bi-plus-lg"></i>
+    </a>
+</div>
+
+@if (Model.Categorias.Count == 0)
+{
+    <div class="alert alert-light border text-center py-5">
+        <i class="bi bi-inbox fs-1 d-block text-secondary mb-2"></i>
+        No hay categorías que mostrar.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (Categoria categoria in Model.Categorias)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <article class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h4 card-title mt-2 text-break">
+                            <i class="bi bi-tag-fill me-2"></i>@categoria.Nombre
+                        </h2>
+                        <p class="card-text text-secondary text-break">
+                            @categoria.Descripcion
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white d-flex gap-2">
+                        <a class="btn btn-sm btn-outline-secondary"
+                           asp-page="/Tareas/Index" asp-route-categoriaId="@categoria.Id"
+                           title="Ver tareas" aria-label="Ver tareas">
+                            <i class="bi bi-list-check"></i>
+                        </a>
+                        <a class="btn btn-sm btn-outline-primary"
+                           asp-page="Modificar" asp-route-id="@categoria.Id"
+                           title="Modificar" aria-label="Modificar">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <form method="post" asp-page-handler="Eliminar"
+                              class="d-inline"
+                              data-elemento="la categoría" data-nombre="@categoria.Nombre"
+                              onsubmit="return confirmarEliminacion(this)">
+                            <input type="hidden" name="id" value="@categoria.Id" />
+                            <button class="btn btn-sm btn-outline-danger" type="submit"
+                                    title="Eliminar" aria-label="Eliminar">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

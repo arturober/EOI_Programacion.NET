@@ -1,0 +1,66 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-md-5 rounded-4 shadow-sm bg-white border">
+    <div class="row align-items-center g-5">
+        <div class="col-12 col-lg-7">
+            <p class="text-primary fw-bold small mb-1">JUEGO EDUCATIVO</p>
+            <h1 class="display-5 fw-bold">¿Preparado para completar el rosco?</h1>
+            <p class="lead text-secondary mb-4">
+                Responde, pasa palabra y vuelve a intentarlo cuando el rosco dé otra vuelta.
+            </p>
+
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary" asp-page="/Jugar/Index">
+                    <i class="bi bi-play-fill me-1"></i>Empezar a jugar
+                </a>
+                <a class="btn btn-outline-primary" asp-page="/Preguntas/Index">
+                    <i class="bi bi-question-circle me-1"></i>Gestionar preguntas
+                </a>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-5 d-flex justify-content-center" aria-hidden="true">
+            <div class="mini-rosco">
+                @for (int i = 0; i < TextoUtil.LetrasRosco.Length; i++)
+                {
+                    <span style="--i: @i">@TextoUtil.LetrasRosco[i]</span>
+                }
+                <strong>?</strong>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="row g-3 mt-2" aria-label="Características">
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+                <i class="bi bi-check2-circle fs-1 text-primary"></i>
+                <h2 class="h5 mt-3">Juego completo</h2>
+                <p class="text-secondary mb-0">27 letras, preguntas aleatorias y varias vueltas.</p>
+            </div>
+        </article>
+    </div>
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+                <i class="bi bi-pencil-square fs-1 text-primary"></i>
+                <h2 class="h5 mt-3">CRUD de preguntas</h2>
+                <p class="text-secondary mb-0">Añade, consulta, modifica y elimina preguntas.</p>
+            </div>
+        </article>
+    </div>
+    <div class="col-12 col-md-4">
+        <article class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+                <i class="bi bi-database fs-1 text-primary"></i>
+                <h2 class="h5 mt-3">SQLite visible</h2>
+                <p class="text-secondary mb-0">Mapeo manual y SQL parametrizado fácil de estudiar.</p>
+            </div>
+        </article>
+    </div>
+</section>
