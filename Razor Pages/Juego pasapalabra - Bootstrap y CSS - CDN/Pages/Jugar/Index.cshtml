@@ -23,7 +23,7 @@
     <form method="post" class="card shadow-sm">
         <input type="hidden" name="temaId" value="0" />
         <div class="card-body d-flex flex-column flex-md-row align-items-md-center gap-3">
-            <i class="bi bi-stars fs-2 text-primary flex-shrink-0"></i>
+            <i class="bi bi-stars fs-2 text-primary flex-shrink-0 d-none d-md-inline-block"></i>
             <div class="flex-grow-1">
                 <h2 class="h5 mb-1">Todos los temas</h2>
                 <p class="text-secondary mb-0">Mezcla preguntas de toda la base de datos.</p>
@@ -44,7 +44,7 @@
         <form method="post" class="card shadow-sm">
             <input type="hidden" name="temaId" value="@item.Tema.Id" />
             <div class="card-body d-flex flex-column flex-md-row align-items-md-center gap-3">
-                <i class="bi bi-tag-fill fs-2 text-primary flex-shrink-0"></i>
+                <i class="bi bi-tag-fill fs-2 text-primary flex-shrink-0 d-none d-md-inline-block"></i>
                 <div class="flex-grow-1 text-break">
                     <h2 class="h5 mb-1">@item.Tema.Nombre</h2>
                     <p class="text-secondary mb-0">@item.Tema.Descripcion</p>

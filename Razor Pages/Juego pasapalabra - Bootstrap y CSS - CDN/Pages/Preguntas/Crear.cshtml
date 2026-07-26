@@ -6,8 +6,7 @@
 
 <div class="card shadow-sm col-lg-8 mx-auto">
     <div class="card-body p-4">
-        <p class="text-primary fw-bold small mb-1">NUEVA PREGUNTA</p>
-        <h1 class="h2 mb-4"><i class="bi bi-plus-circle me-2"></i>Añadir pregunta</h1>
+        <h1 class="h2 mb-4"><i class="bi bi-question-circle me-2"></i>Añadir pregunta</h1>
 
         @if (Model.Temas.Count == 0)
         {
@@ -72,11 +71,11 @@
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary"
                             title="Guardar" aria-label="Guardar">
-                        <i class="bi bi-floppy"></i>
+                        <i class="bi bi-floppy me-2"></i>Guardar
                     </button>
                     <a asp-page="Index" class="btn btn-outline-secondary"
                        title="Cancelar" aria-label="Cancelar">
-                        <i class="bi bi-x-lg"></i>
+                        <i class="bi bi-x-lg me-2"></i>Cancelar
                     </a>
                 </div>
             </form>
