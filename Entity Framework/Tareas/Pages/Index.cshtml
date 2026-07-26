@@ -1,0 +1,35 @@
+﻿@page
+@model IndexModel
+@{
+  ViewData["Title"] = "Home page";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+  <h1 class="display-6">Gestión de Tareas</h1>
+  <a asp-page="./Create" class="btn btn-primary">Nueva Tarea</a>
+</div>
+
+<ul class="list-group">
+  @foreach (var tarea in Model.Tareas)
+  {
+    <li class="list-group-item d-flex justify-content-between align-items-center @(tarea.EstaAcabada ? "list-group-item-success" : "")">
+      <div>
+        <h5 class="mb-1 text-break @(tarea.EstaAcabada ? "text-decoration-line-through text-muted" : "")">
+          @tarea.Descripcion
+        </h5>
+        <small class="text-muted">Fecha: @(tarea.Fecha?.ToString("g") ?? "Sin fecha")</small>
+      </div>
+      <div class="d-flex gap-2">
+        <form method="post" asp-page-handler="Toggle" asp-route-id="@tarea.Id">
+          <button type="submit" class="btn @(tarea.EstaAcabada ? "btn-warning" : "btn-success") btn-sm">
+            @(tarea.EstaAcabada ? "Marcar Pendiente" : "Completar")
+          </button>
+        </form>
+        <form method="post" asp-page-handler="Delete" asp-route-id="@tarea.Id"
+              onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta tarea?');">
+          <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+        </form>
+      </div>
+    </li>
+  }
+</ul>

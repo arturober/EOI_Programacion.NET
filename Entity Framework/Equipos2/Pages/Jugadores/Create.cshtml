@@ -1,0 +1,54 @@
+@page
+@model global::Equipos.Pages.Jugadores.CreateModel
+@{
+    ViewData["Title"] = "Registrar Jugador";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">➕ Registrar Nuevo Jugador</h1>
+        <p class="page-subtitle">Añade un participante a un equipo de competición</p>
+    </div>
+    <a asp-page="./Index" class="btn-esports btn-secondary">⬅️ Volver a la Lista</a>
+</div>
+
+<div class="form-card">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 1rem;"></div>
+
+        <div class="form-group">
+            <label asp-for="Input.Nickname" class="form-label">Nickname / In-Game Name (IGN)</label>
+            <input asp-for="Input.Nickname" class="form-control" placeholder="Ej: Faker, Chronicle, s1mple" />
+            <span asp-validation-for="Input.Nickname" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.NombreCompleto" class="form-label">Nombre Completo</label>
+            <input asp-for="Input.NombreCompleto" class="form-control" placeholder="Ej: Lee Sang-hyeok" />
+            <span asp-validation-for="Input.NombreCompleto" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Rol" class="form-label">Rol en el Juego</label>
+            <input asp-for="Input.Rol" class="form-control" placeholder="Ej: Midlaner, IGL, Duelista, Awper, Support" />
+            <span asp-validation-for="Input.Rol" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.EquipoId" class="form-label">Equipo de Pertenece</label>
+            <select asp-for="Input.EquipoId" asp-items="Model.EquiposOptions" class="form-control">
+                <option value="">-- Selecciona un Equipo --</option>
+            </select>
+            <span asp-validation-for="Input.EquipoId" class="text-danger"></span>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn-esports btn-primary">💾 Registrar Jugador</button>
+            <a asp-page="./Index" class="btn-esports btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

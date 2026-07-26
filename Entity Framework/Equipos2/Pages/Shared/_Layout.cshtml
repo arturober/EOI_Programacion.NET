@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Arena eSports Manager</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="navbar-esports">
+        <div class="nav-container">
+            <a class="brand-logo" asp-page="/Equipos/Index">
+                <div class="brand-icon">⚡</div>
+                <div class="brand-text">ARENA<span>eSPORTS</span></div>
+            </a>
+            <nav>
+                <ul class="nav-links">
+                    <li>
+                        <a class="nav-link-item @(Context.Request.Path.StartsWithSegments("/Equipos") || Context.Request.Path == "/" ? "active" : "")" asp-page="/Equipos/Index">
+                            🛡️ Equipos
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link-item @(Context.Request.Path.StartsWithSegments("/Jugadores") ? "active" : "")" asp-page="/Jugadores/Index">
+                            🎮 Jugadores
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert-esports">
+                <div>✨ @TempData["SuccessMessage"]</div>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="footer-esports">
+        <p>&copy; 2026 Arena eSports Manager — Sistema CRUD con EF Core, SQLite y Razor Pages (.NET 10)</p>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

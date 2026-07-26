@@ -1,0 +1,28 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<ul class="list-group">
+  <li class="list-group-item active" aria-current="true">
+    Lista de Equipos
+    <a asp-page="./Equipos/Crear" class="ms-2 btn btn-sm btn-outline-light">+</a>
+  </li>
+  @foreach(var equipo in Model.Equipos)
+  {
+      <li class="list-group-item d-flex">
+        <span class="col">
+          @equipo.Nombre
+          <small class="bg-success text-white rounded col-auto py-1 px-2 ms-2">@equipo.NumJugadores Jugadores</small>
+        </span>
+        <div class="d-flex gap-2 col-auto">
+          <a asp-page="./Equipos/Detalles" asp-route-id="@equipo.Id" class="btn btn-sm btn-primary">Detalles</a>
+          <form method="post" asp-page-handler="Delete" asp-route-id="@equipo.Id"
+              onsubmit="return confirm('¿Estás seguro de que deseas eliminar este equipo?');">
+            <button class="btn btn-sm btn-danger">Borrar</button>
+          </form>
+        </div>
+      </li>
+  }
+</ul>

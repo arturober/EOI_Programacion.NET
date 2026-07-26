@@ -1,0 +1,54 @@
+@page
+@model CreateModel
+@{
+    ViewData["Title"] = "Nueva Asignatura";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Nueva Asignatura</h1>
+                <p class="page-subtitle">Formulario de registro para crear una asignatura académica</p>
+            </div>
+            <a asp-page="./Index" class="btn-secondary-custom">
+                <i class="bi bi-arrow-left"></i> Volver
+            </a>
+        </div>
+
+        <div class="card-custom">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="alert-custom alert-danger-custom mb-4" role="alert"></div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Nombre" class="form-label-custom">Nombre de la Asignatura</label>
+                    <input asp-for="Input.Nombre" class="form-control-custom" placeholder="Ej: Programación C#" />
+                    <span asp-validation-for="Input.Nombre" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Codigo" class="form-label-custom">Código Asignatura</label>
+                    <input asp-for="Input.Codigo" class="form-control-custom" placeholder="PRG101" />
+                    <span asp-validation-for="Input.Codigo" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Input.Creditos" class="form-label-custom">Créditos ECTS</label>
+                    <input asp-for="Input.Creditos" type="number" class="form-control-custom" min="1" max="60" />
+                    <span asp-validation-for="Input.Creditos" class="text-danger small mt-1 d-block"></span>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a asp-page="./Index" class="btn-secondary-custom">Cancelar</a>
+                    <button type="submit" class="btn-primary-custom">
+                        <i class="bi bi-check-lg"></i> Guardar Asignatura
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

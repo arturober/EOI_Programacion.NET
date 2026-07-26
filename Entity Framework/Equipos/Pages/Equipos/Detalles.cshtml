@@ -1,0 +1,24 @@
+@page
+@model DetalleEquipoModel
+@{
+    ViewData["Title"] = "Detalles " + Model.Equipo?.Nombre;
+}
+
+<h1 class="h3">@Model.Equipo?.Nombre</h1>
+
+<ul class="list-group">
+  <li class="list-group-item active" aria-current="true">Lista de Jugadores</li>
+  @foreach(var jugador in Model.Equipo!.Jugadores)
+  {
+      <li class="list-group-item d-flex">
+        <span class="col">
+          @jugador.Nombre
+        </span>
+        <div class="d-flex gap-2 col-auto">
+          <button class="btn btn-sm btn-danger">Borrar</button>
+        </div>
+      </li>
+  }
+</ul>
+
+<div><a asp-page="/Index" class="btn btn-primary mt-4">Volver</a></div>

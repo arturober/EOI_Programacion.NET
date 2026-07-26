@@ -1,0 +1,46 @@
+@page
+@model global::Equipos.Pages.Equipos.CreateModel
+@{
+    ViewData["Title"] = "Crear Nuevo Equipo";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">➕ Crear Nuevo Equipo</h1>
+        <p class="page-subtitle">Registra una nueva organización o club deportivo</p>
+    </div>
+    <a asp-page="./Index" class="btn-esports btn-secondary">⬅️ Volver a la Lista</a>
+</div>
+
+<div class="form-card">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 1rem;"></div>
+
+        <div class="form-group">
+            <label asp-for="Input.Nombre" class="form-label">Nombre del Equipo</label>
+            <input asp-for="Input.Nombre" class="form-control" placeholder="Ej: G2 Esports, Cloud9, Sentinels" />
+            <span asp-validation-for="Input.Nombre" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Juego" class="form-label">Juego Principal</label>
+            <input asp-for="Input.Juego" class="form-control" placeholder="Ej: Valorant, League of Legends, CS2, Rocket League" />
+            <span asp-validation-for="Input.Juego" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.LogoUrl" class="form-label">URL del Logo (Opcional)</label>
+            <input asp-for="Input.LogoUrl" class="form-control" placeholder="https://ejemplo.com/logo.png" />
+            <span asp-validation-for="Input.LogoUrl" class="text-danger"></span>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn-esports btn-primary">💾 Guardar Equipo</button>
+            <a asp-page="./Index" class="btn-esports btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

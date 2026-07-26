@@ -1,0 +1,46 @@
+@page "{id:guid}"
+@model global::Equipos.Pages.Jugadores.DetailsModel
+@{
+    ViewData["Title"] = $"Jugador - {Model.Jugador.Nickname}";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">🎮 @Model.Jugador.Nickname</h1>
+        <p class="page-subtitle">@Model.Jugador.NombreCompleto</p>
+    </div>
+    <div style="display: flex; gap: 0.75rem;">
+        <a asp-page="./Edit" asp-route-id="@Model.Jugador.Id" class="btn-esports btn-primary">✏️ Editar</a>
+        <a asp-page="./Index" class="btn-esports btn-secondary">⬅️ Volver a Lista</a>
+    </div>
+</div>
+
+<div class="form-card">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent-pink)); display: inline-flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 1rem; box-shadow: var(--shadow-glow);">
+            @Model.Jugador.Nickname[0]
+        </div>
+        <h2 style="font-size: 1.8rem; color: #ffffff;">@Model.Jugador.Nickname</h2>
+        <span class="badge-role" style="font-size: 0.9rem; margin-top: 0.5rem;">@Model.Jugador.Rol</span>
+    </div>
+
+    <div class="card-stats" style="flex-direction: column; gap: 1rem; padding: 1.5rem;">
+        <div class="stat-item">
+            <span class="stat-label">Nombre Completo</span>
+            <span class="stat-value" style="font-size: 1.1rem; font-weight: 600;">@Model.Jugador.NombreCompleto</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Equipo de Pertenece</span>
+            <span class="stat-value">
+                <a asp-page="/Equipos/Details" asp-route-id="@Model.Jugador.EquipoId" style="color: var(--accent-cyan); text-decoration: none;">
+                    🛡️ @Model.Jugador.NombreEquipo
+                </a>
+            </span>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <a asp-page="./Edit" asp-route-id="@Model.Jugador.Id" class="btn-esports btn-primary" style="flex: 1; justify-content: center;">✏️ Editar Información</a>
+        <a asp-page="./Delete" asp-route-id="@Model.Jugador.Id" class="btn-esports btn-danger" style="flex: 1; justify-content: center;">🗑️ Eliminar</a>
+    </div>
+</div>

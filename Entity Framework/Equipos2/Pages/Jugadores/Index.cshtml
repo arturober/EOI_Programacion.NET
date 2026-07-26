@@ -1,0 +1,87 @@
+@page
+@model global::Equipos.Pages.Jugadores.IndexModel
+@{
+    ViewData["Title"] = "Jugadores / Participantes";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">🎮 Jugadores y Participantes</h1>
+        <p class="page-subtitle">Gestión de integrantes, roles y pertenencia a equipos</p>
+    </div>
+    <a asp-page="./Create" class="btn-esports btn-primary">
+        <span>➕</span> Nuevo Jugador
+    </a>
+</div>
+
+<form method="get" style="margin-bottom: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+    <div style="flex: 1; min-width: 250px;">
+        <input type="text" asp-for="Search" class="form-control" placeholder="Buscar nickname, nombre o rol..." />
+    </div>
+    <div style="width: 240px;">
+        <select asp-for="EquipoId" class="form-control">
+            <option value="">-- Todos los Equipos --</option>
+            @foreach (var equipo in Model.Equipos)
+            {
+                <option value="@equipo.Id">@equipo.Nombre (@equipo.Juego)</option>
+            }
+        </select>
+    </div>
+    <div style="display: flex; gap: 0.5rem;">
+        <button type="submit" class="btn-esports btn-secondary">🔍 Filtrar</button>
+        @if (Model.EquipoId.HasValue || !string.IsNullOrWhiteSpace(Model.Search))
+        {
+            <a asp-page="./Index" class="btn-esports btn-secondary">Limpiar</a>
+        }
+    </div>
+</form>
+
+@if (!Model.Jugadores.Any())
+{
+    <div class="esports-card" style="text-align: center; padding: 3rem;">
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 1rem;">No se encontraron jugadores que coincidan con la búsqueda.</p>
+        <div>
+            <a asp-page="./Create" class="btn-esports btn-primary">Registrar Nuevo Jugador</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="table-container">
+        <table class="esports-table">
+            <thead>
+                <tr>
+                    <th>Nickname</th>
+                    <th>Nombre Completo</th>
+                    <th>Rol</th>
+                    <th>Equipo</th>
+                    <th style="text-align: right;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var jugador in Model.Jugadores)
+                {
+                    <tr>
+                        <td>
+                            <strong style="color: #ffffff; font-size: 1.05rem;">@jugador.Nickname</strong>
+                        </td>
+                        <td>@jugador.NombreCompleto</td>
+                        <td>
+                            <span class="badge-role">@jugador.Rol</span>
+                        </td>
+                        <td>
+                            <a asp-page="/Equipos/Details" asp-route-id="@jugador.EquipoId" style="color: var(--accent-cyan); text-decoration: none; font-weight: 500;">
+                                🛡️ @jugador.NombreEquipo
+                            </a>
+                        </td>
+                        <td style="text-align: right;">
+                            <a asp-page="./Details" asp-route-id="@jugador.Id" class="btn-esports btn-secondary btn-xs">👁️ Ver</a>
+                            <a asp-page="./Edit" asp-route-id="@jugador.Id" class="btn-esports btn-secondary btn-xs">✏️ Editar</a>
+                            <a asp-page="./Delete" asp-route-id="@jugador.Id" class="btn-esports btn-secondary btn-xs" style="color: #f87171;">🗑️ Eliminar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
