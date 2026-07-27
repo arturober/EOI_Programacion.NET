@@ -1,0 +1,63 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+@* Portada construida únicamente con componentes y utilidades de Bootstrap. *@
+<section class="card border-0 shadow-sm">
+    <div class="card-body text-center p-4 p-md-5">
+        <i class="bi bi-circle-half display-1 text-danger"
+           aria-hidden="true"></i>
+
+        <h1 class="display-4 fw-bold mt-3">Pokédex Razor</h1>
+
+        <p class="lead text-body-secondary mx-auto">
+            (Solo selector de temas)
+        </p>
+
+        <p class="lead text-body-secondary mx-auto">
+            Explora los Pokémon de PokeAPI, consulta sus imágenes,
+            escucha sus sonidos y estudia toda su información.
+        </p>
+    </div>
+</section>
+
+@* Estas tarjetas resumen las funciones principales de la aplicación. *@
+<section class="row row-cols-1 row-cols-md-3 g-4 mt-1">
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-search fs-1 text-danger" aria-hidden="true"></i>
+                <h2 class="h5 mt-3">Búsqueda automática</h2>
+                <p class="text-body-secondary mb-0">
+                    Filtra por nombre mientras escribes, sin pulsar ningún botón.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-images fs-1 text-danger" aria-hidden="true"></i>
+                <h2 class="h5 mt-3">Imágenes y sonidos</h2>
+                <p class="text-body-secondary mb-0">
+                    Recorre todos los sprites y reproduce los sonidos disponibles.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="bi bi-palette fs-1 text-danger" aria-hidden="true"></i>
+                <h2 class="h5 mt-3">Temas visuales</h2>
+                <p class="text-body-secondary mb-0">
+                    Elige Bootstrap claro, oscuro o cualquier tema de Bootswatch.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
