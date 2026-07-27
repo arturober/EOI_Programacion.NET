@@ -1,0 +1,548 @@
+@page "{nombreOId}"
+@model DetalleModel
+@{
+    ViewData["Title"] = Model.Pokemon?.NombreEspanol ?? "Detalle";
+}
+
+@* Permitimos regresar al listado sin depender del botón del navegador. *@
+<div class="mb-3">
+    <a asp-page="/Listado" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1" aria-hidden="true"></i>
+        Volver al listado
+    </a>
+</div>
+
+@if (Model.MensajeError is not null)
+{
+    @* Error temporal de comunicación con la API. *@
+    <div class="alert alert-danger" role="alert">
+        <h1 class="h4 alert-heading">
+            <i class="bi bi-wifi-off me-2" aria-hidden="true"></i>
+            No se ha podido cargar el Pokémon
+        </h1>
+        <p class="mb-0">@Model.MensajeError</p>
+    </div>
+}
+else if (Model.Pokemon is null)
+{
+    @* El nombre o identificador solicitado no existe. *@
+        <div class="text-center bg-body border rounded-3 p-5">
+        <i class="bi bi-question-circle display-4 text-secondary"></i>
+        <h1 class="h2 mt-3">Pokémon no encontrado</h1>
+        <p class="text-secondary">
+            Comprueba el nombre o búscalo desde el listado.
+        </p>
+        <a asp-page="/Listado" class="btn btn-danger">Buscar Pokémon</a>
+    </div>
+}
+else
+{
+    PokemonDetalle pokemon = Model.Pokemon;
+
+    @* La cabecera reúne el nombre, la descripción y las etiquetas principales. *@
+    <section class="card border-0 shadow-sm mb-4 overflow-hidden">
+        <div class="card-body p-4 p-lg-5">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-5">
+                    @if (pokemon.Imagenes.Count > 0)
+                    {
+                        @* Bootstrap cambia automáticamente entre todas las imágenes. *@
+                        <div id="carruselPokemon"
+                             class="carousel slide carousel-fade"
+                             data-bs-ride="carousel"
+                             data-bs-interval="1400">
+                            <div class="carousel-inner rounded-3 bg-body-tertiary">
+                                @for (int i = 0; i < pokemon.Imagenes.Count; i++)
+                                {
+                                    ImagenPokemon imagen = pokemon.Imagenes[i];
+
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <div class="ratio ratio-1x1">
+                                            <img src="@imagen.Url"
+                                                 class="d-block w-100 h-100 object-fit-contain p-5"
+                                                 alt="@imagen.Descripcion"
+                                                 loading="@(i == 0 ? "eager" : "lazy")" />
+                                        </div>
+                                        <div class="carousel-caption">
+                                            <span class="badge text-bg-dark">
+                                                @(i + 1) / @pokemon.Imagenes.Count
+                                            </span>
+                                            <span class="badge text-bg-light text-dark">
+                                                @imagen.Descripcion
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            @* Estos botones oscuros son visibles con cualquier tema. *@
+                            <button class="btn btn-dark border-light rounded-circle position-absolute top-50 start-0 translate-middle-y ms-2 z-3"
+                                    type="button"
+                                    data-bs-target="#carruselPokemon"
+                                    data-bs-slide="prev"
+                                    aria-label="Imagen anterior">
+                                <i class="bi bi-chevron-left"
+                                   aria-hidden="true"></i>
+                            </button>
+
+                            <button class="btn btn-dark border-light rounded-circle position-absolute top-50 end-0 translate-middle-y me-2 z-3"
+                                    type="button"
+                                    data-bs-target="#carruselPokemon"
+                                    data-bs-slide="next"
+                                    aria-label="Imagen siguiente">
+                                <i class="bi bi-chevron-right"
+                                   aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="bg-body-tertiary rounded-3 text-center p-5">
+                            <i class="bi bi-image display-3 text-secondary"></i>
+                            <p class="text-secondary mt-2 mb-0">
+                                No hay imágenes disponibles.
+                            </p>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-lg-7">
+                    <div class="d-flex flex-wrap gap-2 align-items-center mb-2">
+                        <span class="badge text-bg-danger fs-6">
+                            #@pokemon.Id.ToString("0000")
+                        </span>
+
+                        @foreach (string tipo in pokemon.Tipos)
+                        {
+                            <span class="badge rounded-pill text-bg-secondary fs-6">
+                                @tipo
+                            </span>
+                        }
+                    </div>
+
+                    <h1 class="display-4 fw-bold mb-1">@pokemon.NombreEspanol</h1>
+                    <p class="h5 text-secondary">@pokemon.Genero</p>
+                    <p class="lead">@pokemon.Descripcion</p>
+
+                    @* Estos avisos destacan casos especiales de la especie. *@
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        @if (pokemon.EsLegendario)
+                        {
+                            <span class="badge text-bg-warning">
+                                <i class="bi bi-star-fill me-1"></i>Legendario
+                            </span>
+                        }
+                        @if (pokemon.EsMitico)
+                        {
+                            <span class="badge text-bg-info">
+                                <i class="bi bi-gem me-1"></i>Mítico
+                            </span>
+                        }
+                        @if (pokemon.EsBebe)
+                        {
+                            <span class="badge text-bg-success">
+                                <i class="bi bi-balloon me-1"></i>Bebé
+                            </span>
+                        }
+                        @if (!pokemon.EsVariedadPrincipal)
+                        {
+                            <span class="badge text-bg-dark">Variedad alternativa</span>
+                        }
+                    </div>
+
+                    @* El navegador reproduce directamente los archivos de sonido. *@
+                    @if (pokemon.SonidoActual is not null
+                        || pokemon.SonidoClasico is not null)
+                    {
+                        <h2 class="h5">
+                            <i class="bi bi-volume-up me-1"></i>Sonidos
+                        </h2>
+
+                        <div class="row g-3">
+                            @if (pokemon.SonidoActual is not null)
+                            {
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">
+                                        Sonido actual
+                                    </label>
+                                    <audio class="w-100"
+                                           controls
+                                           preload="none"
+                                           src="@pokemon.SonidoActual">
+                                        Tu navegador no puede reproducir este sonido.
+                                    </audio>
+                                </div>
+                            }
+
+                            @if (pokemon.SonidoClasico is not null)
+                            {
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-semibold">
+                                        Sonido clásico
+                                    </label>
+                                    <audio class="w-100"
+                                           controls
+                                           preload="none"
+                                           src="@pokemon.SonidoClasico">
+                                        Tu navegador no puede reproducir este sonido.
+                                    </audio>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* Las estadísticas se muestran con tarjetas de Bootstrap, sin CSS propio. *@
+    <section class="card border-0 shadow-sm mb-4">
+        <div class="card-body p-4">
+            <h2 class="h4 mb-4">
+                <i class="bi bi-bar-chart-fill text-danger me-2"></i>
+                Estadísticas base
+            </h2>
+
+            <div class="row row-cols-2 row-cols-md-3 g-3">
+                @foreach (EstadisticaPokemon estadistica in pokemon.Estadisticas)
+                {
+                    <div class="col">
+                        <div class="border rounded text-center h-100 p-3">
+                            <span class="d-block text-body-secondary">
+                                @estadistica.Nombre
+                            </span>
+                            <strong class="display-6">@estadistica.Valor</strong>
+                            @if (estadistica.Esfuerzo > 0)
+                            {
+                                <small class="d-block text-body-secondary">
+                                    +@estadistica.Esfuerzo esfuerzo
+                                </small>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    @* El acordeón organiza la información extensa sin crear más JavaScript. *@
+    <div class="accordion shadow-sm" id="informacionPokemon">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#datosBasicos"
+                        aria-expanded="true"
+                        aria-controls="datosBasicos">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Datos y características
+                </button>
+            </h2>
+            <div id="datosBasicos"
+                 class="accordion-collapse collapse show"
+                 data-bs-parent="#informacionPokemon">
+                <div class="accordion-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5 col-lg-3">Nombre de PokeAPI</dt>
+                        <dd class="col-sm-7 col-lg-3">@TextoPokemon.Formatear(pokemon.Nombre)</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Experiencia base</dt>
+                        <dd class="col-sm-7 col-lg-3">@(pokemon.ExperienciaBase?.ToString() ?? "No disponible")</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Altura</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.AlturaMetros.ToString("0.0") m</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Peso</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.PesoKilos.ToString("0.0") kg</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Generación</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.Generacion</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Hábitat</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.Habitat</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Color</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.Color</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Forma</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.Forma</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Crecimiento</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.Crecimiento</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Ratio de captura</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.RatioCaptura</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Felicidad base</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.FelicidadBase</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Eclosión aproximada</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.PasosEclosionAproximados pasos</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Distribución por sexo</dt>
+                        <dd class="col-sm-7 col-lg-3">@pokemon.DistribucionSexo</dd>
+
+                        <dt class="col-sm-5 col-lg-3">Diferencias por sexo</dt>
+                        <dd class="col-sm-7 col-lg-3">
+                            @(pokemon.TieneDiferenciasDeSexo ? "Sí" : "No")
+                        </dd>
+                    </dl>
+
+                    @if (pokemon.GruposHuevo.Count > 0)
+                    {
+                        <hr />
+                        <h3 class="h6">Grupos huevo</h3>
+                        <div class="d-flex flex-wrap gap-2">
+                            @foreach (string grupo in pokemon.GruposHuevo)
+                            {
+                                <span class="badge text-bg-light border">@grupo</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#habilidadesEvolucion"
+                        aria-expanded="false"
+                        aria-controls="habilidadesEvolucion">
+                    <i class="bi bi-lightning-charge me-2"></i>
+                    Habilidades, formas y evolución
+                </button>
+            </h2>
+            <div id="habilidadesEvolucion"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#informacionPokemon">
+                <div class="accordion-body">
+                    <h3 class="h6">Habilidades</h3>
+                    <ul class="list-group mb-4">
+                        @foreach (HabilidadPokemon habilidad in pokemon.Habilidades)
+                        {
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>@habilidad.Nombre</span>
+                                @if (habilidad.EsOculta)
+                                {
+                                    <span class="badge text-bg-dark">Oculta</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+
+                    <h3 class="h6">Cadena de evolución</h3>
+                    @if (pokemon.CadenaEvolucion.Count > 0)
+                    {
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+                            @for (int i = 0; i < pokemon.CadenaEvolucion.Count; i++)
+                            {
+                                @if (i > 0)
+                                {
+                                    <i class="bi bi-arrow-right text-secondary"
+                                       aria-hidden="true"></i>
+                                }
+                                <span class="badge text-bg-danger fs-6">
+                                    @pokemon.CadenaEvolucion[i]
+                                </span>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-secondary">No hay datos de evolución.</p>
+                    }
+
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <h3 class="h6">Formas</h3>
+                            <ul class="mb-0">
+                                @foreach (string forma in pokemon.Formas)
+                                {
+                                    <li>@forma</li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="h6">Variedades de la especie</h3>
+                            <ul class="mb-0">
+                                @foreach (string variedad in pokemon.Variedades)
+                                {
+                                    <li>@variedad</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#juegosObjetos"
+                        aria-expanded="false"
+                        aria-controls="juegosObjetos">
+                    <i class="bi bi-controller me-2"></i>
+                    Juegos y objetos
+                </button>
+            </h2>
+            <div id="juegosObjetos"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#informacionPokemon">
+                <div class="accordion-body">
+                    <h3 class="h6">Versiones con índice de Pokédex</h3>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        @foreach (string version in pokemon.Versiones)
+                        {
+                            <span class="badge text-bg-light border">@version</span>
+                        }
+                    </div>
+
+                    <h3 class="h6">Objetos que puede llevar</h3>
+                    @if (pokemon.Objetos.Count == 0)
+                    {
+                        <p class="text-secondary mb-0">
+                            No lleva objetos en ninguna versión.
+                        </p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped align-middle mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Objeto</th>
+                                        <th>Versiones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (ObjetoPokemon objeto in pokemon.Objetos)
+                                    {
+                                        <tr>
+                                            <td class="fw-semibold">@objeto.Nombre</td>
+                                            <td>@string.Join(", ", objeto.Versiones)</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#encuentros"
+                        aria-expanded="false"
+                        aria-controls="encuentros">
+                    <i class="bi bi-geo-alt me-2"></i>
+                    Lugares de encuentro (@pokemon.Encuentros.Count)
+                </button>
+            </h2>
+            <div id="encuentros"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#informacionPokemon">
+                <div class="accordion-body">
+                    @if (pokemon.Encuentros.Count == 0)
+                    {
+                        <p class="text-secondary mb-0">
+                            PokeAPI no ofrece lugares de encuentro para esta variedad.
+                        </p>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Zona</th>
+                                        <th>Probabilidad máxima</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (EncuentroPokemon encuentro in pokemon.Encuentros)
+                                    {
+                                        <tr>
+                                            <td>@encuentro.Zona</td>
+                                            <td>@encuentro.ProbabilidadMaxima%</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#movimientos"
+                        aria-expanded="false"
+                        aria-controls="movimientos">
+                    <i class="bi bi-list-check me-2"></i>
+                    Movimientos (@pokemon.Movimientos.Count)
+                </button>
+            </h2>
+            <div id="movimientos"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#informacionPokemon">
+                <div class="accordion-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (string movimiento in pokemon.Movimientos)
+                        {
+                            <span class="badge text-bg-light border">
+                                @movimiento
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#jsonOriginal"
+                        aria-expanded="false"
+                        aria-controls="jsonOriginal">
+                    <i class="bi bi-braces me-2"></i>
+                    JSON original completo
+                </button>
+            </h2>
+            <div id="jsonOriginal"
+                 class="accordion-collapse collapse"
+                 data-bs-parent="#informacionPokemon">
+                <div class="accordion-body">
+                    <p class="text-secondary">
+                        Esta respuesta permite estudiar todos los campos del endpoint,
+                        incluidos los que no necesitan una presentación visual.
+                    </p>
+                    <a href="https://pokeapi.co/api/v2/pokemon/@pokemon.Nombre/"
+                       class="btn btn-sm btn-outline-secondary mb-3"
+                       target="_blank"
+                       rel="noopener">
+                        Abrir JSON en PokeAPI
+                        <i class="bi bi-box-arrow-up-right ms-1"></i>
+                    </a>
+                    <pre class="overflow-auto p-3 bg-dark text-light rounded mb-0"><code>@pokemon.JsonOriginal</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+}

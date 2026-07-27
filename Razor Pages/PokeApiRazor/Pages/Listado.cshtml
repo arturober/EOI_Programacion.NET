@@ -1,0 +1,165 @@
+@page
+@model ListadoModel
+@{
+    ViewData["Title"] = "Listado de Pokémon";
+}
+
+@* Cabecera de la página. *@
+<header class="text-center mb-4">
+    <h1 class="display-5 fw-bold">Listado de Pokémon</h1>
+    <p class="lead text-secondary mb-0">
+        Busca por una parte del nombre y abre cualquier tarjeta para ver todos sus datos.
+    </p>
+</header>
+
+@* El propio campo envía el formulario 500 ms después de dejar de escribir. *@
+<form method="get"
+      class="card shadow-sm border-0 mb-4"
+      role="search">
+    <div class="card-body p-3 p-md-4">
+        <label asp-for="Busqueda" class="form-label fw-semibold">
+            Buscar Pokémon
+        </label>
+
+        <div class="input-group input-group-lg">
+            <span class="input-group-text">
+                <i class="bi bi-search" aria-hidden="true"></i>
+            </span>
+
+            <input asp-for="Busqueda"
+                   class="form-control"
+                   type="search"
+                   placeholder="Por ejemplo: pika"
+                   autocomplete="off"
+                   autofocus
+                   spellcheck="false"
+                   aria-describedby="ayudaBusqueda"
+                   onfocus="this.setSelectionRange(this.value.length, this.value.length); this.onfocus = null"
+                   oninput="clearTimeout(this.espera); this.espera = setTimeout(() => this.form.requestSubmit(), 500)" />
+        </div>
+
+        <div id="ayudaBusqueda" class="form-text">
+            La búsqueda se actualiza 500 milisegundos después de dejar de escribir.
+        </div>
+
+        @* Sin JavaScript sigue siendo posible enviar el formulario. *@
+        <noscript>
+            <button type="submit" class="btn btn-danger mt-3">
+                Buscar
+            </button>
+        </noscript>
+    </div>
+</form>
+
+@* Los errores de red se muestran con un componente de Bootstrap. *@
+@if (Model.MensajeError is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-wifi-off me-2" aria-hidden="true"></i>
+        @Model.MensajeError
+    </div>
+}
+else
+{
+    @* Resumen del número de resultados. *@
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="text-secondary mb-0">
+            <strong>@Model.Resultado.TotalResultados</strong>
+            resultado@(Model.Resultado.TotalResultados == 1 ? "" : "s")
+        </p>
+        <span class="badge text-bg-light border">
+            Página @Model.Resultado.Pagina de @Model.Resultado.TotalPaginas
+        </span>
+    </div>
+
+    @if (Model.Resultado.Pokemons.Count == 0)
+    {
+        @* Mensaje mostrado cuando el filtro no encuentra coincidencias. *@
+        <div class="text-center bg-body border rounded-3 p-5">
+            <i class="bi bi-emoji-frown display-4 text-secondary"></i>
+            <h2 class="h4 mt-3">No se ha encontrado ningún Pokémon</h2>
+            <p class="text-secondary mb-3">
+                Prueba con otra parte del nombre.
+            </p>
+            <a asp-page="/Listado" class="btn btn-danger">Ver todos</a>
+        </div>
+    }
+    else
+    {
+        @* Bootstrap crea una cuadrícula de una a cuatro columnas según el ancho. *@
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (PokemonResumen pokemon in Model.Resultado.Pokemons)
+            {
+                <div class="col">
+                    <article class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center d-flex flex-column">
+                            <span class="badge text-bg-light border align-self-start">
+                                #@pokemon.Id.ToString("0000")
+                            </span>
+
+                            <div class="ratio ratio-1x1">
+                                <img src="@pokemon.Imagen"
+                                     class="w-100 h-100 object-fit-contain p-3"
+                                     alt="Ilustración oficial de @pokemon.NombreVisible"
+                                     loading="lazy" />
+                            </div>
+
+                            <h2 class="h5 card-title">@pokemon.NombreVisible</h2>
+
+                            <a asp-page="/Detalle"
+                               asp-route-nombreOId="@pokemon.Nombre"
+                               class="btn btn-outline-danger stretched-link mt-auto">
+                                Ver información
+                                <i class="bi bi-arrow-right ms-1"
+                                   aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+
+        @* La paginación conserva el texto buscado en todos sus enlaces. *@
+        @if (Model.Resultado.TotalPaginas > 1)
+        {
+            int primeraPagina = Math.Max(1, Model.Resultado.Pagina - 2);
+            int ultimaPagina = Math.Min(
+                Model.Resultado.TotalPaginas,
+                Model.Resultado.Pagina + 2);
+
+            <nav class="mt-4" aria-label="Páginas del listado">
+                <ul class="pagination justify-content-center flex-wrap">
+                    <li class="page-item @(Model.Resultado.Pagina == 1 ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-page="/Listado"
+                           asp-route-busqueda="@Model.Busqueda"
+                           asp-route-pagina="@(Model.Resultado.Pagina - 1)">
+                            Anterior
+                        </a>
+                    </li>
+
+                    @for (int pagina = primeraPagina; pagina <= ultimaPagina; pagina++)
+                    {
+                        <li class="page-item @(pagina == Model.Resultado.Pagina ? "active" : "")">
+                            <a class="page-link"
+                               asp-page="/Listado"
+                               asp-route-busqueda="@Model.Busqueda"
+                               asp-route-pagina="@pagina">
+                                @pagina
+                            </a>
+                        </li>
+                    }
+
+                    <li class="page-item @(Model.Resultado.Pagina == Model.Resultado.TotalPaginas ? "disabled" : "")">
+                        <a class="page-link"
+                           asp-page="/Listado"
+                           asp-route-busqueda="@Model.Busqueda"
+                           asp-route-pagina="@(Model.Resultado.Pagina + 1)">
+                            Siguiente
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
+    }
+}
