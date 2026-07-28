@@ -32,6 +32,14 @@
     </nav>
 
     <main class="container py-4 -flex-grow-1">
+        @if (TempData["Mensaje"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["Mensaje"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
         @RenderBody()
     </main>
 

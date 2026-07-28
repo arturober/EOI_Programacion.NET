@@ -1,0 +1,20 @@
+@page
+@model Categorias.CrearModel
+@{
+    ViewData["Title"] = "Nueva categoría";
+}
+
+<section class="card shadow-sm">
+    <div class="card-body text-center">
+        <h1 class="display-4">Crear nueva categoría</h1>
+
+        <form method="post" class="mt-4">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <partial name="_Formulario" model="Model.Categoria" />
+
+            <button type="submit" class="btn btn-primary">Crear</button>
+            <a asp-page="/Categorias/Index" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</section>
