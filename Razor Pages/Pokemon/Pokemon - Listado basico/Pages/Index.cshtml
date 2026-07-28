@@ -1,0 +1,19 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Listado";
+}
+
+<header class="mb-4">
+    <h1 class="display-5 fw-bold">Pokédex</h1>
+    <p class="lead mb-0">Los 151 Pokémon de la primera generación.</p>
+</header>
+
+<ol class="list-group list-group-numbered">
+    @foreach (PokemonListaApi pokemon in Model.Pokemons)
+    {
+        <li class="list-group-item text-capitalize">
+            @pokemon.Nombre
+        </li>
+    }
+</ol>

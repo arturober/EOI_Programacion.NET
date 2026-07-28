@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <!-- El proyecto utiliza .NET 10, la versión LTS actual. -->
+    <TargetFramework>net10.0</TargetFramework>
+
+    <!-- Nullable ayuda a detectar posibles valores nulos al compilar. -->
+    <Nullable>enable</Nullable>
+
+    <!-- Los using más habituales se añaden automáticamente. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

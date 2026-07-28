@@ -1,0 +1,53 @@
+@page "{nombre}"
+@model DetalleModel
+@{
+    PokemonDetalleApi pokemon = Model.Pokemon!;
+    ViewData["Title"] = pokemon.Nombre;
+}
+
+<a asp-page="/Index" class="btn btn-outline-secondary mb-4">
+    ← Volver al listado
+</a>
+
+<article class="card shadow-sm mx-auto" style="max-width: 42rem;">
+    <div class="row g-0 align-items-center">
+        <div class="col-md-5 text-center">
+            <img src="@pokemon.ImagenUrl"
+                 class="img-fluid p-4"
+                 alt="@pokemon.Nombre"
+                 width="280"
+                 height="280" />
+        </div>
+
+        <div class="col-md-7">
+            <div class="card-body">
+                <p class="text-secondary mb-1">N.º @pokemon.Id</p>
+                <h1 class="card-title text-capitalize">@pokemon.Nombre</h1>
+
+                <div class="mb-4">
+                    @foreach (PokemonTipoSlotApi tipo in pokemon.Tipos)
+                    {
+                        <span class="badge text-bg-primary text-capitalize me-1">
+                            @tipo.Tipo.Nombre
+                        </span>
+                    }
+                </div>
+
+                <dl class="row mb-0">
+                    <dt class="col-5">Altura</dt>
+                    <dd class="col-7">@pokemon.AlturaMetros.ToString("0.0") m</dd>
+
+                    <dt class="col-5">Peso</dt>
+                    <dd class="col-7">@pokemon.PesoKilogramos.ToString("0.0") kg</dd>
+
+                    <dt class="col-5">Habilidades</dt>
+                    <dd class="col-7 text-capitalize">
+                        @string.Join(", ",
+                            pokemon.Habilidades.Select(
+                                elemento => elemento.Habilidad.Nombre))
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</article>
