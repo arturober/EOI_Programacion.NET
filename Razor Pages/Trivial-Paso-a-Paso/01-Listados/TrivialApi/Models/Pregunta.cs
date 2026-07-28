@@ -14,7 +14,7 @@ public class Pregunta
     [Required(ErrorMessage = "La respuesta 1 es obligatoria")]
     [StringLength(150)]
     [Display(Name = "Respuesta 1")]
-    public string Respuesta { get; set; } = ""; 
+    public string Respuesta1 { get; set; } = ""; 
 
     [Required(ErrorMessage = "La respuesta 2 es obligatoria")]
     [StringLength(150)]

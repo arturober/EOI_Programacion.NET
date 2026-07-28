@@ -1,0 +1,27 @@
+@page
+@model Categorias.IndexModel
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<header>
+    <h1 class="display-4">Categorías</h1>
+</header>
+
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Categoria categoria in Model.Categorias)
+            {
+                <tr>
+                    <td>@categoria.Nombre</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
