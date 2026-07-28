@@ -12,6 +12,25 @@
           rel="stylesheet" />
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm bg-primary">
+        <div class="container">
+            <a class="navbar-brand" asp-page="/Index">TrivialApi</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Categorias/Index">Categorías</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Preguntas/Index">Preguntas</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <main class="container py-4 -flex-grow-1">
         @RenderBody()
     </main>
