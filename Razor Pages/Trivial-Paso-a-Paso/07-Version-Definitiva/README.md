@@ -402,7 +402,7 @@ Botones y SweetAlert
 5. Abrir el cliente.
 6. Cerrar y volver a abrir el navegador.
 
-## Preguntas para el alumnado
+## Preguntas para evaluar los conceptos aprendidos
 
 1. ¿Por qué TempData sigue siendo útil con SweetAlert?
 2. ¿Qué diferencia hay entre `dataset` y `localStorage`?

@@ -34,7 +34,7 @@ Cada carpeta es autosuficiente e incluye:
 
 No es necesario ejecutar las versiones anteriores para utilizar una posterior.
 Esto permite abrir cada etapa por separado, compararla con la anterior o
-entregarla individualmente al alumnado.
+entregarla individualmente.
 
 ## Tecnologías utilizadas
 
@@ -192,9 +192,9 @@ Se repite el patrón de categorías y se incorporan:
 - Categoría seleccionada.
 - Formularios parciales.
 - `SelectList`.
-- Validación de la clave foránea.
+- Validación de la clave ajena.
 
-El alumnado puede comprobar que el patrón de creación, edición y borrado es el
+Se puede comprobar que el patrón de creación, edición y borrado es el
 mismo, aunque la entidad tenga más propiedades.
 
 ## Versión 4: búsqueda y paginación
@@ -368,7 +368,7 @@ version-07-definitiva
 ```
 
 Otra posibilidad es mantener las siete carpetas en `main`, como se entregan,
-y utilizar una rama de trabajo para los ejercicios del alumnado.
+y utilizar una rama de trabajo para los ejercicios.
 
 ## Comparar versiones
 
