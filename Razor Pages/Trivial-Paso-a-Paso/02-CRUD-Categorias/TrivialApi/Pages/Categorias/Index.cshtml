@@ -1,0 +1,33 @@
+@page
+@model Categorias.IndexModel
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<header>
+    <h1>Categorías</h1>
+</header>
+
+<div class="row">
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Preguntas</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Categoria categoria in Model.Categorias)
+            {
+                <tr>
+                    <td>@categoria.Nombre</td>
+                    <td>
+                        <span class="badge bg-secondary">
+                            @categoria.Preguntas.Count
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
