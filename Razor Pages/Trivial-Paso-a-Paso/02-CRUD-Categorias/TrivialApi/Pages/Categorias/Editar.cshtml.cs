@@ -32,8 +32,19 @@ public class EditarModel(TrivialContext contexto) : PageModel
             return Page();
         }
 
-        contexto.Categorias.Add(Categoria);
+        bool categoriaExistente = await contexto.Categorias.AnyAsync(c => c.Id != Categoria.Id && c.Nombre.ToLower() == Categoria.Nombre.ToLower());
+
+        if (categoriaExistente)
+        {
+            ModelState.AddModelError("Categoria.Nombre", "Ya existe una categoría con el mismo nombre.");
+            return Page();
+        }
+
+
+        contexto.Attach(Categoria).State = EntityState.Modified;
         await contexto.SaveChangesAsync();
+
+        TempData["Mensaje"] = "Categoría editada correctamente.";
 
         return RedirectToPage("./Index");
     }
