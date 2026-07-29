@@ -1,0 +1,24 @@
+@servidor = http://localhost:5055
+
+### Crear un jugador
+POST {{servidor}}/api/entrar
+Content-Type: application/json
+
+{
+  "nombre": "Ana"
+}
+
+### Consultar los mapas
+GET {{servidor}}/api/mapas
+
+### Consultar la clasificación
+GET {{servidor}}/api/clasificacion
+
+### Consultar las últimas rondas
+GET {{servidor}}/api/resultados
+
+### Consultar un jugador
+GET {{servidor}}/api/jugadores/PEGA_AQUI_EL_ID
+
+### Eliminar un jugador
+DELETE {{servidor}}/api/jugadores/PEGA_AQUI_EL_ID

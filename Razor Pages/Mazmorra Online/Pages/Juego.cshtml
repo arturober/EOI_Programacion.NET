@@ -1,0 +1,232 @@
+@page
+@model JuegoModel
+@{
+    ViewData["Title"] = "Partida";
+}
+
+@section Styles {
+    @* SweetAlert y el juego cargan su CSS solo en esta página. *@
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" />
+    <link rel="stylesheet"
+          href="~/css/juego.css"
+          asp-append-version="true" />
+}
+
+<div id="datosJuego"
+     data-jugador-id="@Model.JugadorId">
+
+    @* Esta sección contiene todo lo que debe verse en pantalla completa. *@
+    <section id="pantallaJuego" class="position-relative">
+
+        @* El HUD resume la partida y agrupa todas las acciones importantes. *@
+        <div class="card shadow-sm mb-2 hud-juego">
+            <div class="card-body py-2 px-3">
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    <span>
+                        <span class="text-body-secondary small">Estado</span>
+                        <strong id="estadoPartida" class="d-block">
+                            Conectando
+                        </strong>
+                    </span>
+
+                    <span>
+                        <span class="text-body-secondary small">Ronda</span>
+                        <strong id="numeroRonda" class="d-block">0</strong>
+                    </span>
+
+                    <span>
+                        <span class="text-body-secondary small">Tiempo</span>
+                        <strong id="tiempoPartida" class="d-block">--</strong>
+                    </span>
+
+                    <span>
+                        <span class="text-body-secondary small">Vivos</span>
+                        <strong id="numeroJugadores" class="d-block">0/0</strong>
+                    </span>
+
+                    <span class="d-none d-md-inline">
+                        <span class="text-body-secondary small">Mapa</span>
+                        <strong id="nombreMapa" class="d-block">--</strong>
+                    </span>
+
+                    <span id="estadoConexion"
+                          class="badge rounded-pill text-bg-secondary ms-md-auto"
+                          role="status"
+                          aria-live="polite">
+                        <i id="iconoConexion"
+                           class="bi bi-hourglass-split me-1"></i>
+                        <span id="textoConexion">Conectando</span>
+                    </span>
+
+                    @* btn-group mantiene juntos los botones del HUD. *@
+                    <div class="btn-group btn-group-sm"
+                         role="group"
+                         aria-label="Opciones de la partida">
+                        <button type="button"
+                                class="btn btn-outline-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalEstadisticas"
+                                title="Ver estadísticas"
+                                aria-label="Ver estadísticas">
+                            <i class="bi bi-bar-chart-fill"></i>
+                        </button>
+
+                        <button id="botonPantallaCompleta"
+                                type="button"
+                                class="btn btn-outline-primary"
+                                title="Pantalla completa"
+                                aria-label="Activar pantalla completa">
+                            <i id="iconoPantallaCompleta"
+                               class="bi bi-fullscreen"></i>
+                        </button>
+
+                        <form id="formularioSalir"
+                              method="post"
+                              asp-page-handler="Salir"
+                              class="d-inline">
+                            <input asp-for="JugadorId" type="hidden" />
+                            <button type="submit"
+                                    class="btn btn-outline-danger rounded-start-0"
+                                    title="Salir de la partida"
+                                    aria-label="Salir de la partida">
+                                <i class="bi bi-box-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 fila-juego">
+            <div class="col-lg-9 columna-tablero">
+                <div class="marco-canvas">
+                    <canvas id="juego"
+                            width="960"
+                            height="540"
+                            aria-label="Tablero de la partida"></canvas>
+                </div>
+
+                @* Estos controles solo aparecen mientras se toca la pantalla. *@
+                <div id="joystickMovil"
+                     class="joystick-movil"
+                     aria-hidden="true">
+                    <span id="palancaJoystick"></span>
+                </div>
+
+                <div id="joystickDisparo"
+                     class="joystick-disparo"
+                     aria-hidden="true">
+                    <span id="palancaDisparo"></span>
+                </div>
+
+                <div class="alert alert-secondary py-2 mt-2 mb-0 d-lg-none ayuda-movil">
+                    <i class="bi bi-phone-landscape me-1"></i>
+                    Usa el joystick izquierdo para moverte y el derecho
+                    para apuntar y disparar.
+                </div>
+            </div>
+
+            @* En escritorio la clasificación permanece visible junto al tablero. *@
+            <aside class="col-lg-3 d-none d-lg-block panel-escritorio">
+                <div class="card h-100">
+                    <div class="card-header fw-bold">
+                        <i class="bi bi-people-fill me-1"></i>Jugadores
+                    </div>
+
+                    <div id="listaJugadoresEscritorio"
+                         class="list-group list-group-flush lista-jugadores">
+                    </div>
+
+                    <div class="card-footer">
+                        <h2 class="h6">Power-ups</h2>
+                        <ul class="list-unstyled small mb-0">
+                            <li class="mb-1">
+                                <span class="badge text-bg-success">+</span> Vida
+                            </li>
+                            <li class="mb-1">
+                                <span class="badge text-bg-info">E</span> Escudo
+                            </li>
+                            <li class="mb-1">
+                                <span class="badge text-bg-warning">V</span> Velocidad
+                            </li>
+                            <li>
+                                <span class="badge text-bg-danger">D</span> Disparo rápido
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    @* Bootstrap abre este modal sin que tengamos que programar su animación. *@
+    <div id="modalEstadisticas"
+         class="modal fade"
+         tabindex="-1"
+         aria-labelledby="tituloEstadisticas"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-lg-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="tituloEstadisticas" class="modal-title h5">
+                        <i class="bi bi-bar-chart-fill me-2"></i>
+                        Estadísticas y power-ups
+                    </h2>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Cerrar"></button>
+                </div>
+
+                <div class="modal-body">
+                    <h3 class="h6">Jugadores</h3>
+                    <div id="listaJugadoresModal"
+                         class="list-group mb-4">
+                    </div>
+
+                    <h3 class="h6">Leyenda de power-ups</h3>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <span class="badge text-bg-success">+</span> Vida
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <span class="badge text-bg-info">E</span> Escudo
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <span class="badge text-bg-warning">V</span> Velocidad
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <span class="badge text-bg-danger">D</span> Disparo rápido
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @* Razor envía los mapas una sola vez; SignalR no envía muros. *@
+    <script id="mapasJuego" type="application/json">
+        @Html.Raw(Model.MapasJson)
+    </script>
+
+    @* SignalR permanece local para usar exactamente la versión de .NET 10. *@
+    <script src="~/lib/signalr/signalr.min.js"></script>
+
+    @* SweetAlert se descarga desde CDN y no ocupa espacio en el servidor. *@
+    <script
+        src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js">
+    </script>
+
+    <script src="~/js/juego.js" asp-append-version="true"></script>
+}

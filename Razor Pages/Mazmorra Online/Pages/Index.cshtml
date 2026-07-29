@@ -1,0 +1,96 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+@* La cuadrícula coloca la presentación y el formulario en dos columnas grandes. *@
+<div class="row align-items-center g-4 py-lg-5">
+    <section class="col-lg-7">
+        <span class="badge text-bg-primary mb-3">
+            Una partida · Hasta 16 jugadores
+        </span>
+
+        <h1 class="display-4 fw-bold">
+            Entra en la mazmorra y sobrevive
+        </h1>
+
+        <p class="lead text-body-secondary">
+            Escribe tu nombre y entrarás directamente. La ronda comienza
+            cuando haya al menos dos jugadores, pero mientras tanto podrás
+            moverte y practicar el disparo.
+        </p>
+
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-page="/Mapas" class="btn btn-outline-primary">
+                <i class="bi bi-map me-1"></i>Ver mapas
+            </a>
+            <a asp-page="/Rondas" class="btn btn-outline-secondary">
+                <i class="bi bi-trophy me-1"></i>Últimas rondas
+            </a>
+        </div>
+    </section>
+
+    <section class="col-lg-5">
+        <form method="post" class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4 card-title mb-3">Unirse al juego</h2>
+
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label">
+                        Tu nombre
+                    </label>
+                    <input asp-for="Nombre"
+                           class="form-control form-control-lg"
+                           maxlength="15"
+                           required
+                           autofocus
+                           autocomplete="off" />
+                    <span asp-validation-for="Nombre"
+                          class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">
+                    <i class="bi bi-play-fill me-1"></i>
+                    Entrar en la mazmorra
+                </button>
+            </div>
+        </form>
+    </section>
+</div>
+
+@* Las instrucciones se muestran con cards de Bootstrap, sin CSS propio. *@
+<section class="mt-4" aria-labelledby="tituloControles">
+    <h2 id="tituloControles" class="h3 mb-3">Controles</h2>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <article class="card h-100">
+                <div class="card-body">
+                    <h3 class="h5">
+                        <i class="bi bi-keyboard me-2"></i>Ordenador
+                    </h3>
+                    <p class="card-text mb-0">
+                        Muévete con WASD o los cursores. Apunta con el ratón
+                        y mantén pulsado el botón izquierdo para disparar.
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-md-6">
+            <article class="card h-100">
+                <div class="card-body">
+                    <h3 class="h5">
+                        <i class="bi bi-phone me-2"></i>Móvil
+                    </h3>
+                    <p class="card-text mb-0">
+                        Usa el móvil en horizontal. El joystick izquierdo
+                        sirve para moverte y el derecho para apuntar y
+                        disparar.
+                    </p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>

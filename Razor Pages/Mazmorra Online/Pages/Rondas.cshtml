@@ -1,0 +1,60 @@
+@page
+@model RondasModel
+@{
+    ViewData["Title"] = "Últimas rondas";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="mb-1">Últimas rondas</h1>
+        <p class="text-body-secondary mb-0">
+            El historial se guarda en memoria y contiene hasta diez rondas.
+        </p>
+    </div>
+
+    <a asp-page="/Index" class="btn btn-primary">
+        <i class="bi bi-play-fill me-1"></i>Jugar
+    </a>
+</div>
+
+@if (Model.Resultados.Count == 0)
+{
+    <div class="alert alert-info" role="status">
+        <i class="bi bi-info-circle me-2"></i>
+        Todavía no ha terminado ninguna ronda.
+    </div>
+}
+else
+{
+    @* table-responsive permite desplazar la tabla en pantallas estrechas. *@
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Ronda</th>
+                    <th>Ganador</th>
+                    <th>Mapa</th>
+                    <th>Jugadores</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var resultado in Model.Resultados)
+                {
+                    <tr>
+                        <td>@resultado.Numero</td>
+                        <td>
+                            <span class="badge text-bg-warning">
+                                <i class="bi bi-trophy-fill me-1"></i>
+                                @(resultado.Ganador ?? "Sin ganador")
+                            </span>
+                        </td>
+                        <td>@resultado.Mapa</td>
+                        <td>@resultado.NumeroJugadores</td>
+                        <td>@resultado.Fecha.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,183 @@
+/* El CSS propio solo contiene estilos que Bootstrap no proporciona. */
+
+/* El canvas usa una paleta clara u oscura acorde con el tema elegido. */
+:root {
+    --fondo-tablero: #17141f;
+}
+
+html[data-tema-juego="claro"] {
+    --fondo-tablero: #e9ecef;
+}
+
+/* El tablero conserva siempre su proporción original de 16:9. */
+.marco-canvas {
+    overflow: hidden;
+    line-height: 0;
+    background: var(--fondo-tablero);
+    border: 3px solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    cursor: crosshair;
+    touch-action: none;
+    user-select: none;
+}
+
+/* La lista puede desplazarse si se conectan muchos jugadores. */
+.lista-jugadores {
+    max-height: 28rem;
+    overflow-y: auto;
+}
+
+/* Los controles se colocan bajo cada dedo mediante JavaScript. */
+.joystick-movil,
+.joystick-disparo {
+    display: none;
+    position: fixed;
+    z-index: 1080;
+    width: 6rem;
+    height: 6rem;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    user-select: none;
+    border-radius: 50%;
+}
+
+.joystick-movil,
+.joystick-disparo {
+    background: rgb(33 37 41 / 72%);
+    border: 3px solid rgb(255 255 255 / 60%);
+}
+
+.joystick-movil span,
+.joystick-disparo span {
+    position: absolute;
+    top: calc(50% - 1.35rem);
+    left: calc(50% - 1.35rem);
+    width: 2.7rem;
+    height: 2.7rem;
+    background: rgb(111 66 193 / 95%);
+    border-radius: 50%;
+}
+
+.joystick-disparo {
+    background: rgb(73 20 29 / 78%);
+    border-color: rgb(255 193 7 / 72%);
+}
+
+.joystick-disparo span {
+    background: rgb(220 53 69 / 95%);
+}
+
+/* En dispositivos táctiles se muestran los controles cuando están activos. */
+@media (pointer: coarse) {
+    .joystick-movil.visible,
+    .joystick-disparo.visible {
+        display: grid;
+    }
+
+    canvas {
+        cursor: default;
+    }
+
+    /* Se evita que un gesto del juego desplace accidentalmente la página. */
+    body.pagina-juego {
+        overscroll-behavior: none;
+    }
+
+    /*
+     * Fuera del modal se reservan los gestos para el juego. El modal recupera
+     * el desplazamiento vertical para consultar todos los jugadores.
+     */
+    body.pagina-juego:not(.modal-open) {
+        touch-action: none;
+    }
+
+    .modal,
+    .modal-body {
+        touch-action: pan-y;
+    }
+}
+
+/* En un móvil apaisado se reduce el espacio que no pertenece al tablero. */
+@media (orientation: landscape) and (max-height: 650px)
+       and (pointer: coarse) {
+    #cabeceraPrincipal,
+    #piePrincipal,
+    .ayuda-movil {
+        display: none;
+    }
+
+    #contenidoPrincipal {
+        width: 100%;
+        max-width: none;
+        padding: 0.25rem !important;
+    }
+
+    .hud-juego {
+        margin-bottom: 0.25rem !important;
+        font-size: 0.78rem;
+    }
+
+    .fila-juego {
+        --bs-gutter-x: 0;
+    }
+
+    .columna-tablero {
+        width: min(100%, calc((100vh - 4.5rem) * 16 / 9));
+        margin-inline: auto;
+    }
+}
+
+/*
+ * La pantalla completa se aplica al documento entero para que Bootstrap Modal
+ * y SweetAlert continúen siendo visibles. Todo lo demás se oculta con CSS.
+ */
+body.pantalla-completa #cabeceraPrincipal,
+body.pantalla-completa #piePrincipal,
+body.pantalla-completa .panel-escritorio,
+body.pantalla-completa .ayuda-movil,
+body.pantalla-completa .hud-juego {
+    display: none !important;
+}
+
+body.pantalla-completa,
+body.pantalla-completa #contenidoPrincipal,
+body.pantalla-completa #datosJuego,
+body.pantalla-completa #pantallaJuego {
+    width: 100%;
+    max-width: none;
+    min-height: 100%;
+    margin: 0;
+    padding: 0 !important;
+}
+
+body.pantalla-completa #pantallaJuego {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--bs-body-bg);
+}
+
+body.pantalla-completa .fila-juego {
+    flex: 1 1 auto;
+    align-items: center;
+    min-height: 0;
+    margin: 0;
+}
+
+body.pantalla-completa .columna-tablero {
+    width: min(100vw, calc(100vh * 16 / 9));
+    margin-inline: auto;
+    padding: 0;
+}
+
+body.pantalla-completa .marco-canvas {
+    border: 0;
+    border-radius: 0;
+}

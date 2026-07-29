@@ -1,0 +1,82 @@
+@page
+@model MapasModel
+@{
+    ViewData["Title"] = "Mapas";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="mb-1">Mapas disponibles</h1>
+        <p class="text-body-secondary mb-0">
+            Los mapas se leen desde archivos de texto y Razor los convierte
+            en estas cuadrículas.
+        </p>
+    </div>
+
+    <a asp-page="/Index" class="btn btn-primary">
+        <i class="bi bi-play-fill me-1"></i>Jugar
+    </a>
+</div>
+
+@* Razor recorre los mapas y genera todo el HTML en el servidor. *@
+<div class="row g-4">
+    @foreach (var mapa in Model.Mapas)
+    {
+        <div class="col-xl-6">
+            <article class="card shadow-sm h-100">
+                <div class="card-header fw-bold">
+                    <i class="bi bi-map me-2"></i>@mapa.Nombre
+                </div>
+
+                <div class="card-body">
+                    @* table-layout reparte las dieciséis columnas por igual. *@
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0"
+                               style="table-layout: fixed;">
+                            <tbody>
+                                @foreach (string fila in mapa.Filas)
+                                {
+                                    <tr>
+                                        @foreach (char casilla in fila)
+                                        {
+                                            string color = casilla switch
+                                            {
+                                                '#' => "text-bg-secondary",
+                                                'J' => "text-bg-primary",
+                                                'P' => "text-bg-warning",
+                                                _ => "bg-body-tertiary"
+                                            };
+
+                                            string texto = casilla switch
+                                            {
+                                                'J' => "J",
+                                                'P' => "P",
+                                                _ => ""
+                                            };
+
+                                            <td class="p-0 @color text-center">
+                                                <div class="ratio ratio-1x1">
+                                                    <span class="d-flex align-items-center
+                                                                 justify-content-center
+                                                                 small fw-bold">
+                                                        @texto
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-3 mt-3 small">
+                        <span><span class="badge text-bg-secondary">■</span> Muro</span>
+                        <span><span class="badge text-bg-primary">J</span> Jugador</span>
+                        <span><span class="badge text-bg-warning">P</span> Power-up</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    }
+</div>
