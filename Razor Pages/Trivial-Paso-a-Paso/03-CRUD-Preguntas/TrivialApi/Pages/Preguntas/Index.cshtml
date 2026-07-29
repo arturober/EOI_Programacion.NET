@@ -1,0 +1,49 @@
+@page
+@model Preguntas.IndexModel
+@{
+    ViewData["Title"] = "Preguntas";
+}
+
+<header>
+    <h1>Preguntas</h1>
+
+    <a class="btn btn-primary" asp-page="/Preguntas/Crear">Crear nueva pregunta</a>
+</header>
+
+<div class="row">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Pregunta</th>
+                <th>Categoria</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Pregunta pregunta in Model.Preguntas)
+            {
+                <tr>
+                    <td>@pregunta.Enunciado</td>
+                    <td>
+                        <span class="badge bg-secondary">
+                            @pregunta.Categoria?.Nombre
+                        </span>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" 
+                            asp-page="/Preguntas/Editar" 
+                            asp-route-id="@pregunta.Id">Editar</a>
+
+                        <form method="post" 
+                            asp-page-handler="Eliminar"
+                            class="d-inline" 
+                            onsubmit="return confirm('¿Está seguro de que desea eliminar la pregunta?');">
+                            <input type="hidden" name="id" value="@pregunta.Id" />
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
