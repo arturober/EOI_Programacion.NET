@@ -1,0 +1,17 @@
+@servidor = https://localhost:7000
+
+# Busca hasta cinco localidades que coincidan con el texto.
+GET {{servidor}}/api/lugares?texto=Alicante
+Accept: application/json
+
+###
+
+# Devuelve el informe completo en unidades métricas.
+GET {{servidor}}/api/tiempo?lat=38.3452&lon=-0.4810&unidades=metrico
+Accept: application/json
+
+###
+
+# La misma consulta también puede realizarse con unidades imperiales.
+GET {{servidor}}/api/tiempo?lat=38.3452&lon=-0.4810&unidades=imperial
+Accept: application/json

@@ -1,0 +1,17 @@
+# Resultados de compilación
+bin/
+obj/
+
+# Configuración personal de Visual Studio y Rider
+.vs/
+.idea/
+*.user
+*.suo
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# La clave real nunca debe guardarse en el repositorio.
+appsettings.Local.json
+.env

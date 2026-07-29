@@ -1,0 +1,415 @@
+@page
+@model IndexModel
+@using System.Globalization
+@{
+    ViewData["Title"] = "El tiempo";
+    InformeMeteorologico? informe = Model.Informe;
+    CultureInfo cultura = CultureInfo.GetCultureInfo("es-ES");
+}
+
+@* La cabecera incluye la búsqueda principal y el acceso a la geolocalización. *@
+<section class="p-4 p-md-5 mb-4 bg-body-tertiary rounded-3 shadow-sm">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <h1 class="display-5 fw-bold">
+                <i class="bi bi-cloud-sun text-primary"></i>
+                Consulta meteorológica
+            </h1>
+            <p class="lead mb-0">
+                Tiempo actual, previsión de cinco días y calidad del aire
+                obtenidos desde OpenWeather.
+            </p>
+        </div>
+
+        <div class="col-lg-5">
+            <form method="get" class="row g-2" role="search">
+                <div class="col-12">
+                    <label for="ciudad" class="form-label">
+                        Localidad
+                    </label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-search" aria-hidden="true"></i>
+                        </span>
+                        <input id="ciudad"
+                               name="ciudad"
+                               value="@Model.Ciudad"
+                               class="form-control"
+                               placeholder="Ejemplo: Alicante"
+                               minlength="2"
+                               maxlength="100"
+                               required />
+                    </div>
+                </div>
+
+                <div class="col-sm-7">
+                    <label for="unidades" class="form-label">
+                        Unidades
+                    </label>
+                    <select id="unidades"
+                            name="unidades"
+                            class="form-select">
+                        <option value="metrico"
+                                selected="@(informe?.Unidades != Unidades.Imperial ? "selected" : null)">
+                            Métricas (°C y km/h)
+                        </option>
+                        <option value="imperial"
+                                selected="@(informe?.Unidades == Unidades.Imperial ? "selected" : null)">
+                            Imperiales (°F y mph)
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-sm-5 d-grid align-self-end">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search me-1"></i>Consultar
+                    </button>
+                </div>
+
+                <div class="col-12 d-grid">
+                    <button id="botonUbicacion"
+                            class="btn btn-outline-secondary"
+                            type="button">
+                        <i class="bi bi-geo-alt me-1"></i>Usar mi ubicación
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@if (!Model.EstaConfigurado)
+{
+    @* Este aviso aparece antes de hacer ninguna petición a OpenWeather. *@
+    <div class="alert alert-warning shadow-sm" role="alert">
+        <h2 class="h4 alert-heading">
+            <i class="bi bi-key-fill me-1"></i>Falta la clave de OpenWeather
+        </h2>
+        <p>
+            Abre una terminal dentro de la carpeta del proyecto y ejecuta:
+        </p>
+        <pre class="bg-dark text-light rounded p-3 mb-3"><code>dotnet user-secrets set "OpenWeather:ApiKey" "TU_CLAVE"</code></pre>
+        <p class="mb-0">
+            Encontrarás el proceso completo en <code>README.md</code>.
+            La clave no debe escribirse en un archivo que vaya a GitHub.
+        </p>
+    </div>
+}
+
+@if (Model.LugaresEncontrados.Count > 1)
+{
+    @* La API puede devolver varias localidades que comparten el mismo nombre. *@
+    <section class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h5">Otros lugares encontrados</h2>
+            <p class="text-body-secondary">
+                Se muestra el primero. Elige otro resultado si no es el correcto.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                @foreach (Lugar lugar in Model.LugaresEncontrados)
+                {
+                    <a class="btn btn-outline-primary btn-sm"
+                       asp-page="/Index"
+                       asp-route-lat="@lugar.Latitud.ToString(CultureInfo.InvariantCulture)"
+                       asp-route-lon="@lugar.Longitud.ToString(CultureInfo.InvariantCulture)"
+                       asp-route-unidades="@informe?.Unidades.ParaUrl()">
+                        <i class="bi bi-geo-alt me-1"></i>@lugar.NombreCompleto
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+@if (informe is not null)
+{
+    @* Resumen principal de las condiciones actuales. *@
+    <section class="card border-0 shadow mb-4 overflow-hidden">
+        <div class="card-body p-4 p-md-5">
+            <div class="row align-items-center g-4">
+                <div class="col-md-5 text-center text-md-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                        <img src="@informe.Actual.UrlIcono"
+                             width="100"
+                             height="100"
+                             alt="@informe.Actual.Descripcion" />
+                        <span class="display-2 fw-bold">
+                            @informe.Actual.Temperatura.ToString("0")
+                            <small class="fs-2">@informe.SimboloTemperatura</small>
+                        </span>
+                    </div>
+                    <h2 class="h4 mb-1">@informe.Actual.Descripcion</h2>
+                    <p class="text-body-secondary mb-0">
+                        Sensación de
+                        @informe.Actual.Sensacion.ToString("0")@informe.SimboloTemperatura
+                    </p>
+                </div>
+
+                <div class="col-md-7">
+                    <h2 class="h3 mb-1">
+                        <i class="bi bi-geo-alt-fill text-primary"></i>
+                        @informe.Lugar.NombreCompleto
+                    </h2>
+                    <p class="text-body-secondary">
+                        Actualizado el @informe.Actual.Fecha.ToString("dd/MM/yyyy 'a las' HH:mm")
+                        (hora local)
+                    </p>
+
+                    <div class="row row-cols-2 row-cols-lg-3 g-3">
+                        <div class="col">
+                            <div class="border rounded p-3 h-100">
+                                <i class="bi bi-droplet-fill text-primary"></i>
+                                <span class="d-block small text-body-secondary">Humedad</span>
+                                <strong>@informe.Actual.Humedad %</strong>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border rounded p-3 h-100">
+                                <i class="bi bi-wind text-primary"></i>
+                                <span class="d-block small text-body-secondary">Viento</span>
+                                <strong>
+                                    @informe.Actual.Viento.ToString("0.0")
+                                    @informe.UnidadViento
+                                    @informe.Actual.DireccionVientoTexto
+                                </strong>
+                                @if (informe.Actual.Racha is not null)
+                                {
+                                    <span class="d-block small text-body-secondary">
+                                        Rachas de @informe.Actual.Racha.Value.ToString("0.0")
+                                        @informe.UnidadViento
+                                    </span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border rounded p-3 h-100">
+                                <i class="bi bi-speedometer text-primary"></i>
+                                <span class="d-block small text-body-secondary">Presión</span>
+                                <strong>@informe.Actual.Presion hPa</strong>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border rounded p-3 h-100">
+                                <i class="bi bi-eye-fill text-primary"></i>
+                                <span class="d-block small text-body-secondary">Visibilidad</span>
+                                <strong>
+                                    @informe.Actual.VisibilidadKilometros.ToString("0.0") km
+                                </strong>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border rounded p-3 h-100">
+                                <i class="bi bi-clouds-fill text-primary"></i>
+                                <span class="d-block small text-body-secondary">Nubosidad</span>
+                                <strong>@informe.Actual.Nubosidad %</strong>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="border rounded p-3 h-100">
+                                <i class="bi bi-sunrise-fill text-warning"></i>
+                                <span class="d-block small text-body-secondary">Sol</span>
+                                <strong>
+                                    @informe.Actual.Amanecer.ToString("HH:mm")
+                                    – @informe.Actual.Atardecer.ToString("HH:mm")
+                                </strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-outline-secondary btn-sm mt-3"
+                       href="https://www.openstreetmap.org/?mlat=@informe.Lugar.Latitud.ToString(CultureInfo.InvariantCulture)&mlon=@informe.Lugar.Longitud.ToString(CultureInfo.InvariantCulture)#map=11/@informe.Lugar.Latitud.ToString(CultureInfo.InvariantCulture)/@informe.Lugar.Longitud.ToString(CultureInfo.InvariantCulture)"
+                       target="_blank"
+                       rel="noopener">
+                        <i class="bi bi-map me-1"></i>Ver en OpenStreetMap
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* Cada tarjeta resume los intervalos disponibles de un mismo día. *@
+    <section class="mb-4">
+        <h2 class="h3 mb-3">
+            <i class="bi bi-calendar-week text-primary me-1"></i>
+            Previsión de cinco días
+        </h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-5 g-3">
+            @foreach (PrevisionDiaria dia in informe.ProximosDias)
+            {
+                <div class="col">
+                    <article class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <h3 class="h5 text-capitalize">
+                                @dia.Fecha.ToDateTime(TimeOnly.MinValue).ToString("dddd", cultura)
+                            </h3>
+                            <div class="small text-body-secondary">
+                                @dia.Fecha.ToString("dd/MM")
+                            </div>
+                            <img src="@dia.UrlIcono"
+                                 width="80"
+                                 height="80"
+                                 alt="@dia.Descripcion" />
+                            <p class="mb-2">@dia.Descripcion</p>
+                            <p class="fs-5 mb-2">
+                                <strong>@dia.Maxima.ToString("0")°</strong>
+                                <span class="text-body-secondary">
+                                    / @dia.Minima.ToString("0")°
+                                </span>
+                            </p>
+                            <div class="small text-body-secondary">
+                                <i class="bi bi-umbrella"></i>
+                                @dia.ProbabilidadLluvia.ToString("0") %
+                                · @dia.LluviaMilimetros.ToString("0.0") mm
+                            </div>
+                            <div class="small text-body-secondary mt-1">
+                                <i class="bi bi-droplet"></i>
+                                @dia.Humedad %
+                                · <i class="bi bi-wind"></i>
+                                @dia.VientoMaximo.ToString("0") @informe.UnidadViento
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            }
+        </div>
+    </section>
+
+    @* Esta tabla conserva el detalle de los intervalos de tres horas. *@
+    <section class="card shadow-sm mb-4">
+        <div class="card-header bg-body">
+            <h2 class="h4 mb-0">
+                <i class="bi bi-clock-history text-primary me-1"></i>
+                Próximas 48 horas
+            </h2>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Fecha y hora</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Temperatura</th>
+                        <th scope="col">Sensación</th>
+                        <th scope="col">Lluvia</th>
+                        <th scope="col">Humedad</th>
+                        <th scope="col">Viento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (PrevisionPeriodo periodo in informe.ProximasHoras)
+                    {
+                        <tr>
+                            <td class="text-nowrap">
+                                @periodo.Fecha.ToString("ddd dd/MM HH:mm", cultura)
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="@periodo.UrlIcono"
+                                         width="50"
+                                         height="50"
+                                         alt="" />
+                                    <span>@periodo.Descripcion</span>
+                                </div>
+                            </td>
+                            <td class="fw-semibold">
+                                @periodo.Temperatura.ToString("0")@informe.SimboloTemperatura
+                            </td>
+                            <td>
+                                @periodo.Sensacion.ToString("0")@informe.SimboloTemperatura
+                            </td>
+                            <td>
+                                @periodo.ProbabilidadLluvia.ToString("0") %
+                                <span class="text-body-secondary">
+                                    (@periodo.LluviaMilimetros.ToString("0.0") mm)
+                                </span>
+                            </td>
+                            <td>@periodo.Humedad %</td>
+                            <td class="text-nowrap">
+                                @periodo.Viento.ToString("0.0") @informe.UnidadViento
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    @if (informe.Aire is not null)
+    {
+        CalidadAire aire = informe.Aire;
+
+        @* La tabla conserva las unidades originales indicadas por OpenWeather. *@
+        <section class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div>
+                        <h2 class="h4 mb-1">
+                            <i class="bi bi-lungs text-primary me-1"></i>
+                            Calidad del aire
+                        </h2>
+                        <p class="text-body-secondary mb-0">
+                            Concentraciones en μg/m³
+                        </p>
+                    </div>
+                    <span class="badge text-bg-@aire.ClaseBootstrap fs-6">
+                        Índice @aire.Indice/5 · @aire.Descripcion
+                    </span>
+                </div>
+
+                <div class="table-responsive mt-3">
+                    <table class="table table-sm text-center mb-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">CO</th>
+                                <th scope="col">NO</th>
+                                <th scope="col">NO₂</th>
+                                <th scope="col">O₃</th>
+                                <th scope="col">SO₂</th>
+                                <th scope="col">PM2.5</th>
+                                <th scope="col">PM10</th>
+                                <th scope="col">NH₃</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@aire.MonoxidoCarbono.ToString("0.0")</td>
+                                <td>@aire.MonoxidoNitrogeno.ToString("0.0")</td>
+                                <td>@aire.DioxidoNitrogeno.ToString("0.0")</td>
+                                <td>@aire.Ozono.ToString("0.0")</td>
+                                <td>@aire.DioxidoAzufre.ToString("0.0")</td>
+                                <td>@aire.Pm25.ToString("0.0")</td>
+                                <td>@aire.Pm10.ToString("0.0")</td>
+                                <td>@aire.Amoniaco.ToString("0.0")</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    }
+
+    @* Estos enlaces muestran el JSON de la API propia sin revelar la clave externa. *@
+    <section class="alert alert-secondary mb-0">
+        <h2 class="h5">
+            <i class="bi bi-filetype-json me-1"></i>Consultar el JSON
+        </h2>
+        <p>
+            La aplicación también expone este informe mediante una ruta propia:
+        </p>
+        <a class="text-break"
+           asp-controller="Tiempo"
+           asp-action="ObtenerTiempo"
+           asp-route-lat="@informe.Lugar.Latitud"
+           asp-route-lon="@informe.Lugar.Longitud"
+           asp-route-unidades="@informe.Unidades.ParaUrl()"
+           target="_blank"
+           rel="noopener">
+            Abrir <code>/api/tiempo</code> en una pestaña nueva
+        </a>
+    </section>
+}
+
+@section Scripts {
+    @* Solo la geolocalización necesita JavaScript específico de esta página. *@
+    <script src="~/js/ubicacion.js" asp-append-version="true"></script>
+}

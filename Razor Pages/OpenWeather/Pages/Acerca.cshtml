@@ -1,0 +1,83 @@
+@page
+@{
+    ViewData["Title"] = "Proyecto y API";
+    string urlBase = $"{Request.Scheme}://{Request.Host}";
+}
+
+<section class="p-4 p-md-5 mb-4 bg-body-tertiary rounded-3 shadow-sm">
+    <h1 class="display-5 fw-bold">
+        <i class="bi bi-braces text-primary"></i>
+        Proyecto y API
+    </h1>
+    <p class="lead mb-0">
+        Una aplicación didáctica que protege la clave externa,
+        transforma el JSON en DTO y presenta los datos mediante Razor Pages.
+    </p>
+</section>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <section class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h4">Direcciones de la API propia</h2>
+                <p>
+                    Los endpoints llaman a OpenWeather desde el servidor.
+                    La clave no se incluye en la respuesta ni llega al navegador.
+                </p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a class="text-break"
+                           href="@($"{urlBase}/api/lugares?texto=Alicante")"
+                           target="_blank"
+                           rel="noopener">
+                            <code>@urlBase/api/lugares?texto=Alicante</code>
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a class="text-break"
+                           href="@($"{urlBase}/api/tiempo?lat=38.3452&lon=-0.4810&unidades=metrico")"
+                           target="_blank"
+                           rel="noopener">
+                            <code>@urlBase/api/tiempo?lat=38.3452&amp;lon=-0.4810&amp;unidades=metrico</code>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-5">
+        <section class="card shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h4">Servicios utilizados</h2>
+                <ul>
+                    <li>Geocodificación directa e inversa.</li>
+                    <li>Tiempo actual.</li>
+                    <li>Previsión de 5 días en intervalos de 3 horas.</li>
+                    <li>Calidad actual del aire.</li>
+                </ul>
+                <a class="btn btn-primary"
+                   href="https://openweathermap.org/api"
+                   target="_blank"
+                   rel="noopener">
+                    <i class="bi bi-box-arrow-up-right me-1"></i>
+                    Documentación de OpenWeather
+                </a>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="card shadow-sm mt-4">
+    <div class="card-body">
+        <h2 class="h4">Flujo de una consulta</h2>
+        <ol class="mb-0">
+            <li>La Razor Page recibe el nombre de una localidad.</li>
+            <li>El servicio de geocodificación obtiene sus coordenadas.</li>
+            <li>El servidor añade la clave y consulta los endpoints externos.</li>
+            <li>Los DTO reciben solamente los campos necesarios del JSON.</li>
+            <li>El servicio transforma los DTO en modelos claros para la interfaz.</li>
+            <li>Razor genera el HTML y Bootstrap lo adapta a cada pantalla.</li>
+        </ol>
+    </div>
+</section>
