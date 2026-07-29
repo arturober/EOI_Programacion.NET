@@ -1,0 +1,126 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-md-5 mb-5 bg-body-tertiary rounded-3 shadow-sm">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <h1 class="display-4 fw-bold">
+                <i class="bi bi-camera-reels-fill text-primary"></i>
+                Descubre tu próxima película
+            </h1>
+            <p class="lead">
+                Explora el catálogo de TMDB y crea una colección personal
+                de favoritas guardada en SQLite.
+            </p>
+
+            @if (User.Identity?.IsAuthenticated != true)
+            {
+                <div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-primary btn-lg"
+                       asp-page="/Cuenta/Registro">
+                        <i class="bi bi-person-plus me-1"></i>Crear una cuenta
+                    </a>
+                    <a class="btn btn-outline-secondary btn-lg"
+                       asp-page="/Cuenta/Login">
+                        Iniciar sesión
+                    </a>
+                </div>
+            }
+            else
+            {
+                <a class="btn btn-danger btn-lg"
+                   asp-page="/Favoritos/Index">
+                    <i class="bi bi-heart-fill me-1"></i>Ver mis favoritas
+                </a>
+            }
+        </div>
+
+        <div class="col-lg-5">
+            <form method="get"
+                  asp-page="/Peliculas/Buscar"
+                  class="card card-body shadow-sm"
+                  role="search">
+                <label for="busquedaPrincipal"
+                       class="form-label fw-semibold">
+                    Buscar en TMDB
+                </label>
+                <div class="input-group input-group-lg">
+                    <input id="busquedaPrincipal"
+                           name="texto"
+                           class="form-control"
+                           placeholder="Ejemplo: El padrino"
+                           minlength="2"
+                           maxlength="100"
+                           required />
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i>
+                        <span class="visually-hidden">Buscar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@if (!Model.EstaConfigurado)
+{
+    <div class="alert alert-warning shadow-sm" role="alert">
+        <h2 class="h4 alert-heading">
+            <i class="bi bi-key-fill me-1"></i>Falta el token de TMDB
+        </h2>
+        <p>
+            Abre una terminal en la carpeta del proyecto y ejecuta:
+        </p>
+        <pre class="bg-dark text-light rounded p-3 mb-3"><code>dotnet user-secrets set "Tmdb:TokenAcceso" "TU_TOKEN"</code></pre>
+        <p class="mb-0">
+            Debes utilizar el valor denominado <strong>API Read Access Token</strong>.
+            El proceso completo se explica en <code>README.md</code>.
+        </p>
+    </div>
+}
+
+@if (Model.EstaConfigurado)
+{
+    @foreach (var seccion in new[]
+    {
+        new
+        {
+            Tipo = TipoListado.Tendencias,
+            Peliculas = Model.Tendencias.Resultados.Take(6)
+        },
+        new
+        {
+            Tipo = TipoListado.EnCartelera,
+            Peliculas = Model.Cartelera.Resultados.Take(6)
+        },
+        new
+        {
+            Tipo = TipoListado.MejorValoradas,
+            Peliculas = Model.MejorValoradas.Resultados.Take(6)
+        }
+    })
+    {
+        <section class="mb-5">
+            <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                <h2 class="h3 mb-0">@seccion.Tipo.Titulo()</h2>
+                <a class="btn btn-outline-primary btn-sm"
+                   asp-page="/Peliculas/Index"
+                   asp-route-tipo="@seccion.Tipo.ParaUrl()">
+                    Ver todas
+                </a>
+            </div>
+
+            <div class="row row-cols-2 row-cols-md-3 row-cols-xl-6 g-3">
+                @foreach (PeliculaResumen pelicula in seccion.Peliculas)
+                {
+                    <div class="col">
+                        <partial name="_TarjetaPelicula" model="pelicula" />
+                    </div>
+                }
+            </div>
+        </section>
+    }
+}

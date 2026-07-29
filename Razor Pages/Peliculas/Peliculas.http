@@ -1,0 +1,19 @@
+# Estas peticiones funcionan con la aplicación ejecutándose en HTTP.
+@host = http://localhost:5090
+
+### Películas populares
+GET {{host}}/api/peliculas/populares?pagina=1
+Accept: application/json
+
+### Buscar por título
+GET {{host}}/api/peliculas/buscar?texto=matrix&pagina=1
+Accept: application/json
+
+### Obtener una ficha por el identificador de TMDB
+GET {{host}}/api/peliculas/603
+Accept: application/json
+
+### Favoritas del usuario conectado
+# Esta ruta necesita la cookie de una sesión iniciada en el navegador.
+GET {{host}}/api/favoritos
+Accept: application/json

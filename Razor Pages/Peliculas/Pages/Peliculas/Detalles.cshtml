@@ -1,0 +1,324 @@
+@page "{id:int}"
+@model global::Peliculas.Pages.Peliculas.DetallesModel
+@{
+    ViewData["Title"] = string.IsNullOrWhiteSpace(Model.Pelicula.Titulo)
+        ? "Detalle"
+        : Model.Pelicula.Titulo;
+
+    string retorno = Url.Page(
+        "/Peliculas/Detalles",
+        values: new { id = Model.Pelicula.Id }) ?? "/";
+}
+
+@if (string.IsNullOrWhiteSpace(Model.Pelicula.Titulo))
+{
+    <div class="alert alert-warning">
+        No se ha podido cargar la ficha de la película.
+        Puedes volver a intentarlo dentro de unos instantes.
+    </div>
+}
+else
+{
+    <article>
+        @* La imagen de fondo solo se muestra cuando TMDB la proporciona. *@
+        @if (Model.Pelicula.UrlFondo is not null)
+        {
+            <div class="ratio ratio-21x9 rounded-4 overflow-hidden shadow mb-4">
+                <img src="@Model.Pelicula.UrlFondo"
+                     class="object-fit-cover"
+                     alt=""
+                     loading="eager" />
+            </div>
+        }
+
+        <div class="row g-4">
+            <div class="col-md-4 col-lg-3">
+                @if (Model.Pelicula.UrlPoster is not null)
+                {
+                    <img src="@Model.Pelicula.UrlPoster"
+                         class="img-fluid rounded-4 shadow w-100"
+                         alt="Cartel de @Model.Pelicula.Titulo" />
+                }
+                else
+                {
+                    <div class="ratio rounded-4 bg-body-tertiary shadow"
+                         style="--bs-aspect-ratio: 150%;">
+                        <div class="d-flex flex-column align-items-center justify-content-center text-body-secondary">
+                            <i class="bi bi-image fs-1"></i>
+                            <span>Sin cartel</span>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-8 col-lg-9">
+                <div class="d-flex flex-wrap justify-content-between gap-3">
+                    <div>
+                        <h1 class="display-6 fw-bold mb-1">
+                            @Model.Pelicula.Titulo
+                        </h1>
+
+                        @if (Model.Pelicula.TituloOriginal != Model.Pelicula.Titulo)
+                        {
+                            <p class="text-body-secondary mb-2">
+                                Título original: @Model.Pelicula.TituloOriginal
+                            </p>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Pelicula.Eslogan))
+                        {
+                            <p class="lead fst-italic">
+                                @Model.Pelicula.Eslogan
+                            </p>
+                        }
+                    </div>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form method="post"
+                              asp-page="/Favoritos/Alternar"
+                              data-confirmar-favorito="true">
+                            <input type="hidden"
+                                   name="peliculaId"
+                                   value="@Model.Pelicula.Id" />
+                            <input type="hidden"
+                                   name="accion"
+                                   value="@(Model.Pelicula.EsFavorita ? "quitar" : "agregar")" />
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@retorno" />
+
+                            <button class="btn @(Model.Pelicula.EsFavorita ? "btn-danger" : "btn-outline-danger")"
+                                    type="submit"
+                                    data-accion="@(Model.Pelicula.EsFavorita ? "quitar" : "agregar")">
+                                <i class="bi @(Model.Pelicula.EsFavorita ? "bi-heartbreak" : "bi-heart") me-1"></i>
+                                @(Model.Pelicula.EsFavorita
+                                    ? "Quitar de favoritas"
+                                    : "Añadir a favoritas")
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn btn-outline-danger"
+                           asp-page="/Cuenta/Login"
+                           asp-route-returnUrl="@retorno">
+                            <i class="bi bi-heart me-1"></i>
+                            Entra para guardarla
+                        </a>
+                    }
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 my-3">
+                    <span class="badge text-bg-warning fs-6">
+                        <i class="bi bi-star-fill me-1"></i>
+                        @Model.Pelicula.Puntuacion.ToString("0.0") / 10
+                    </span>
+                    <span class="badge text-bg-secondary fs-6">
+                        @Model.Pelicula.NumeroVotos.ToString("N0") votos
+                    </span>
+                    <span class="badge text-bg-info fs-6">
+                        @Model.Pelicula.Anio
+                    </span>
+                    <span class="badge text-bg-dark fs-6">
+                        @Model.Pelicula.DuracionTexto
+                    </span>
+                    @foreach (string genero in Model.Pelicula.Generos)
+                    {
+                        <span class="badge border text-body fs-6">@genero</span>
+                    }
+                </div>
+
+                <h2 class="h4">Sinopsis</h2>
+                <p>
+                    @(string.IsNullOrWhiteSpace(Model.Pelicula.Sinopsis)
+                        ? "TMDB no dispone de una sinopsis en español."
+                        : Model.Pelicula.Sinopsis)
+                </p>
+
+                <dl class="row">
+                    <dt class="col-sm-3">Dirección</dt>
+                    <dd class="col-sm-9">
+                        @(Model.Pelicula.Director ?? "Sin información")
+                    </dd>
+
+                    <dt class="col-sm-3">Países</dt>
+                    <dd class="col-sm-9">
+                        @(Model.Pelicula.Paises.Count > 0
+                            ? string.Join(", ", Model.Pelicula.Paises)
+                            : "Sin información")
+                    </dd>
+
+                    <dt class="col-sm-3">Estado</dt>
+                    <dd class="col-sm-9">
+                        @(string.IsNullOrWhiteSpace(Model.Pelicula.Estado)
+                            ? "Sin información"
+                            : Model.Pelicula.Estado)
+                    </dd>
+                </dl>
+
+                <div class="d-flex flex-wrap gap-2">
+                    @if (Model.Pelicula.Trailer is not null)
+                    {
+                        <a class="btn btn-danger"
+                           href="@Model.Pelicula.Trailer.UrlYoutube"
+                           target="_blank"
+                           rel="noopener">
+                            <i class="bi bi-youtube me-1"></i>Ver tráiler
+                        </a>
+                    }
+
+                    <a class="btn btn-outline-primary"
+                       href="@Model.Pelicula.UrlTmdb"
+                       target="_blank"
+                       rel="noopener">
+                        Ver en TMDB
+                    </a>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Pelicula.PaginaOficial))
+                    {
+                        <a class="btn btn-outline-secondary"
+                           href="@Model.Pelicula.PaginaOficial"
+                           target="_blank"
+                           rel="noopener">
+                            Web oficial
+                        </a>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Pelicula.ImdbId))
+                    {
+                        <a class="btn btn-outline-warning"
+                           href="https://www.imdb.com/title/@Model.Pelicula.ImdbId/"
+                           target="_blank"
+                           rel="noopener">
+                            IMDb
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (Model.Pelicula.Disponibilidad?.TieneDatos == true)
+        {
+            <section class="mt-5">
+                <div class="d-flex flex-wrap justify-content-between align-items-end gap-2">
+                    <div>
+                        <h2 class="h3 mb-1">Dónde verla en España</h2>
+                        <p class="text-body-secondary mb-0">
+                            Disponibilidad facilitada por JustWatch a través de TMDB.
+                        </p>
+                    </div>
+
+                    @if (Model.Pelicula.Disponibilidad.Enlace is not null)
+                    {
+                        <a href="@Model.Pelicula.Disponibilidad.Enlace"
+                           target="_blank"
+                           rel="noopener"
+                           class="btn btn-sm btn-outline-primary">
+                            Ver todas las opciones
+                        </a>
+                    }
+                </div>
+
+                <div class="row g-4 mt-1">
+                    @{
+                        var grupos = new[]
+                        {
+                            new
+                            {
+                                Titulo = "Suscripción",
+                                Proveedores = Model.Pelicula.Disponibilidad.Suscripcion
+                            },
+                            new
+                            {
+                                Titulo = "Alquiler",
+                                Proveedores = Model.Pelicula.Disponibilidad.Alquiler
+                            },
+                            new
+                            {
+                                Titulo = "Compra",
+                                Proveedores = Model.Pelicula.Disponibilidad.Compra
+                            }
+                        };
+                    }
+
+                    @foreach (var grupo in grupos.Where(grupo => grupo.Proveedores.Count > 0))
+                    {
+                        <div class="col-md-4">
+                            <h3 class="h5">@grupo.Titulo</h3>
+                            <div class="d-flex flex-wrap gap-3">
+                                @foreach (ProveedorTmdb proveedor in grupo.Proveedores)
+                                {
+                                    <div class="text-center" style="width: 74px;">
+                                        @if (proveedor.UrlLogo is not null)
+                                        {
+                                            <img src="@proveedor.UrlLogo"
+                                                 class="rounded-3 shadow-sm mb-1"
+                                                 width="56"
+                                                 height="56"
+                                                 alt="@proveedor.Nombre"
+                                                 loading="lazy" />
+                                        }
+                                        <small class="d-block">@proveedor.Nombre</small>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+
+        @if (Model.Pelicula.Reparto.Count > 0)
+        {
+            <section class="mt-5">
+                <h2 class="h3">Reparto principal</h2>
+                <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
+                    @foreach (PersonaReparto persona in Model.Pelicula.Reparto)
+                    {
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                @if (persona.UrlFoto is not null)
+                                {
+                                    <img src="@persona.UrlFoto"
+                                         class="card-img-top"
+                                         alt="Fotografía de @persona.Nombre"
+                                         loading="lazy" />
+                                }
+                                else
+                                {
+                                    <div class="ratio ratio-1x1 bg-body-tertiary">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-person fs-1 text-body-secondary"></i>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="card-body p-2">
+                                    <h3 class="h6 card-title mb-1">@persona.Nombre</h3>
+                                    <p class="card-text small text-body-secondary">
+                                        @persona.Personaje
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+
+        @if (Model.Pelicula.Recomendaciones.Count > 0)
+        {
+            <section class="mt-5">
+                <h2 class="h3">También podría gustarte</h2>
+                <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
+                    @foreach (PeliculaResumen pelicula in Model.Pelicula.Recomendaciones)
+                    {
+                        <div class="col">
+                            <partial name="_TarjetaPelicula" model="pelicula" />
+                        </div>
+                    }
+                </div>
+            </section>
+        }
+    </article>
+}

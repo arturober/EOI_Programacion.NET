@@ -1,0 +1,22 @@
+@page
+@model global::Peliculas.Pages.ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="text-center py-5">
+    <i class="bi bi-exclamation-triangle display-1 text-warning"></i>
+    <h1 class="display-6 mt-3">No se ha podido completar la petición</h1>
+    <p class="lead">
+        Prueba a recargar la página o vuelve al inicio.
+    </p>
+    <a class="btn btn-primary" asp-page="/Index">Volver al inicio</a>
+
+    @if (Model.MostrarIdentificador)
+    {
+        <p class="small text-body-secondary mt-4">
+            Identificador de la petición:
+            <code>@Model.IdentificadorPeticion</code>
+        </p>
+    }
+</div>

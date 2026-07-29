@@ -1,0 +1,90 @@
+@page
+@model global::Peliculas.Pages.Peliculas.BuscarModel
+@{
+    ViewData["Title"] = "Buscar películas";
+}
+
+<section class="p-4 mb-4 bg-body-tertiary rounded-3 shadow-sm">
+    <h1 class="display-5 fw-bold">Buscar películas</h1>
+    <form method="get" class="row g-2" role="search">
+        <div class="col-md-10">
+            <label for="texto" class="visually-hidden">
+                Título
+            </label>
+            <input id="texto"
+                   name="texto"
+                   value="@Model.Texto"
+                   class="form-control form-control-lg"
+                   placeholder="Escribe al menos dos caracteres"
+                   minlength="2"
+                   maxlength="100"
+                   required
+                   autofocus />
+        </div>
+        <div class="col-md-2 d-grid">
+            <button class="btn btn-primary btn-lg" type="submit">
+                <i class="bi bi-search me-1"></i>Buscar
+            </button>
+        </div>
+    </form>
+</section>
+
+@if (Model.Texto.Length is > 0 and < 2)
+{
+    <div class="alert alert-warning">
+        Escribe al menos dos caracteres.
+    </div>
+}
+else if (Model.Texto.Length >= 2)
+{
+    <div class="d-flex justify-content-between align-items-center gap-3 mb-4">
+        <h2 class="h3 mb-0">
+            Resultados para «@Model.Texto»
+        </h2>
+        <span class="badge text-bg-secondary fs-6">
+            @Model.Resultado.TotalResultados.ToString("N0")
+        </span>
+    </div>
+
+    @if (Model.Resultado.Resultados.Count > 0)
+    {
+        <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+            @foreach (PeliculaResumen pelicula in Model.Resultado.Resultados)
+            {
+                <div class="col">
+                    <partial name="_TarjetaPelicula" model="pelicula" />
+                </div>
+            }
+        </div>
+
+        <nav class="mt-5" aria-label="Páginas de búsqueda">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.Resultado.Pagina <= 1 ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-route-texto="@Model.Texto"
+                       asp-route-pagina="@(Model.Resultado.Pagina - 1)">
+                        Anterior
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">
+                        @Model.Resultado.Pagina / @Model.Resultado.TotalPaginas
+                    </span>
+                </li>
+                <li class="page-item @(Model.Resultado.Pagina >= Model.Resultado.TotalPaginas ? "disabled" : "")">
+                    <a class="page-link"
+                       asp-route-texto="@Model.Texto"
+                       asp-route-pagina="@(Model.Resultado.Pagina + 1)">
+                        Siguiente
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No se ha encontrado ninguna película con ese título.
+        </div>
+    }
+}

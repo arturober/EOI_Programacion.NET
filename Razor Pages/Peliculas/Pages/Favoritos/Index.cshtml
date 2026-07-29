@@ -1,0 +1,71 @@
+@page
+@model global::Peliculas.Pages.Favoritos.IndexModel
+@{
+    ViewData["Title"] = "Mis favoritas";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <h1 class="display-6 fw-bold mb-1">
+            <i class="bi bi-heart-fill text-danger me-2"></i>Mis favoritas
+        </h1>
+        <p class="text-body-secondary mb-0">
+            Esta lista es privada y está vinculada a tu cuenta.
+        </p>
+    </div>
+
+    @if (Model.Peliculas.Count > 1)
+    {
+        <form method="get">
+            <label for="orden" class="form-label mb-1">Ordenar por</label>
+            <select id="orden"
+                    name="orden"
+                    class="form-select"
+                    onchange="this.form.submit()">
+                <option value="recientes"
+                        selected="@(Model.Orden == "recientes" ? "selected" : null)">
+                    Añadidas recientemente
+                </option>
+                <option value="titulo"
+                        selected="@(Model.Orden == "titulo" ? "selected" : null)">
+                    Título
+                </option>
+                <option value="estreno"
+                        selected="@(Model.Orden == "estreno" ? "selected" : null)">
+                    Fecha de estreno
+                </option>
+                <option value="puntuacion"
+                        selected="@(Model.Orden == "puntuacion" ? "selected" : null)">
+                    Puntuación
+                </option>
+            </select>
+        </form>
+    }
+</div>
+
+@if (Model.Peliculas.Count == 0)
+{
+    <div class="text-center border rounded-4 p-5 bg-body-tertiary">
+        <i class="bi bi-heart fs-1 text-danger"></i>
+        <h2 class="h4 mt-3">Todavía no tienes películas favoritas</h2>
+        <p class="text-body-secondary">
+            Pulsa el corazón de cualquier película y aparecerá aquí.
+        </p>
+        <a class="btn btn-primary"
+           asp-page="/Peliculas/Index"
+           asp-route-tipo="populares">
+            Explorar películas populares
+        </a>
+    </div>
+}
+else
+{
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+        @foreach (PeliculaResumen pelicula in Model.Peliculas)
+        {
+            <div class="col">
+                <partial name="_TarjetaPelicula" model="pelicula" />
+            </div>
+        }
+    </div>
+}

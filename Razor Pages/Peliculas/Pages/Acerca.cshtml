@@ -1,0 +1,79 @@
+@page
+@model global::Peliculas.Pages.AcercaModel
+@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <h1 class="display-6 fw-bold">Acerca del proyecto</h1>
+        <p class="lead">
+            Una aplicación educativa para aprender Razor Pages, Identity,
+            Entity Framework Core, SQLite y consumo de una API REST.
+        </p>
+
+        <div class="row g-4 my-2">
+            <div class="col-md-6">
+                <section class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h4">
+                            <i class="bi bi-person-lock text-primary me-2"></i>
+                            Cuentas locales
+                        </h2>
+                        <p>
+                            El registro y el inicio de sesión se realizan con
+                            ASP.NET Core Identity. No se exige confirmar el
+                            correo, por lo que la cuenta queda disponible al
+                            terminar el registro.
+                        </p>
+                        <p class="mb-0">
+                            Las contraseñas nunca se guardan como texto:
+                            Identity conserva únicamente su hash seguro.
+                        </p>
+                    </div>
+                </section>
+            </div>
+
+            <div class="col-md-6">
+                <section class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h4">
+                            <i class="bi bi-database text-primary me-2"></i>
+                            Favoritas en SQLite
+                        </h2>
+                        <p>
+                            Cada favorito relaciona un usuario de Identity con
+                            el identificador de una película de TMDB.
+                        </p>
+                        <p class="mb-0">
+                            La lista es independiente para cada cuenta y sigue
+                            disponible al volver a iniciar la aplicación.
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <section class="border rounded-4 p-4 mt-4">
+            <h2 class="h3">Créditos de los datos</h2>
+            <p>
+                This product uses the TMDB API but is not endorsed or certified
+                by TMDB.
+            </p>
+            <p>
+                Los datos, carteles y fondos proceden de
+                <a href="https://www.themoviedb.org/"
+                   target="_blank"
+                   rel="noopener">The Movie Database (TMDB)</a>.
+                La información sobre plataformas de reproducción es facilitada
+                por JustWatch a través de TMDB.
+            </p>
+            <a class="btn btn-outline-primary"
+               href="https://developer.themoviedb.org/docs/getting-started"
+               target="_blank"
+               rel="noopener">
+                Documentación de la API de TMDB
+            </a>
+        </section>
+    </div>
+</div>

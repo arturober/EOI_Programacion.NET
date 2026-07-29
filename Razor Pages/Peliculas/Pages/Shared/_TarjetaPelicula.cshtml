@@ -1,0 +1,84 @@
+@model PeliculaResumen
+@{
+    // El retorno permite permanecer en la misma página después de cambiar el favorito.
+    string retorno = $"{Context.Request.Path}{Context.Request.QueryString}";
+}
+
+<article class="card h-100 shadow-sm">
+    <div class="position-relative">
+        <div class="ratio bg-body-secondary"
+             style="--bs-aspect-ratio: 150%;">
+            @if (Model.UrlPosterPequeno is not null)
+            {
+                <img src="@Model.UrlPosterPequeno"
+                     class="w-100 h-100 object-fit-cover"
+                     alt="Cartel de @Model.Titulo"
+                     loading="lazy" />
+            }
+            else
+            {
+                <div class="d-flex align-items-center justify-content-center">
+                    <i class="bi bi-film display-1 text-body-secondary"></i>
+                </div>
+            }
+        </div>
+
+        <span class="badge text-bg-warning position-absolute bottom-0 start-0 m-2">
+            <i class="bi bi-star-fill me-1"></i>
+            @Model.Puntuacion.ToString("0.0")
+        </span>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <form method="post"
+                  asp-page="/Favoritos/Alternar"
+                  class="position-absolute top-0 end-0 m-2 z-3"
+                  data-confirmar-favorito="@(Model.EsFavorita ? "true" : null)">
+                <input type="hidden" name="peliculaId" value="@Model.Id" />
+                <input type="hidden"
+                       name="accion"
+                       value="@(Model.EsFavorita ? "quitar" : "agregar")" />
+                <input type="hidden" name="returnUrl" value="@retorno" />
+                <button class="btn @(Model.EsFavorita ? "btn-danger" : "btn-light") rounded-circle shadow"
+                        type="submit"
+                        data-accion="@(Model.EsFavorita ? "quitar" : "agregar")"
+                        title="@(Model.EsFavorita ? "Quitar de favoritas" : "Añadir a favoritas")"
+                        aria-label="@(Model.EsFavorita ? "Quitar de favoritas" : "Añadir a favoritas")">
+                    <i class="bi @(Model.EsFavorita ? "bi-heart-fill" : "bi-heart")"></i>
+                </button>
+            </form>
+        }
+        else
+        {
+            <a class="btn btn-light rounded-circle shadow position-absolute top-0 end-0 m-2 z-3"
+               asp-page="/Cuenta/Login"
+               asp-route-returnUrl="@retorno"
+               title="Inicia sesión para añadirla"
+               aria-label="Inicia sesión para añadirla a favoritas">
+                <i class="bi bi-heart"></i>
+            </a>
+        }
+    </div>
+
+    <div class="card-body d-flex flex-column">
+        <h2 class="h5 card-title">
+            <a class="link-body-emphasis text-decoration-none"
+               asp-page="/Peliculas/Detalles"
+               asp-route-id="@Model.Id">
+                @Model.Titulo
+            </a>
+        </h2>
+        <p class="text-body-secondary small mb-3">
+            @Model.Anio
+            @if (Model.NumeroVotos > 0)
+            {
+                <span>· @Model.NumeroVotos.ToString("N0") votos</span>
+            }
+        </p>
+        <a class="btn btn-outline-primary mt-auto"
+           asp-page="/Peliculas/Detalles"
+           asp-route-id="@Model.Id">
+            <i class="bi bi-info-circle me-1"></i>Ver detalles
+        </a>
+    </div>
+</article>

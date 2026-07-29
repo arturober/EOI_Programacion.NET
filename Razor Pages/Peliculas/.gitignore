@@ -1,0 +1,22 @@
+# Resultados de compilación
+bin/
+obj/
+
+# Base de datos creada al ejecutar la aplicación
+Data/*.db
+Data/*.db-shm
+Data/*.db-wal
+
+# Configuración personal de los editores
+.vs/
+.idea/
+*.user
+*.suo
+
+# Secretos locales
+appsettings.Local.json
+.env
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db

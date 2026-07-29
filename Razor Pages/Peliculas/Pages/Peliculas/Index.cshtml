@@ -1,0 +1,59 @@
+@page
+@model global::Peliculas.Pages.Peliculas.IndexModel
+@{
+    ViewData["Title"] = Model.Tipo.Titulo();
+}
+
+<header class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+    <div>
+        <h1 class="display-5 fw-bold mb-1">@Model.Tipo.Titulo()</h1>
+        <p class="text-body-secondary mb-0">
+            @Model.Resultado.TotalResultados.ToString("N0") resultados
+        </p>
+    </div>
+    <span class="badge text-bg-secondary fs-6">
+        Página @Model.Resultado.Pagina de @Model.Resultado.TotalPaginas
+    </span>
+</header>
+
+@if (Model.Resultado.Resultados.Count > 0)
+{
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+        @foreach (PeliculaResumen pelicula in Model.Resultado.Resultados)
+        {
+            <div class="col">
+                <partial name="_TarjetaPelicula" model="pelicula" />
+            </div>
+        }
+    </div>
+
+    <nav class="mt-5" aria-label="Páginas de resultados">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.Resultado.Pagina <= 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-route-tipo="@Model.Tipo.ParaUrl()"
+                   asp-route-pagina="@(Model.Resultado.Pagina - 1)">
+                    <i class="bi bi-chevron-left"></i>
+                    <span class="visually-hidden">Anterior</span>
+                </a>
+            </li>
+            <li class="page-item disabled">
+                <span class="page-link">
+                    @Model.Resultado.Pagina / @Model.Resultado.TotalPaginas
+                </span>
+            </li>
+            <li class="page-item @(Model.Resultado.Pagina >= Model.Resultado.TotalPaginas ? "disabled" : "")">
+                <a class="page-link"
+                   asp-route-tipo="@Model.Tipo.ParaUrl()"
+                   asp-route-pagina="@(Model.Resultado.Pagina + 1)">
+                    <i class="bi bi-chevron-right"></i>
+                    <span class="visually-hidden">Siguiente</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+}
+else
+{
+    <div class="alert alert-info">No se han encontrado películas.</div>
+}
