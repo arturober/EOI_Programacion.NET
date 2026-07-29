@@ -4,11 +4,38 @@
     ViewData["Title"] = "Preguntas";
 }
 
-<header>
+<header class="mb-3">
     <h1>Preguntas</h1>
 
     <a class="btn btn-primary" asp-page="/Preguntas/Crear">Crear nueva pregunta</a>
 </header>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g3">
+        <div class="col">
+            <label for="Busqueda" class="form-label">Buscar:</label>
+            <input asp-for="Busqueda" 
+                class="form-control" 
+                type="search" 
+                autocomplete="off"
+                autofocus
+                placeholder="Buscar pregunta..."
+                onfocus="this.setSelectionRange(this.value.length, this.value.length); this.onfocus = null"
+                oninput="clearTimeout(this.espera); this.espera = setTimeout(() => this.form.requestSubmit(), 300)" />
+
+        </div>
+        <div class="col">
+            <label asp-for="CategoriaId" class="form-label"></label>
+            <select asp-for="CategoriaId" class="form-select"
+                    asp-items="@(ViewData["Categorias"] as SelectList)"
+                    onchange="this.form.requestSubmit()">
+                <option value="0">-- Selecciona una categoría --</option>
+            </select>
+            <span asp-validation-for="CategoriaId" class="text-danger"></span>
+        </div>
+    </div>
+
+</form>
 
 <div class="row">
     <table class="table table-striped">
