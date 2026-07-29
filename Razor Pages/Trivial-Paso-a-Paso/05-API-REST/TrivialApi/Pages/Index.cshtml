@@ -1,0 +1,15 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="text-center">
+    <h1 class="display-4">Bienvenido a TrivialApi</h1>
+    <p>Este es un ejemplo de una aplicación web construida con Razor Pages y Entity Framework Core.</p>
+    <p>Total de preguntas: @Model.TotalPreguntas</p>
+    <p>Total de categorías: @Model.TotalCategorias</p>
+
+    <a asp-page="/Categorias/Index" class="btn btn-primary">Ver categorías</a>
+    <a asp-page="/Preguntas/Index" class="btn btn-primary">Ver preguntas</a>
+</section>
