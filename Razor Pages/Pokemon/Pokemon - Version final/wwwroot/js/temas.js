@@ -11,19 +11,8 @@ function cambiarTema(tema) {
         ? `https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/${nombreBootswatch}/bootstrap.min.css`
         : "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css";
 
-    const temasOscuros = [
-        "bootstrap-dark",
-        "bootswatch-cyborg",
-        "bootswatch-darkly",
-        "bootswatch-quartz",
-        "bootswatch-slate",
-        "bootswatch-solar",
-        "bootswatch-superhero",
-        "bootswatch-vapor"
-    ];
-
     document.documentElement.dataset.bsTheme =
-        temasOscuros.includes(tema) ? "dark" : "light";
+        tema.includes("bootstrap-dark") ? "dark" : "light";
 
     localStorage.setItem("temaPokedex", tema);
 }
