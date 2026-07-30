@@ -10,7 +10,8 @@ function cambiarTema(tema) {
         ? `https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/${nombre}/bootstrap.min.css`
         : `https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css`;
 
-    document.documentElement.setAttribute('data-bs-theme', esBootSwatch ? nombre : 'light');
+    document.documentElement.setAttribute('data-bs-theme', 
+        tema == 'bootstrap-dark' ? 'dark' : 'light');
 
     localStorage.setItem('tema', tema);
 }
