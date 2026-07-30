@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
 
@@ -9,6 +9,10 @@
     <title>@ViewData["Title"] - TrivialApi</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+          rel="stylesheet" 
+          id="temaCSS" />
+
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css" 
           rel="stylesheet" />
 </head>
 <body>
@@ -29,6 +33,41 @@
                 </ul>
 
                 <a class="btn btn-outline-light ms-auto" href="/cliente/index.html">Jugar</a>
+
+                <select id="selectorTema" class="form-select ms-3" style="width: auto;">
+                    <optgroup label="Bootstrap">
+                        <option value="bootstrap-light" selected>Claro</option>
+                        <option value="bootstrap-dark">Oscuro</option>
+                    </optgroup>
+                    <optgroup label="Bootswatch">
+                        <option value="bootswatch-brite">Brite</option>
+                        <option value="bootswatch-cerulean">Cerulean</option>
+                        <option value="bootswatch-cosmo">Cosmo</option>
+                        <option value="bootswatch-cyborg">Cyborg</option>
+                        <option value="bootswatch-darkly">Darkly</option>
+                        <option value="bootswatch-flatly">Flatly</option>
+                        <option value="bootswatch-journal">Journal</option>
+                        <option value="bootswatch-litera">Litera</option>
+                        <option value="bootswatch-lumen">Lumen</option>
+                        <option value="bootswatch-lux">Lux</option>
+                        <option value="bootswatch-materia">Materia</option>
+                        <option value="bootswatch-minty">Minty</option>
+                        <option value="bootswatch-morph">Morph</option>
+                        <option value="bootswatch-pulse">Pulse</option>
+                        <option value="bootswatch-quartz">Quartz</option>
+                        <option value="bootswatch-sandstone">Sandstone</option>
+                        <option value="bootswatch-simplex">Simplex</option>
+                        <option value="bootswatch-sketchy">Sketchy</option>
+                        <option value="bootswatch-slate">Slate</option>
+                        <option value="bootswatch-solar">Solar</option>
+                        <option value="bootswatch-spacelab">Spacelab</option>
+                        <option value="bootswatch-superhero">Superhero</option>
+                        <option value="bootswatch-united">United</option>
+                        <option value="bootswatch-vapor">Vapor</option>
+                        <option value="bootswatch-yeti">Yeti</option>
+                        <option value="bootswatch-zephyr">Zephyr</option>
+                    </optgroup>
+                </select>
             </div>
         </div>
     </nav>
@@ -46,6 +85,11 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+
+    <script src="~/js/sweetalert.js"></script>
+    <script src="~/js/temas.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

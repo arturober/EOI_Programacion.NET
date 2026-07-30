@@ -35,7 +35,8 @@
 
                         <form method="post" 
                             asp-page-handler="Eliminar"
-                            class="d-inline formulario-eliminar">
+                            class="d-inline" 
+                            onsubmit="return confirm('¿Está seguro de que desea eliminar la categoría?');">
                             <input type="hidden" name="id" value="@categoria.Id" />
                             <button type="submit" class="btn btn-danger">Eliminar</button>
                         </form>
