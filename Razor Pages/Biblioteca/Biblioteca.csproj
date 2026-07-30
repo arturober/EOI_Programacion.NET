@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>Biblioteca-OpenLibrary-2026</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Entity Framework Core utiliza SQLite para usuarios y favoritos. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"
+                      Version="10.0.10" />
+
+    <!-- Este paquete conecta Identity con Entity Framework Core. -->
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
+                      Version="10.0.10" />
+
+    <!-- Se fija una versión de SQLite sin la vulnerabilidad de la 2.1.11. -->
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3"
+                      Version="2.1.12" />
+  </ItemGroup>
+
+</Project>

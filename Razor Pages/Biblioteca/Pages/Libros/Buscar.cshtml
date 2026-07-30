@@ -1,0 +1,79 @@
+@page
+@model global::Biblioteca.Pages.Libros.BuscarModel
+@{
+    ViewData["Title"] = "Buscar libros";
+
+    // Se prepara el modelo fuera de la etiqueta para que Razor lo interprete bien.
+    PaginacionVista paginacion = new()
+    {
+        PaginaActual = Model.Resultado.Pagina,
+        TotalPaginas = Model.Resultado.TotalPaginas,
+        PaginaRazor = "/Libros/Buscar",
+        ValoresRuta = new()
+        {
+            ["texto"] = Model.Texto
+        }
+    };
+}
+
+<header class="mb-4">
+    <h1>Buscar libros</h1>
+
+    <form method="get" class="mt-3" role="search">
+        <div class="input-group input-group-lg">
+            <input class="form-control"
+                   name="texto"
+                   value="@Model.Texto"
+                   placeholder="Título, autor, ISBN o materia"
+                   aria-label="Texto que se desea buscar"
+                   minlength="2"
+                   autofocus
+                   required />
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-search me-1"></i>Buscar
+            </button>
+        </div>
+    </form>
+</header>
+
+@if (Model.Texto.Length >= 2)
+{
+    <p class="text-body-secondary">
+        @Model.Resultado.TotalResultados.ToString("N0") resultados para
+        <strong>«@Model.Texto»</strong>.
+    </p>
+
+    @if (Model.Resultado.Resultados.Count > 0)
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+            @foreach (LibroResumen libro in Model.Resultado.Resultados)
+            {
+                <div class="col">
+                    <partial name="_TarjetaLibro" model="libro" />
+                </div>
+            }
+        </div>
+
+        <partial name="_Paginacion" model="paginacion" />
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-emoji-frown display-1 text-body-secondary"></i>
+            <h2 class="h4 mt-3">No se han encontrado coincidencias</h2>
+            <p class="text-body-secondary">
+                Prueba con menos palabras o busca por ISBN.
+            </p>
+        </div>
+    }
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-book display-1 text-body-secondary"></i>
+        <h2 class="h4 mt-3">¿Qué te apetece leer?</h2>
+        <p class="text-body-secondary">
+            Escribe al menos dos caracteres para empezar.
+        </p>
+    </div>
+}

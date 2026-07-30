@@ -1,0 +1,88 @@
+@page
+@model global::Biblioteca.Pages.Cuenta.RegistroModel
+@{
+    ViewData["Title"] = "Crear una cuenta";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <section class="card shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus-fill display-3 text-primary"></i>
+                    <h1 class="h2 mt-2">Crear una cuenta</h1>
+                    <p class="text-body-secondary">
+                        Regístrate para guardar tus libros favoritos.
+                    </p>
+                </div>
+
+                <form method="post">
+                    <input type="hidden"
+                           name="returnUrl"
+                           value="@Model.ReturnUrl" />
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Entrada.Nombre"
+                               class="form-label"></label>
+                        <input asp-for="Entrada.Nombre"
+                               class="form-control"
+                               autocomplete="name"
+                               autofocus />
+                        <span asp-validation-for="Entrada.Nombre"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Entrada.Email"
+                               class="form-label"></label>
+                        <input asp-for="Entrada.Email"
+                               class="form-control"
+                               autocomplete="email" />
+                        <span asp-validation-for="Entrada.Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Entrada.Contrasena"
+                               class="form-label"></label>
+                        <input asp-for="Entrada.Contrasena"
+                               class="form-control"
+                               autocomplete="new-password" />
+                        <div class="form-text">
+                            Mínimo 8 caracteres, con mayúscula, minúscula y número.
+                        </div>
+                        <span asp-validation-for="Entrada.Contrasena"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Entrada.ConfirmacionContrasena"
+                               class="form-label"></label>
+                        <input asp-for="Entrada.ConfirmacionContrasena"
+                               class="form-control"
+                               autocomplete="new-password" />
+                        <span asp-validation-for="Entrada.ConfirmacionContrasena"
+                              class="text-danger"></span>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg w-100"
+                            type="submit">
+                        <i class="bi bi-person-check me-1"></i>Registrarme
+                    </button>
+                </form>
+
+                <p class="text-center mt-4 mb-0">
+                    ¿Ya tienes una cuenta?
+                    <a asp-page="/Cuenta/Login"
+                       asp-route-returnUrl="@Model.ReturnUrl">
+                        Inicia sesión
+                    </a>
+                </p>
+            </div>
+        </section>
+    </div>
+</div>

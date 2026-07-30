@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" role="img" aria-labelledby="titulo descripcion">
+  <title id="titulo">Portada no disponible</title>
+  <desc id="descripcion">Ilustración sencilla de un libro abierto</desc>
+  <rect width="400" height="600" fill="#e9ecef"/>
+  <path d="M70 170c55-20 100-5 130 25v245c-30-30-75-45-130-25V170zm260 0c-55-20-100-5-130 25v245c30-30 75-45 130-25V170z" fill="#6c757d"/>
+  <path d="M200 195v245" stroke="#495057" stroke-width="8"/>
+  <text x="200" y="500" text-anchor="middle" font-family="system-ui, sans-serif" font-size="26" fill="#495057">Sin portada</text>
+</svg>

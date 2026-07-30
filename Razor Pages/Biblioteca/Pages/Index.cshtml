@@ -1,0 +1,145 @@
+@page
+@model global::Biblioteca.Pages.IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-md-5 mb-5 bg-primary text-white rounded-4 shadow">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="badge text-bg-light text-primary mb-3">
+                Proyecto ASP.NET Core Razor Pages
+            </span>
+            <h1 class="display-4 fw-bold">Tu próxima lectura empieza aquí</h1>
+            <p class="lead">
+                Busca entre millones de obras de Open Library, consulta sus
+                fichas y guarda tus favoritas en una colección privada.
+            </p>
+
+            <form method="get"
+                  asp-page="/Libros/Buscar"
+                  class="mt-4"
+                  role="search">
+                <div class="input-group input-group-lg">
+                    <input class="form-control"
+                           name="texto"
+                           placeholder="Prueba con un título, autor o ISBN"
+                           aria-label="Buscar libros"
+                           minlength="2"
+                           required />
+                    <button class="btn btn-warning" type="submit">
+                        <i class="bi bi-search me-1"></i>Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-5 text-center">
+            <i class="bi bi-book-half display-1" aria-hidden="true"></i>
+            <p class="mt-3 mb-0">
+                Registro inmediato, favoritos con SQLite y temas Bootswatch.
+            </p>
+        </div>
+    </div>
+</section>
+
+@if (!Model.ContactoConfigurado)
+{
+    <div class="alert alert-info d-flex gap-3 align-items-start" role="alert">
+        <i class="bi bi-info-circle-fill fs-4" aria-hidden="true"></i>
+        <div>
+            <strong>Configuración recomendada para desarrollo.</strong>
+            Añade un correo de contacto en
+            <code>appsettings.Local.json</code> para identificar correctamente
+            la aplicación ante Open Library. No es una clave de acceso.
+        </div>
+    </div>
+}
+
+<section class="mb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+            <h2 class="mb-1">Tendencias</h2>
+            <p class="text-body-secondary mb-0">
+                Libros que están despertando interés entre los lectores.
+            </p>
+        </div>
+        <a class="btn btn-outline-primary"
+           asp-page="/Libros/Index"
+           asp-route-tipo="tendencias">
+            Ver todos
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-6 g-4">
+        @foreach (LibroResumen libro in Model.Tendencias)
+        {
+            <div class="col">
+                <partial name="_TarjetaLibro" model="libro" />
+            </div>
+        }
+    </div>
+</section>
+
+<section class="mb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+            <h2 class="mb-1">Mejor valorados</h2>
+            <p class="text-body-secondary mb-0">
+                Obras en español ordenadas por la valoración de la comunidad.
+            </p>
+        </div>
+        <a class="btn btn-outline-primary"
+           asp-page="/Libros/Index"
+           asp-route-tipo="mejor-valorados">
+            Ver todos
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-6 g-4">
+        @foreach (LibroResumen libro in Model.MejorValorados)
+        {
+            <div class="col">
+                <partial name="_TarjetaLibro" model="libro" />
+            </div>
+        }
+    </div>
+</section>
+
+<section>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+            <h2 class="mb-1">Programación</h2>
+            <p class="text-body-secondary mb-0">
+                Una selección técnica para seguir aprendiendo.
+            </p>
+        </div>
+        <a class="btn btn-outline-primary"
+           asp-page="/Libros/Index"
+           asp-route-tipo="programacion">
+            Ver todos
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-6 g-4">
+        @foreach (LibroResumen libro in Model.Programacion)
+        {
+            <div class="col">
+                <partial name="_TarjetaLibro" model="libro" />
+            </div>
+        }
+    </div>
+</section>
+
+@if (!Model.Tendencias.Any()
+    && !Model.MejorValorados.Any()
+    && !Model.Programacion.Any())
+{
+    <div class="text-center py-5">
+        <i class="bi bi-cloud-slash display-1 text-body-secondary"></i>
+        <h2 class="h4 mt-3">No se han podido cargar los libros</h2>
+        <p class="text-body-secondary">
+            Comprueba la conexión y vuelve a intentarlo dentro de unos segundos.
+        </p>
+    </div>
+}

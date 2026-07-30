@@ -1,0 +1,50 @@
+@model PaginacionVista
+@{
+    // Se limita la cantidad de botones para no crear paginaciones enormes.
+    int inicio = Math.Max(1, Model.PaginaActual - 2);
+    int final = Math.Min(Model.TotalPaginas, Model.PaginaActual + 2);
+
+    if (final - inicio < 4)
+    {
+        inicio = Math.Max(1, final - 4);
+        final = Math.Min(Model.TotalPaginas, inicio + 4);
+    }
+}
+
+@if (Model.TotalPaginas > 1)
+{
+    <nav class="mt-5" aria-label="Paginación de libros">
+        <ul class="pagination justify-content-center flex-wrap">
+            <li class="page-item @(Model.PaginaActual <= 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-page="@Model.PaginaRazor"
+                   asp-all-route-data="Model.ValoresRuta"
+                   asp-route-pagina="@(Model.PaginaActual - 1)">
+                    Anterior
+                </a>
+            </li>
+
+            @for (int numero = inicio; numero <= final; numero++)
+            {
+                <li class="page-item @(numero == Model.PaginaActual ? "active" : "")">
+                    <a class="page-link"
+                       asp-page="@Model.PaginaRazor"
+                       asp-all-route-data="Model.ValoresRuta"
+                       asp-route-pagina="@numero"
+                       aria-current="@(numero == Model.PaginaActual ? "page" : null)">
+                        @numero
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(Model.PaginaActual >= Model.TotalPaginas ? "disabled" : "")">
+                <a class="page-link"
+                   asp-page="@Model.PaginaRazor"
+                   asp-all-route-data="Model.ValoresRuta"
+                   asp-route-pagina="@(Model.PaginaActual + 1)">
+                    Siguiente
+                </a>
+            </li>
+        </ul>
+    </nav>
+}

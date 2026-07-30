@@ -1,0 +1,56 @@
+@page "/libros/{tipo?}"
+@model global::Biblioteca.Pages.Libros.IndexModel
+@{
+    ViewData["Title"] = Model.Tipo.Titulo();
+
+    // Se prepara el modelo fuera de la etiqueta para que Razor lo interprete bien.
+    PaginacionVista paginacion = new()
+    {
+        PaginaActual = Model.Resultado.Pagina,
+        TotalPaginas = Model.Resultado.TotalPaginas,
+        PaginaRazor = "/Libros/Index",
+        ValoresRuta = new()
+        {
+            ["tipo"] = Model.Tipo.ParaUrl()
+        }
+    };
+}
+
+<header class="mb-4">
+    <nav aria-label="Migas de pan">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                @Model.Tipo.Titulo()
+            </li>
+        </ol>
+    </nav>
+
+    <h1>@Model.Tipo.Titulo()</h1>
+    <p class="text-body-secondary">
+        @Model.Resultado.TotalResultados.ToString("N0") resultados encontrados
+        en Open Library.
+    </p>
+</header>
+
+@if (Model.Resultado.Resultados.Count > 0)
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-4">
+        @foreach (LibroResumen libro in Model.Resultado.Resultados)
+        {
+            <div class="col">
+                <partial name="_TarjetaLibro" model="libro" />
+            </div>
+        }
+    </div>
+
+    <partial name="_Paginacion" model="paginacion" />
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-search display-1 text-body-secondary"></i>
+        <h2 class="h4 mt-3">No hay libros que mostrar</h2>
+        <a class="btn btn-primary mt-2" asp-page="/Index">Volver al inicio</a>
+    </div>
+}

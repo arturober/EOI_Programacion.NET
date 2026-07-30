@@ -1,0 +1,71 @@
+@page
+@model global::Biblioteca.Pages.AcercaModel
+@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<header class="text-center mb-5">
+    <i class="bi bi-book-half display-1 text-primary"></i>
+    <h1 class="display-5 fw-bold mt-3">Biblioteca</h1>
+    <p class="lead">
+        Una aplicación educativa para aprender Razor Pages consumiendo datos
+        reales.
+    </p>
+</header>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <section class="card h-100 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4">
+                    <i class="bi bi-diagram-3 me-2"></i>Cómo está construida
+                </h2>
+                <ul class="mb-0">
+                    <li>ASP.NET Core Razor Pages y C#.</li>
+                    <li>Open Library Search, Works y Covers API.</li>
+                    <li>Identity para registro, acceso y cookies seguras.</li>
+                    <li>Entity Framework Core con una base SQLite local.</li>
+                    <li>Bootstrap, Bootswatch y SweetAlert2 desde CDN.</li>
+                    <li>Caché y limitación de peticiones a la API.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-6">
+        <section class="card h-100 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4">
+                    <i class="bi bi-shield-check me-2"></i>Cuentas y privacidad
+                </h2>
+                <p>
+                    El registro no exige confirmar el correo. Identity guarda
+                    un hash de la contraseña: nunca almacena la contraseña
+                    original.
+                </p>
+                <p class="mb-0">
+                    Cada favorito se asocia al identificador interno del
+                    usuario y se guarda únicamente en la base SQLite de esta
+                    aplicación.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12">
+        <section class="alert alert-info">
+            <h2 class="h5 alert-heading">Sobre los datos</h2>
+            <p>
+                Open Library es un proyecto abierto de Internet Archive. La
+                aplicación identifica sus peticiones, aplica caché y limita su
+                frecuencia para hacer un uso responsable del servicio.
+            </p>
+            <a class="alert-link"
+               href="https://openlibrary.org/developers/api"
+               target="_blank"
+               rel="noopener">
+                Consultar la documentación oficial de Open Library
+            </a>
+        </section>
+    </div>
+</div>

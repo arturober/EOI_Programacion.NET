@@ -1,0 +1,215 @@
+@page "/libro/{id}"
+@model global::Biblioteca.Pages.Libros.DetallesModel
+@{
+    ViewData["Title"] = string.IsNullOrWhiteSpace(Model.Libro.Titulo)
+        ? "Ficha del libro"
+        : Model.Libro.Titulo;
+
+    // ViewContext da acceso explícito a la petición HTTP de esta página.
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<nav aria-label="Migas de pan">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Index">Inicio</a></li>
+        <li class="breadcrumb-item">
+            <a asp-page="/Libros/Index" asp-route-tipo="tendencias">Libros</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            @Model.Libro.Titulo
+        </li>
+    </ol>
+</nav>
+
+@if (!string.IsNullOrWhiteSpace(Model.Libro.Id))
+{
+    <article class="row g-5">
+        <div class="col-md-4 col-lg-3">
+            <div class="ratio bg-body-tertiary rounded shadow overflow-hidden"
+                 style="--bs-aspect-ratio: 150%;">
+                @if (Model.Libro.UrlPortadaGrande is not null)
+                {
+                    <img src="@Model.Libro.UrlPortadaGrande"
+                         class="w-100 h-100 object-fit-contain"
+                         alt="Portada de @Model.Libro.Titulo"
+                         data-portada />
+                }
+                else
+                {
+                    <div class="d-flex flex-column align-items-center justify-content-center text-body-secondary">
+                        <i class="bi bi-book display-1"></i>
+                        <span>Sin portada</span>
+                    </div>
+                }
+            </div>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <form method="post"
+                      asp-page="/Favoritos/Alternar"
+                      class="mt-3"
+                      data-confirmar-favorito="@(Model.Libro.EsFavorito ? "true" : null)">
+                    <input type="hidden" name="libroId" value="@Model.Libro.Id" />
+                    <input type="hidden"
+                           name="accion"
+                           value="@(Model.Libro.EsFavorito ? "quitar" : "agregar")" />
+                    <input type="hidden" name="returnUrl" value="@retorno" />
+
+                    <button class="btn @(Model.Libro.EsFavorito ? "btn-danger" : "btn-primary") w-100"
+                            type="submit">
+                        <i class="bi @(Model.Libro.EsFavorito ? "bi-heart-fill" : "bi-heart") me-1"></i>
+                        @(Model.Libro.EsFavorito
+                            ? "Quitar de favoritos"
+                            : "Añadir a favoritos")
+                    </button>
+                </form>
+            }
+            else
+            {
+                <a class="btn btn-primary w-100 mt-3"
+                   asp-page="/Cuenta/Login"
+                   asp-route-returnUrl="@retorno">
+                    <i class="bi bi-box-arrow-in-right me-1"></i>
+                    Entra para guardarlo
+                </a>
+            }
+        </div>
+
+        <div class="col-md-8 col-lg-9">
+            <h1 class="display-5 fw-bold">@Model.Libro.Titulo</h1>
+            <p class="lead">@Model.Libro.AutoresTexto</p>
+
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                <span class="badge text-bg-secondary fs-6">
+                    <i class="bi bi-calendar3 me-1"></i>
+                    @Model.Libro.AnioTexto
+                </span>
+
+                @if (Model.Libro.Puntuacion is not null)
+                {
+                    <span class="badge text-bg-warning fs-6">
+                        <i class="bi bi-star-fill me-1"></i>
+                        @Model.Libro.Puntuacion.Value.ToString("0.0")
+                        (@Model.Libro.NumeroValoraciones.ToString("N0"))
+                    </span>
+                }
+
+                @if (Model.Libro.NumeroEdiciones > 0)
+                {
+                    <span class="badge text-bg-info fs-6">
+                        @Model.Libro.NumeroEdiciones.ToString("N0") ediciones
+                    </span>
+                }
+
+                @if (Model.Libro.NumeroPaginas is not null)
+                {
+                    <span class="badge text-bg-light fs-6">
+                        @Model.Libro.NumeroPaginas páginas
+                    </span>
+                }
+            </div>
+
+            <h2 class="h4">Descripción</h2>
+            @if (!string.IsNullOrWhiteSpace(Model.Libro.Descripcion))
+            {
+                <p class="lh-lg">@Model.Libro.Descripcion</p>
+            }
+            else
+            {
+                <p class="text-body-secondary">
+                    Open Library todavía no dispone de una descripción para
+                    esta obra.
+                </p>
+            }
+
+            <div class="row g-4 mt-2">
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h2 class="h5 card-title">Datos bibliográficos</h2>
+                            <dl class="row mb-0">
+                                <dt class="col-sm-5">Primera publicación</dt>
+                                <dd class="col-sm-7">
+                                    @(Model.Libro.PrimeraFechaPublicacion
+                                        ?? Model.Libro.AnioTexto)
+                                </dd>
+
+                                <dt class="col-sm-5">Idiomas</dt>
+                                <dd class="col-sm-7">
+                                    @(Model.Libro.Idiomas.Count > 0
+                                        ? string.Join(", ", Model.Libro.Idiomas)
+                                        : "No indicados")
+                                </dd>
+
+                                <dt class="col-sm-5">ISBN</dt>
+                                <dd class="col-sm-7 text-break">
+                                    @(Model.Libro.Isbn.Count > 0
+                                        ? string.Join(", ", Model.Libro.Isbn)
+                                        : "No indicado")
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h2 class="h5 card-title">Disponibilidad</h2>
+                            <p>@Model.Libro.AccesoTexto</p>
+                            <a class="btn btn-outline-primary"
+                               href="@Model.Libro.UrlOpenLibrary"
+                               target="_blank"
+                               rel="noopener">
+                                <i class="bi bi-box-arrow-up-right me-1"></i>
+                                Consultar en Open Library
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.Libro.Materias.Count > 0)
+            {
+                <section class="mt-4">
+                    <h2 class="h4">Materias</h2>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (string materia in Model.Libro.Materias)
+                        {
+                            <a class="badge rounded-pill text-bg-secondary text-decoration-none"
+                               asp-page="/Libros/Buscar"
+                               asp-route-texto="@($"subject:\"{materia}\"")">
+                                @materia
+                            </a>
+                        }
+                    </div>
+                </section>
+            }
+        </div>
+    </article>
+
+    @if (Model.Libro.Recomendaciones.Count > 0)
+    {
+        <section class="mt-5 pt-4 border-top">
+            <h2>También podría interesarte</h2>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-6 g-4 mt-1">
+                @foreach (LibroResumen libro in Model.Libro.Recomendaciones)
+                {
+                    <div class="col">
+                        <partial name="_TarjetaLibro" model="libro" />
+                    </div>
+                }
+            </div>
+        </section>
+    }
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-cloud-slash display-1 text-body-secondary"></i>
+        <h1 class="h3 mt-3">No se ha podido cargar la ficha</h1>
+        <a class="btn btn-primary" asp-page="/Index">Volver al inicio</a>
+    </div>
+}

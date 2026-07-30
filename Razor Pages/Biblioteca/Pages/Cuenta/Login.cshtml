@@ -1,0 +1,72 @@
+@page
+@model global::Biblioteca.Pages.Cuenta.LoginModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-5">
+        <section class="card shadow-sm">
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-circle display-3 text-primary"></i>
+                    <h1 class="h2 mt-2">Iniciar sesión</h1>
+                    <p class="text-body-secondary">
+                        Accede a tu biblioteca personal.
+                    </p>
+                </div>
+
+                <form method="post">
+                    <input type="hidden"
+                           name="returnUrl"
+                           value="@Model.ReturnUrl" />
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Entrada.Email"
+                               class="form-label"></label>
+                        <input asp-for="Entrada.Email"
+                               class="form-control"
+                               autocomplete="email"
+                               autofocus />
+                        <span asp-validation-for="Entrada.Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Entrada.Contrasena"
+                               class="form-label"></label>
+                        <input asp-for="Entrada.Contrasena"
+                               class="form-control"
+                               autocomplete="current-password" />
+                        <span asp-validation-for="Entrada.Contrasena"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="form-check mb-4">
+                        <input asp-for="Entrada.Recordarme"
+                               class="form-check-input" />
+                        <label asp-for="Entrada.Recordarme"
+                               class="form-check-label"></label>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg w-100"
+                            type="submit">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
+                    </button>
+                </form>
+
+                <p class="text-center mt-4 mb-0">
+                    ¿No tienes una cuenta?
+                    <a asp-page="/Cuenta/Registro"
+                       asp-route-returnUrl="@Model.ReturnUrl">
+                        Regístrate
+                    </a>
+                </p>
+            </div>
+        </section>
+    </div>
+</div>

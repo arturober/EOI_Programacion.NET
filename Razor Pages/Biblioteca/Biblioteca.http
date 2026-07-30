@@ -1,0 +1,11 @@
+@Biblioteca_HostAddress = http://localhost:5100
+
+# Busca obras y devuelve una página en formato JSON.
+GET {{Biblioteca_HostAddress}}/api/libros/buscar?texto=Don%20Quijote&pagina=1
+Accept: application/json
+
+###
+
+# Obtiene el detalle de una obra conocida de Open Library.
+GET {{Biblioteca_HostAddress}}/api/libros/OL45804W
+Accept: application/json
