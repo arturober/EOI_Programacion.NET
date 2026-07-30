@@ -58,12 +58,50 @@ function mostrarPregunta() {
 
     respuestas.innerHTML = "";
 
-    pregunta.respuestas.forEach(respuesta => {
+    pregunta.respuestas.forEach((respuesta, indice) => {
         const boton = document.createElement("button");
         boton.classList.add("btn", "btn-outline-primary", "d-block", "w-100", "mb-2");
         boton.textContent = respuesta;
+        boton.addEventListener("click", () => responder(indice + 1));
         respuestas.append(boton);
     });
+}
+
+async function responder(numero) {
+    console.log(`Respuesta seleccionada: ${numero}`);
+
+    const pregunta = preguntas[posicion];
+    const esCorrecta = numero === pregunta.respuestaCorrecta;
+
+    if (esCorrecta) {
+        aciertos++;
+        mensaje = "¡Correcto!";
+    }
+    else {
+        mensaje = `La respuesta correcta a la pregunta '${pregunta.enunciado}' es: '${pregunta.respuestas[pregunta.respuestaCorrecta - 1]}'`;
+    }
+
+    await Swal.fire({
+        title: esCorrecta ? "¡Correcto!" : "Incorrecto",
+        text: esCorrecta ? null : mensaje,
+        icon: esCorrecta ? "success" : "error"
+    });
+
+    if (posicion == preguntas.length-1) {
+        await Swal.fire({
+            title: "Juego terminado",
+            text: `Has acertado ${aciertos} de ${preguntas.length} preguntas.`,
+            icon: "info",
+            confirmButtonText: "Aceptar"
+        });
+
+        juego.classList.add("d-none");
+        inicio.classList.remove("d-none");
+    }
+    else {
+        posicion++;
+        mostrarPregunta();
+    }
 }
 
 document.getElementById("empezar").addEventListener("click", empezar);
