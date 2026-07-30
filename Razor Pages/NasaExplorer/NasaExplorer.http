@@ -1,0 +1,5 @@
+@NasaExplorer_HostAddress = http://localhost:5077
+
+### La aplicación principal usa páginas HTML, pero esta petición comprueba el servidor.
+GET {{NasaExplorer_HostAddress}}/
+Accept: text/html

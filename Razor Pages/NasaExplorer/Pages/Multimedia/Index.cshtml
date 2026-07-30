@@ -1,0 +1,123 @@
+@page
+@model NasaExplorer.Pages.Multimedia.IndexModel
+@{
+    ViewData["Title"] = "Archivo multimedia";
+}
+
+<div class="mb-4">
+    <p class="text-info text-uppercase fw-semibold mb-1">NASA Image and Video Library</p>
+    <h1>Archivo multimedia</h1>
+    <p class="lead">Busca entre imágenes, vídeos y audios publicados por los centros de NASA.</p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-4">
+            <label asp-for="Busqueda" class="form-label">Texto</label>
+            <input asp-for="Busqueda" class="form-control" placeholder="Apollo 11, Mars, Webb…" />
+        </div>
+        <div class="col-sm-6 col-lg-2">
+            <label asp-for="Tipo" class="form-label">Tipo de medio</label>
+            <select asp-for="Tipo" class="form-select">
+                <option value="image">Imágenes</option>
+                <option value="video">Vídeos</option>
+                <option value="audio">Audios</option>
+                <option value="todos">Todos</option>
+            </select>
+        </div>
+        <div class="col-sm-6 col-lg-2">
+            <label asp-for="AnioDesde" class="form-label">Desde el año</label>
+            <input asp-for="AnioDesde" class="form-control" min="1900" max="2100" />
+        </div>
+        <div class="col-sm-6 col-lg-2">
+            <label asp-for="AnioHasta" class="form-label">Hasta el año</label>
+            <input asp-for="AnioHasta" class="form-control" min="1900" max="2100" />
+        </div>
+        <div class="col-sm-6 col-lg-2">
+            <button class="btn btn-primary w-100" type="submit">
+                <i class="bi bi-search me-1"></i>Buscar
+            </button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-warning">@Model.Error</div>
+}
+else if (Model.Resultado is not null)
+{
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <strong>@Model.Resultado.Coleccion.Metadatos.Total.ToString("N0") resultados</strong>
+        <span class="text-body-secondary">Página @Model.Pagina</span>
+    </div>
+
+    <div class="row g-4">
+        @foreach (MediaItemDto elemento in Model.Resultado.Coleccion.Elementos)
+        {
+            MediaDatosDto datos = elemento.DatosPrincipales;
+            string icono = datos.TipoMedio switch
+            {
+                "video" => "bi-camera-video-fill",
+                "audio" => "bi-soundwave",
+                _ => "bi-image"
+            };
+
+            <div class="col-sm-6 col-lg-4 col-xxl-3">
+                <article class="card tarjeta-elevada h-100 overflow-hidden">
+                    @if (elemento.Miniatura is not null)
+                    {
+                        <img class="card-img-top imagen-tarjeta"
+                             src="@elemento.Miniatura"
+                             alt="@datos.Titulo"
+                             loading="lazy" />
+                    }
+                    else
+                    {
+                        <div class="imagen-tarjeta d-flex align-items-center justify-content-center">
+                            <i class="bi @icono display-1 text-body-secondary"></i>
+                        </div>
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between gap-2">
+                            <span class="badge text-bg-secondary">@datos.TipoMedio</span>
+                            <small class="text-body-secondary">@datos.FechaCreacion?.Year</small>
+                        </div>
+                        <h2 class="h5 mt-2">@datos.Titulo</h2>
+                        <p class="small text-body-secondary descripcion-limitada">
+                            @datos.Descripcion
+                        </p>
+                        <a class="btn btn-outline-info mt-auto"
+                           asp-page="/Multimedia/Detalle"
+                           asp-route-id="@datos.NasaId">Ver ficha y archivos</a>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+
+    <nav class="d-flex justify-content-center gap-2 mt-4" aria-label="Paginación">
+        @if (Model.Pagina > 1)
+        {
+            <a class="btn btn-outline-primary"
+               asp-route-busqueda="@Model.Busqueda"
+               asp-route-tipo="@Model.Tipo"
+               asp-route-anioDesde="@Model.AnioDesde"
+               asp-route-anioHasta="@Model.AnioHasta"
+               asp-route-pagina="@(Model.Pagina - 1)">
+                <i class="bi bi-arrow-left me-1"></i>Anterior
+            </a>
+        }
+        @if (Model.Pagina < Model.TotalPaginas)
+        {
+            <a class="btn btn-outline-primary"
+               asp-route-busqueda="@Model.Busqueda"
+               asp-route-tipo="@Model.Tipo"
+               asp-route-anioDesde="@Model.AnioDesde"
+               asp-route-anioHasta="@Model.AnioHasta"
+               asp-route-pagina="@(Model.Pagina + 1)">
+                Siguiente<i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        }
+    </nav>
+}

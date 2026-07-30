@@ -1,0 +1,16 @@
+@page
+@model NasaExplorer.Pages.ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="text-center py-5">
+    <i class="bi bi-exclamation-triangle-fill text-warning display-1"></i>
+    <h1 class="mt-3">Algo no ha salido bien</h1>
+    <p class="lead">La aplicación no ha podido completar la operación.</p>
+    @if (Model.MostrarId)
+    {
+        <p><strong>Identificador:</strong> <code>@Model.IdPeticion</code></p>
+    }
+    <a class="btn btn-primary" asp-page="/Index">Volver al inicio</a>
+</div>

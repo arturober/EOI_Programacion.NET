@@ -1,0 +1,67 @@
+/* Ajustes pequeños sobre Bootswatch; la mayor parte del diseño usa Bootstrap. */
+html {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background-image:
+        radial-gradient(circle at 15% 0%, rgba(13, 110, 253, .18), transparent 32rem),
+        radial-gradient(circle at 90% 20%, rgba(111, 66, 193, .16), transparent 28rem);
+}
+
+.hero-nasa {
+    background:
+        linear-gradient(120deg, rgba(3, 14, 36, .96), rgba(25, 30, 70, .88)),
+        url("https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e001362/GSFC_20171208_Archive_e001362~large.jpg")
+        center / cover;
+    min-height: 360px;
+}
+
+.tarjeta-elevada {
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.tarjeta-elevada:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 .75rem 1.5rem rgba(0, 0, 0, .22);
+}
+
+.imagen-tarjeta {
+    height: 230px;
+    object-fit: cover;
+    background: rgba(0, 0, 0, .2);
+}
+
+.imagen-apod {
+    max-height: 70vh;
+    width: 100%;
+    object-fit: contain;
+    background: #05070c;
+}
+
+.descripcion-limitada {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+}
+
+.mapa-eonet {
+    min-height: 520px;
+    border-radius: .75rem;
+}
+
+.dato-grande {
+    font-size: clamp(1.65rem, 5vw, 3rem);
+    font-weight: 700;
+}
+
+.tabla-responsive-alta {
+    max-height: 70vh;
+    overflow: auto;
+}
+
+footer {
+    background: rgba(0, 0, 0, .12);
+}

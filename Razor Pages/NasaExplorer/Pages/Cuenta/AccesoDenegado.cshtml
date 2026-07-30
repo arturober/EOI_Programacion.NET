@@ -1,0 +1,12 @@
+@page
+@model NasaExplorer.Pages.Cuenta.AccesoDenegadoModel
+@{
+    ViewData["Title"] = "Acceso denegado";
+}
+
+<div class="text-center py-5">
+    <i class="bi bi-shield-lock-fill text-danger display-1"></i>
+    <h1 class="mt-3">No tienes acceso</h1>
+    <p class="lead">Inicia sesión con una cuenta autorizada para continuar.</p>
+    <a class="btn btn-primary" asp-page="/Cuenta/Login">Iniciar sesión</a>
+</div>

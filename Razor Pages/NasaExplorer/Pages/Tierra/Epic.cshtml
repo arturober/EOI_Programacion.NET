@@ -1,0 +1,93 @@
+@page
+@model NasaExplorer.Pages.Tierra.EpicModel
+@{
+    ViewData["Title"] = "La Tierra desde DSCOVR";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<div class="mb-4">
+    <p class="text-success text-uppercase fw-semibold mb-1">DSCOVR · EPIC API 2.0</p>
+    <h1>La Tierra desde 1,5 millones de kilómetros</h1>
+    <p class="lead">Fotografías del disco terrestre completo tomadas desde el punto L1.</p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-5">
+            <label asp-for="Coleccion" class="form-label">Colección</label>
+            <select asp-for="Coleccion" class="form-select">
+                <option value="natural">Color natural</option>
+                <option value="enhanced">Color mejorado</option>
+                <option value="aerosol">Índice de aerosoles</option>
+                <option value="cloud">Fracción de nubes</option>
+            </select>
+        </div>
+        <div class="col-md-5">
+            <label asp-for="Fecha" class="form-label">Fecha opcional</label>
+            <input asp-for="Fecha" class="form-control" type="date" max="@DateTime.Today.ToString("yyyy-MM-dd")" />
+            <div class="form-text">Vacío muestra la fecha más reciente disponible.</div>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" type="submit">Cargar</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-warning">@Model.Error</div>
+}
+else if (Model.Imagenes.Count == 0)
+{
+    <div class="alert alert-info">No hay imágenes disponibles para esa fecha y colección.</div>
+}
+else
+{
+    <div class="d-flex justify-content-between mb-3">
+        <strong>@Model.Imagenes.Count fotografías</strong>
+        <span class="text-body-secondary">@Model.Imagenes[0].Fecha.ToString("dd/MM/yyyy")</span>
+    </div>
+    <div class="row g-4">
+        @foreach (EpicImagenDto imagen in Model.Imagenes)
+        {
+            bool guardada = Model.Favoritos.Contains(imagen.Identificador);
+            string claseBoton = guardada ? "btn-warning" : "btn-outline-warning";
+            string iconoBoton = guardada ? "bi-star-fill" : "bi-star";
+
+            <div class="col-sm-6 col-lg-4 col-xxl-3">
+                <article class="card tarjeta-elevada h-100 overflow-hidden">
+                    <a href="@imagen.ImagenUrl" target="_blank">
+                        <img class="card-img-top imagen-tarjeta"
+                             src="@imagen.MiniaturaUrl"
+                             alt="@imagen.Leyenda"
+                             loading="lazy" />
+                    </a>
+                    <div class="card-body">
+                        <h2 class="h6">@imagen.Fecha.ToString("HH:mm:ss") UTC</h2>
+                        <p class="small text-body-secondary mb-2">
+                            Centro: @imagen.Coordenadas.Latitud.ToString("N2")°,
+                            @imagen.Coordenadas.Longitud.ToString("N2")°
+                        </p>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <form method="post" asp-page="/Favoritos/Alternar">
+                                <input type="hidden" name="tipo" value="EPIC" />
+                                <input type="hidden" name="referencia" value="@imagen.Identificador" />
+                                <input type="hidden" name="titulo" value="La Tierra · @imagen.Fecha.ToString("dd/MM/yyyy HH:mm")" />
+                                <input type="hidden" name="subtitulo" value="@imagen.Leyenda" />
+                                <input type="hidden" name="imagenUrl" value="@imagen.MiniaturaUrl" />
+                                <input type="hidden" name="urlDetalle" value="@imagen.ImagenUrl" />
+                                <input type="hidden" name="returnUrl" value="@retorno" />
+                                <button class="btn btn-sm @claseBoton w-100" type="submit">
+                                    <i class="bi @iconoBoton me-1"></i>Favorito
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

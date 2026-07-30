@@ -1,0 +1,108 @@
+@page "{id}"
+@model NasaExplorer.Pages.Multimedia.DetalleModel
+@{
+    ViewData["Title"] = Model.Elemento?.DatosPrincipales.Titulo ?? "Detalle multimedia";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+    MediaDatosDto? datos = Model.Elemento?.DatosPrincipales;
+    string claseBoton = Model.EsFavorito ? "btn-warning" : "btn-outline-warning";
+    string iconoBoton = Model.EsFavorito ? "bi-star-fill" : "bi-star";
+}
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-warning">@Model.Error</div>
+    <a class="btn btn-primary" asp-page="/Multimedia/Index">Volver al buscador</a>
+}
+else if (datos is not null)
+{
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card overflow-hidden bg-black shadow">
+                @if (datos.TipoMedio == "image" && Model.ArchivoReproducible is not null)
+                {
+                    <img class="imagen-apod"
+                         src="@Model.ArchivoReproducible"
+                         alt="@datos.Titulo" />
+                }
+                else if (datos.TipoMedio == "video" && Model.ArchivoReproducible is not null)
+                {
+                    <video class="w-100" controls poster="@Model.Elemento?.Miniatura">
+                        <source src="@Model.ArchivoReproducible" />
+                        Tu navegador no puede reproducir este vídeo.
+                    </video>
+                }
+                else if (datos.TipoMedio == "audio" && Model.ArchivoReproducible is not null)
+                {
+                    <div class="p-5 text-center">
+                        <i class="bi bi-soundwave display-1 text-info"></i>
+                        <audio class="w-100 mt-4" src="@Model.ArchivoReproducible" controls></audio>
+                    </div>
+                }
+                else if (Model.Elemento?.Miniatura is not null)
+                {
+                    <img class="imagen-apod"
+                         src="@Model.Elemento.Miniatura"
+                         alt="@datos.Titulo" />
+                }
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <span class="badge text-bg-primary">@datos.TipoMedio</span>
+            <h1 class="mt-2">@datos.Titulo</h1>
+            <dl class="row small">
+                <dt class="col-4">Identificador</dt>
+                <dd class="col-8"><code>@datos.NasaId</code></dd>
+                <dt class="col-4">Fecha</dt>
+                <dd class="col-8">@datos.FechaCreacion?.ToString("dd/MM/yyyy")</dd>
+                <dt class="col-4">Centro</dt>
+                <dd class="col-8">@(datos.Centro ?? "No indicado")</dd>
+            </dl>
+
+            <div class="d-flex flex-wrap gap-2 mb-4">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <form method="post" asp-page="/Favoritos/Alternar">
+                        <input type="hidden" name="tipo" value="Multimedia" />
+                        <input type="hidden" name="referencia" value="@datos.NasaId" />
+                        <input type="hidden" name="titulo" value="@datos.Titulo" />
+                        <input type="hidden" name="subtitulo" value="@datos.Descripcion" />
+                        <input type="hidden" name="imagenUrl" value="@Model.Elemento?.Miniatura" />
+                        <input type="hidden" name="urlDetalle" value="@retorno" />
+                        <input type="hidden" name="returnUrl" value="@retorno" />
+                        <button class="btn @claseBoton" type="submit">
+                            <i class="bi @iconoBoton me-1"></i>Favorito
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a class="btn btn-outline-warning"
+                       asp-page="/Cuenta/Login"
+                       asp-route-returnUrl="@retorno">Entra para guardar</a>
+                }
+                @if (Model.ArchivoOriginal is not null)
+                {
+                    <a class="btn btn-outline-info"
+                       href="@Model.ArchivoOriginal"
+                       target="_blank"
+                       download>
+                        <i class="bi bi-download me-1"></i>Abrir original
+                    </a>
+                }
+            </div>
+
+            <p>@datos.Descripcion</p>
+            @if (datos.PalabrasClave.Count > 0)
+            {
+                <div class="d-flex flex-wrap gap-1">
+                    @foreach (string palabra in datos.PalabrasClave.Take(15))
+                    {
+                        <span class="badge text-bg-secondary">@palabra</span>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,102 @@
+@page
+@model NasaExplorer.Pages.ClimaEspacial.IndexModel
+@{
+    ViewData["Title"] = "Meteorología espacial";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<div class="mb-4">
+    <p class="text-warning text-uppercase fw-semibold mb-1">CCMC DONKI</p>
+    <h1>Meteorología espacial</h1>
+    <p class="lead">Sucesos del Sol y del medio interplanetario registrados por NASA.</p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-4">
+            <label asp-for="Tipo" class="form-label">Catálogo</label>
+            <select asp-for="Tipo" class="form-select">
+                <option value="CME">Eyecciones de masa coronal</option>
+                <option value="FLR">Llamaradas solares</option>
+                <option value="GST">Tormentas geomagnéticas</option>
+                <option value="IPS">Choques interplanetarios</option>
+            </select>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <label asp-for="Desde" class="form-label">Desde</label>
+            <input asp-for="Desde" class="form-control" type="date" />
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <label asp-for="Hasta" class="form-label">Hasta</label>
+            <input asp-for="Hasta" class="form-control" type="date" />
+        </div>
+        <div class="col-lg-2">
+            <button class="btn btn-primary w-100" type="submit">Consultar</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-warning">@Model.Error</div>
+}
+else if (Model.Eventos.Count == 0)
+{
+    <div class="alert alert-info">No se han registrado sucesos de este tipo en el intervalo.</div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (DonkiEventoVista evento in Model.Eventos)
+        {
+            bool guardado = Model.Favoritos.Contains(evento.Id);
+            string claseBoton = guardado ? "btn-warning" : "btn-outline-warning";
+
+            <div class="col-md-6 col-xl-4">
+                <article class="card tarjeta-elevada h-100">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between">
+                            <span class="badge text-bg-warning">@evento.Tipo</span>
+                            <small>@evento.Fecha?.ToString("dd/MM/yyyy HH:mm") UTC</small>
+                        </div>
+                        <h2 class="h5 mt-3">@evento.Titulo</h2>
+                        @if (!string.IsNullOrWhiteSpace(evento.Instrumentos))
+                        {
+                            <p class="small">
+                                <i class="bi bi-telescope me-1"></i>@evento.Instrumentos
+                            </p>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(evento.Detalle))
+                        {
+                            <p class="text-body-secondary descripcion-limitada">@evento.Detalle</p>
+                        }
+                        <div class="d-flex gap-2 mt-auto">
+                            @if (evento.Url is not null)
+                            {
+                                <a class="btn btn-sm btn-outline-info"
+                                   href="@evento.Url"
+                                   target="_blank">Ficha DONKI</a>
+                            }
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <form method="post" asp-page="/Favoritos/Alternar">
+                                    <input type="hidden" name="tipo" value="DONKI" />
+                                    <input type="hidden" name="referencia" value="@evento.Id" />
+                                    <input type="hidden" name="titulo" value="@evento.Titulo" />
+                                    <input type="hidden" name="subtitulo" value="@evento.Detalle" />
+                                    <input type="hidden" name="urlDetalle" value="@evento.Url" />
+                                    <input type="hidden" name="returnUrl" value="@retorno" />
+                                    <button class="btn btn-sm @claseBoton" type="submit">
+                                        <i class="bi bi-star me-1"></i>Favorito
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

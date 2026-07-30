@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] · NASA Explorer</title>
+
+    @* Bootswatch incluye Bootstrap y aporta el tema visual desde CDN. *@
+    <link id="tema-css"
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/darkly/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Estilos", required: false)
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-xl bg-primary navbar-dark shadow-sm">
+            <div class="container-fluid px-lg-4">
+                <a class="navbar-brand fw-bold" asp-page="/Index">
+                    <i class="bi bi-rocket-takeoff-fill me-2"></i>NASA Explorer
+                </a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#menuPrincipal"
+                        aria-controls="menuPrincipal"
+                        aria-expanded="false"
+                        aria-label="Abrir navegación">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="menuPrincipal" class="collapse navbar-collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Apod/Index">APOD</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Multimedia/Index">Multimedia</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               role="button"
+                               data-bs-toggle="dropdown">Tierra</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-page="/Tierra/Epic">
+                                        <i class="bi bi-globe-americas me-2"></i>DSCOVR EPIC
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-page="/Tierra/Eventos">
+                                        <i class="bi bi-geo-alt me-2"></i>Eventos EONET
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Asteroides/Index">Asteroides</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/ClimaEspacial/Index">Clima espacial</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-page="/Exoplanetas/Index">Exoplanetas</a>
+                        </li>
+                    </ul>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <select id="selector-tema"
+                                class="form-select form-select-sm"
+                                aria-label="Elegir tema">
+                            <option value="darkly">Darkly</option>
+                            <option value="superhero">Superhero</option>
+                            <option value="solar">Solar</option>
+                            <option value="cyborg">Cyborg</option>
+                            <option value="flatly">Flatly</option>
+                        </select>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container-fluid px-3 px-lg-4 py-4">
+        @RenderBody()
+    </main>
+
+    <footer class="border-top py-4 mt-5">
+        <div class="container-fluid px-lg-4 d-flex flex-wrap justify-content-between gap-2">
+            <span>Proyecto docente con datos públicos de NASA.</span>
+            <a asp-page="/Acerca">APIs, límites y créditos</a>
+        </div>
+    </footer>
+
+    @* Todo el JavaScript de terceros llega desde CDN. *@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @* TempData permite mostrar un único aviso después de una redirección POST. *@
+    @if (TempData["Mensaje"] is string mensaje)
+    {
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                mostrarAviso(@Json.Serialize(mensaje), @Json.Serialize(TempData["TipoMensaje"] ?? "success"));
+            });
+        </script>
+    }
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

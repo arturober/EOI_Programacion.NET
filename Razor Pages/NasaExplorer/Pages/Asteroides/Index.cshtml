@@ -1,0 +1,145 @@
+@page
+@model NasaExplorer.Pages.Asteroides.IndexModel
+@{
+    ViewData["Title"] = "Asteroides cercanos";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<div class="mb-4">
+    <p class="text-warning text-uppercase fw-semibold mb-1">Near Earth Object Web Service</p>
+    <h1>Asteroides próximos a la Tierra</h1>
+    <p class="lead">
+        Compara diámetro estimado, velocidad y distancia mínima de aproximación.
+    </p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-5">
+            <label asp-for="Desde" class="form-label">Desde</label>
+            <input asp-for="Desde" class="form-control" type="date" />
+        </div>
+        <div class="col-md-5">
+            <label asp-for="Hasta" class="form-label">Hasta</label>
+            <input asp-for="Hasta" class="form-control" type="date" />
+            <div class="form-text">NeoWs admite un intervalo máximo de siete días.</div>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" type="submit">Consultar</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-warning">
+        <h2 class="h5"><i class="bi bi-broadcast-pin me-2"></i>NeoWs no ha respondido</h2>
+        <p class="mb-0">@Model.Error</p>
+    </div>
+    <p class="text-body-secondary">
+        El resto de módulos funciona de manera independiente aunque este servicio
+        esté en mantenimiento.
+    </p>
+}
+else if (Model.Resultado is not null)
+{
+    int peligrosos = Model.Resultado.Asteroides.Count(item => item.Peligroso);
+    double distanciaMinima = Model.Resultado.Asteroides.Count > 0
+        ? Model.Resultado.Asteroides.Min(item => item.DistanciaKm)
+        : 0;
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card card-body text-center h-100">
+                <span class="dato-grande">@Model.Resultado.Total</span>
+                <span>Aproximaciones</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-body text-center h-100">
+                <span class="dato-grande text-danger">@peligrosos</span>
+                <span>Potencialmente peligrosos</span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-body text-center h-100">
+                <span class="dato-grande">@distanciaMinima.ToString("N0")</span>
+                <span>km en la aproximación mínima</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive card shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Objeto</th>
+                    <th>Fecha</th>
+                    <th>Diámetro</th>
+                    <th>Velocidad</th>
+                    <th>Distancia</th>
+                    <th>Riesgo</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (AsteroideVista asteroide in Model.Resultado.Asteroides)
+                {
+                    bool guardado = Model.Favoritos.Contains(asteroide.Id);
+                    string claseBoton = guardado ? "btn-warning" : "btn-outline-warning";
+                    string detalle =
+                        $"{asteroide.DiametroMinimoKm:N3}–{asteroide.DiametroMaximoKm:N3} km; "
+                        + $"distancia {asteroide.DistanciaKm:N0} km";
+
+                    <tr>
+                        <td>
+                            <a href="@asteroide.UrlNasa" target="_blank">@asteroide.Nombre</a>
+                            <div class="small text-body-secondary">@asteroide.Id</div>
+                        </td>
+                        <td>@asteroide.FechaAproximacion?.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @asteroide.DiametroMinimoKm.ToString("N3")–
+                            @asteroide.DiametroMaximoKm.ToString("N3") km
+                        </td>
+                        <td>@asteroide.VelocidadKmHora.ToString("N0") km/h</td>
+                        <td>@asteroide.DistanciaKm.ToString("N0") km</td>
+                        <td>
+                            @if (asteroide.Peligroso)
+                            {
+                                <span class="badge text-bg-danger">Potencial</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-success">No</span>
+                            }
+                        </td>
+                        <td>
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <form method="post" asp-page="/Favoritos/Alternar">
+                                    <input type="hidden" name="tipo" value="Asteroide" />
+                                    <input type="hidden" name="referencia" value="@asteroide.Id" />
+                                    <input type="hidden" name="titulo" value="@asteroide.Nombre" />
+                                    <input type="hidden" name="subtitulo" value="@detalle" />
+                                    <input type="hidden" name="urlDetalle" value="@asteroide.UrlNasa" />
+                                    <input type="hidden" name="returnUrl" value="@retorno" />
+                                    <button class="btn btn-sm @claseBoton"
+                                            type="submit"
+                                            title="Alternar favorito">
+                                        <i class="bi bi-star"></i>
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <p class="small text-body-secondary mt-3">
+        «Potencialmente peligroso» es una clasificación orbital; no significa
+        que exista una colisión prevista.
+    </p>
+}

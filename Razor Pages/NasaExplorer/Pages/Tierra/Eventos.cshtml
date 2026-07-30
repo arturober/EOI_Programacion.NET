@@ -1,0 +1,164 @@
+@page
+@model NasaExplorer.Pages.Tierra.EventosModel
+@{
+    ViewData["Title"] = "Eventos naturales";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+@section Estilos {
+    @* Leaflet dibuja el mapa sin instalar ningún paquete npm. *@
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css" />
+}
+
+<div class="mb-4">
+    <p class="text-danger text-uppercase fw-semibold mb-1">EONET API v3</p>
+    <h1>Eventos naturales observados por NASA</h1>
+    <p class="lead">Consulta incendios, volcanes, tormentas, hielo marino y otros sucesos.</p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label asp-for="Estado" class="form-label">Estado</label>
+            <select asp-for="Estado" class="form-select">
+                <option value="open">Activos</option>
+                <option value="closed">Cerrados</option>
+                <option value="all">Todos</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Categoria" class="form-label">Categoría</label>
+            <select asp-for="Categoria" class="form-select">
+                <option value="">Todas</option>
+                <option value="wildfires">Incendios</option>
+                <option value="volcanoes">Volcanes</option>
+                <option value="severeStorms">Tormentas severas</option>
+                <option value="floods">Inundaciones</option>
+                <option value="earthquakes">Terremotos</option>
+                <option value="seaLakeIce">Hielo marino y lacustre</option>
+                <option value="landslides">Deslizamientos</option>
+                <option value="dustHaze">Polvo y bruma</option>
+                <option value="snow">Nieve</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Dias" class="form-label">Últimos días</label>
+            <input asp-for="Dias" class="form-control" min="1" max="365" />
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" type="submit">Actualizar</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-warning">@Model.Error</div>
+}
+else
+{
+    <div class="row g-4">
+        <div class="col-xl-7">
+            <div id="mapa-eonet" class="mapa-eonet shadow"></div>
+            <p class="small text-body-secondary mt-2">
+                Mapa base © OpenStreetMap. Los polígonos sin un punto simple aparecen en la lista.
+            </p>
+        </div>
+        <div class="col-xl-5">
+            <div class="d-flex justify-content-between mb-2">
+                <h2 class="h4">Sucesos</h2>
+                <span class="badge text-bg-primary">@Model.Eventos.Count</span>
+            </div>
+            <div class="vstack gap-3 tabla-responsive-alta pe-2">
+                @foreach (EonetEventoDto evento in Model.Eventos)
+                {
+                    bool guardado = Model.Favoritos.Contains(evento.Id);
+                    string claseBoton = guardado ? "btn-warning" : "btn-outline-warning";
+                    EonetGeometriaDto? ultima = evento.Geometrias
+                        .OrderByDescending(geometria => geometria.Fecha)
+                        .FirstOrDefault();
+                    string categoria = evento.Categorias.FirstOrDefault()?.Titulo ?? "Evento";
+                    string? fuente = evento.Fuentes.FirstOrDefault()?.Url;
+                    string enlaceLocal = $"{retorno}#{evento.Id}";
+
+                    <article class="card" id="@evento.Id">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between gap-2">
+                                <span class="badge text-bg-danger">@categoria</span>
+                                <small>@ultima?.Fecha.ToString("dd/MM/yyyy")</small>
+                            </div>
+                            <h3 class="h6 mt-2">@evento.Titulo</h3>
+                            @if (!string.IsNullOrWhiteSpace(evento.Descripcion))
+                            {
+                                <p class="small descripcion-limitada">@evento.Descripcion</p>
+                            }
+                            <div class="d-flex gap-2">
+                                @if (fuente is not null)
+                                {
+                                    <a class="btn btn-sm btn-outline-info"
+                                       href="@fuente"
+                                       target="_blank">Fuente</a>
+                                }
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <form method="post" asp-page="/Favoritos/Alternar">
+                                        <input type="hidden" name="tipo" value="EONET" />
+                                        <input type="hidden" name="referencia" value="@evento.Id" />
+                                        <input type="hidden" name="titulo" value="@evento.Titulo" />
+                                        <input type="hidden" name="subtitulo" value="@categoria" />
+                                        <input type="hidden" name="urlDetalle" value="@enlaceLocal" />
+                                        <input type="hidden" name="returnUrl" value="@retorno" />
+                                        <button class="btn btn-sm @claseBoton" type="submit">
+                                            <i class="bi bi-star me-1"></i>Favorito
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+    <script>
+        // Los datos ya están filtrados y serializados por el PageModel.
+        const puntosEonet = @Json.Serialize(Model.Puntos);
+
+        if (document.getElementById("mapa-eonet")) {
+            const mapa = L.map("mapa-eonet").setView([20, 0], 2);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 18,
+                attribution: "&copy; OpenStreetMap"
+            }).addTo(mapa);
+
+            const limites = [];
+            puntosEonet.forEach(punto => {
+                const posicion = [punto.latitud, punto.longitud];
+                limites.push(posicion);
+                const contenido =
+                    `<strong>${escaparHtml(punto.titulo)}</strong><br>`
+                    + `${escaparHtml(punto.categoria)} · ${escaparHtml(punto.fecha)}<br>`
+                    + `<a href="#${encodeURIComponent(punto.id)}">Ver ficha</a>`;
+                L.marker(posicion).addTo(mapa).bindPopup(contenido);
+            });
+
+            if (limites.length > 0) {
+                mapa.fitBounds(limites, { padding: [30, 30], maxZoom: 6 });
+            }
+        }
+
+        // Evita insertar como HTML cualquier texto procedente de una API.
+        function escaparHtml(texto) {
+            const elemento = document.createElement("div");
+            elemento.textContent = texto ?? "";
+            return elemento.innerHTML;
+        }
+    </script>
+}

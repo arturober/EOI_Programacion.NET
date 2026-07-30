@@ -1,0 +1,52 @@
+@page
+@model NasaExplorer.Pages.Cuenta.LoginModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+
+<div class="row justify-content-center py-lg-5">
+    <div class="col-md-7 col-lg-5 col-xl-4">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-circle display-3 text-info"></i>
+                    <h1 class="h3 mt-2">Iniciar sesión</h1>
+                    <p class="text-body-secondary">Accede a tu colección privada.</p>
+                </div>
+                <form method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Entrada.Email"
+                               class="form-control"
+                               autocomplete="email"
+                               placeholder="nombre@correo.es" />
+                        <label asp-for="Entrada.Email">Correo electrónico</label>
+                        <span asp-validation-for="Entrada.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Entrada.Contrasena"
+                               class="form-control"
+                               autocomplete="current-password"
+                               placeholder="Contraseña" />
+                        <label asp-for="Entrada.Contrasena">Contraseña</label>
+                        <span asp-validation-for="Entrada.Contrasena" class="text-danger"></span>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input asp-for="Entrada.Recordarme" class="form-check-input" />
+                        <label asp-for="Entrada.Recordarme" class="form-check-label"></label>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Entrar</button>
+                </form>
+                <p class="text-center mt-3 mb-0">
+                    ¿Aún no tienes cuenta?
+                    <a asp-page="/Cuenta/Registro"
+                       asp-route-returnUrl="@Model.ReturnUrl">Regístrate</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

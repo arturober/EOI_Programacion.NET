@@ -1,0 +1,71 @@
+@page
+@model NasaExplorer.Pages.Favoritos.IndexModel
+@{
+    ViewData["Title"] = "Mis favoritos";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <p class="text-warning text-uppercase fw-semibold mb-1">Colección privada</p>
+        <h1 class="mb-0">Mis favoritos</h1>
+    </div>
+    <span class="badge rounded-pill text-bg-primary fs-6">
+        @Model.Favoritos.Count elementos
+    </span>
+</div>
+
+@if (Model.Favoritos.Count == 0)
+{
+    <div class="card text-center py-5">
+        <div class="card-body">
+            <i class="bi bi-star display-1 text-warning"></i>
+            <h2 class="h4 mt-3">Todavía no has guardado nada</h2>
+            <p class="text-body-secondary">
+                Utiliza los botones con una estrella que aparecen en los exploradores.
+            </p>
+            <a class="btn btn-primary" asp-page="/Index">Empezar a explorar</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (Favorito favorito in Model.Favoritos)
+        {
+            <div class="col-md-6 col-xl-4">
+                <article class="card tarjeta-elevada h-100 overflow-hidden">
+                    @if (!string.IsNullOrWhiteSpace(favorito.ImagenUrl))
+                    {
+                        <img class="card-img-top imagen-tarjeta"
+                             src="@favorito.ImagenUrl"
+                             alt="@favorito.Titulo"
+                             loading="lazy" />
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge text-bg-secondary align-self-start">@favorito.Tipo</span>
+                        <h2 class="h5 mt-2">@favorito.Titulo</h2>
+                        @if (!string.IsNullOrWhiteSpace(favorito.Subtitulo))
+                        {
+                            <p class="text-body-secondary descripcion-limitada">@favorito.Subtitulo</p>
+                        }
+                        <div class="d-flex gap-2 mt-auto">
+                            @if (!string.IsNullOrWhiteSpace(favorito.UrlDetalle))
+                            {
+                                <a class="btn btn-outline-info flex-grow-1"
+                                   href="@favorito.UrlDetalle">Abrir</a>
+                            }
+                            <form method="post"
+                                  asp-page-handler="Eliminar"
+                                  data-confirmar="Este elemento desaparecerá de tu colección.">
+                                <input type="hidden" name="id" value="@favorito.Id" />
+                                <button class="btn btn-outline-danger" type="submit" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

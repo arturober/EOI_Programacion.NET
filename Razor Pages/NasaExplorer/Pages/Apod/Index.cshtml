@@ -1,0 +1,119 @@
+@page
+@model NasaExplorer.Pages.Apod.IndexModel
+@{
+    ViewData["Title"] = "Imagen astronómica del día";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+    DateOnly fechaAnterior = (Model.Fecha ?? Model.FechaMaxima).AddDays(-1);
+    DateOnly fechaSiguiente = (Model.Fecha ?? Model.FechaMaxima).AddDays(1);
+    string? imagenFavorito = Model.Apod?.TipoMedio == "image"
+        ? Model.Apod.Url
+        : Model.Apod?.MiniaturaUrl;
+    string claseBoton = Model.EsFavorito ? "btn-warning" : "btn-outline-warning";
+    string iconoBoton = Model.EsFavorito ? "bi-star-fill" : "bi-star";
+    string textoBoton = Model.EsFavorito ? "Quitar favorito" : "Guardar favorito";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <div>
+        <p class="text-warning text-uppercase fw-semibold mb-1">Astronomy Picture of the Day</p>
+        <h1 class="mb-0">El universo, día a día</h1>
+    </div>
+    <form method="get" class="d-flex gap-2">
+        <input class="form-control"
+               type="date"
+               name="fecha"
+               value="@Model.Fecha?.ToString("yyyy-MM-dd")"
+               min="@Model.FechaMinima.ToString("yyyy-MM-dd")"
+               max="@Model.FechaMaxima.ToString("yyyy-MM-dd")" />
+        <button class="btn btn-primary" type="submit">Ver</button>
+    </form>
+</div>
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle me-2"></i>@Model.Error
+    </div>
+}
+else if (Model.Apod is not null)
+{
+    <article class="card shadow overflow-hidden">
+        <div class="bg-black">
+            @if (Model.Apod.TipoMedio == "image")
+            {
+                <a href="@(Model.Apod.UrlAltaResolucion ?? Model.Apod.Url)" target="_blank">
+                    <img class="imagen-apod"
+                         src="@Model.Apod.Url"
+                         alt="@Model.Apod.Titulo" />
+                </a>
+            }
+            else
+            {
+                <div class="ratio ratio-16x9">
+                    <iframe src="@Model.Apod.Url"
+                            title="@Model.Apod.Titulo"
+                            allowfullscreen></iframe>
+                </div>
+            }
+        </div>
+        <div class="card-body p-lg-5">
+            <div class="d-flex flex-wrap justify-content-between gap-3">
+                <div>
+                    <span class="badge text-bg-primary">@Model.Apod.Fecha</span>
+                    <h2 class="mt-2">@Model.Apod.Titulo</h2>
+                    @if (Model.Apod.Copyright is not null)
+                    {
+                        <p class="text-body-secondary">© @Model.Apod.Copyright</p>
+                    }
+                </div>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <form method="post" asp-page="/Favoritos/Alternar">
+                        <input type="hidden" name="tipo" value="APOD" />
+                        <input type="hidden" name="referencia" value="@Model.Apod.Fecha" />
+                        <input type="hidden" name="titulo" value="@Model.Apod.Titulo" />
+                        <input type="hidden" name="subtitulo" value="@Model.Apod.Explicacion" />
+                        <input type="hidden" name="imagenUrl" value="@imagenFavorito" />
+                        <input type="hidden" name="urlDetalle" value="@retorno" />
+                        <input type="hidden" name="returnUrl" value="@retorno" />
+                        <button class="btn @claseBoton" type="submit">
+                            <i class="bi @iconoBoton me-1"></i>
+                            @textoBoton
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    <a class="btn btn-outline-warning"
+                       asp-page="/Cuenta/Login"
+                       asp-route-returnUrl="@retorno">
+                        <i class="bi bi-star me-1"></i>Entra para guardar
+                    </a>
+                }
+            </div>
+            <p class="lead mt-3 mb-0">@Model.Apod.Explicacion</p>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            @if (fechaAnterior >= Model.FechaMinima)
+            {
+                <a class="btn btn-outline-secondary"
+                   asp-route-fecha="@fechaAnterior.ToString("yyyy-MM-dd")">
+                    <i class="bi bi-arrow-left me-1"></i>Día anterior
+                </a>
+            }
+            else
+            {
+                <span></span>
+            }
+            @if (fechaSiguiente <= Model.FechaMaxima)
+            {
+                <a class="btn btn-outline-secondary"
+                   asp-route-fecha="@fechaSiguiente.ToString("yyyy-MM-dd")">
+                    Día siguiente<i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            }
+        </div>
+    </article>
+}

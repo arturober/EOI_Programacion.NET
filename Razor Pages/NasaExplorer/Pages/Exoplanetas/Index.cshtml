@@ -1,0 +1,186 @@
+@page
+@model NasaExplorer.Pages.Exoplanetas.IndexModel
+@{
+    ViewData["Title"] = "Exoplanetas";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<div class="mb-4">
+    <p class="text-primary text-uppercase fw-semibold mb-1">NASA Exoplanet Archive · TAP</p>
+    <h1>Mundos fuera del sistema solar</h1>
+    <p class="lead">
+        Consulta planetas confirmados mediante una consulta ADQL segura construida en el servidor.
+    </p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-lg-4">
+            <label asp-for="Busqueda" class="form-label">Planeta o estrella</label>
+            <input asp-for="Busqueda" class="form-control" placeholder="TRAPPIST, Kepler, Proxima…" />
+        </div>
+        <div class="col-lg-3">
+            <label asp-for="Metodo" class="form-label">Método</label>
+            <select asp-for="Metodo" class="form-select">
+                <option value="">Todos</option>
+                <option value="Transit">Tránsito</option>
+                <option value="Radial Velocity">Velocidad radial</option>
+                <option value="Microlensing">Microlente</option>
+                <option value="Imaging">Imagen directa</option>
+                <option value="Astrometry">Astrometría</option>
+                <option value="Pulsar Timing">Cronometría de púlsar</option>
+                <option value="Transit Timing Variations">Variaciones de tránsito</option>
+            </select>
+        </div>
+        <div class="col-sm-6 col-lg-2">
+            <label asp-for="AnioDesde" class="form-label">Desde el año</label>
+            <input asp-for="AnioDesde" class="form-control" min="1988" max="2100" />
+        </div>
+        <div class="col-sm-6 col-lg-1">
+            <label asp-for="Limite" class="form-label">Límite</label>
+            <select asp-for="Limite" class="form-select">
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn btn-primary w-100" type="submit">Buscar</button>
+        </div>
+    </div>
+</form>
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-warning">@Model.Error</div>
+}
+else
+{
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4">
+            <div class="card card-body text-center h-100">
+                <span class="dato-grande">@Model.Exoplanetas.Count</span>
+                <span>planetas mostrados</span>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card card-body h-100">
+                <h2 class="h5">Métodos de descubrimiento en el resultado</h2>
+                <div style="height: 190px">
+                    <canvas id="grafico-metodos"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive card shadow-sm">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Planeta / sistema</th>
+                    <th>Descubrimiento</th>
+                    <th>Radio</th>
+                    <th>Masa</th>
+                    <th>Órbita</th>
+                    <th>Distancia</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (ExoplanetaDto planeta in Model.Exoplanetas)
+                {
+                    bool guardado = Model.Favoritos.Contains(planeta.Nombre);
+                    string claseBoton = guardado ? "btn-warning" : "btn-outline-warning";
+                    string archivoUrl =
+                        NasaExplorer.Pages.Exoplanetas.IndexModel.CrearUrlArchivo(planeta.Nombre);
+                    string subtitulo =
+                        $"{planeta.Estrella} · {planeta.MetodoDescubrimiento} · "
+                        + $"{planeta.AnioDescubrimiento}";
+
+                    <tr>
+                        <td>
+                            <a href="@archivoUrl" target="_blank">
+                                <strong>@planeta.Nombre</strong>
+                            </a>
+                            <div class="small text-body-secondary">
+                                @planeta.Estrella · @planeta.PlanetasSistema planeta(s)
+                            </div>
+                        </td>
+                        <td>
+                            @planeta.MetodoDescubrimiento
+                            <div class="small text-body-secondary">@planeta.AnioDescubrimiento</div>
+                        </td>
+                        <td>
+                            @(planeta.RadiosTierra?.ToString("N2") ?? "—")
+                            <span class="text-body-secondary">R⊕</span>
+                        </td>
+                        <td>
+                            @(planeta.MasasTierra?.ToString("N2") ?? "—")
+                            <span class="text-body-secondary">M⊕</span>
+                        </td>
+                        <td>
+                            @(planeta.PeriodoOrbitalDias?.ToString("N2") ?? "—")
+                            <span class="text-body-secondary">días</span>
+                        </td>
+                        <td>
+                            @(planeta.DistanciaParsecs?.ToString("N1") ?? "—")
+                            <span class="text-body-secondary">pc</span>
+                        </td>
+                        <td>
+                            @if (User.Identity?.IsAuthenticated == true)
+                            {
+                                <form method="post" asp-page="/Favoritos/Alternar">
+                                    <input type="hidden" name="tipo" value="Exoplaneta" />
+                                    <input type="hidden" name="referencia" value="@planeta.Nombre" />
+                                    <input type="hidden" name="titulo" value="@planeta.Nombre" />
+                                    <input type="hidden" name="subtitulo" value="@subtitulo" />
+                                    <input type="hidden" name="urlDetalle" value="@archivoUrl" />
+                                    <input type="hidden" name="returnUrl" value="@retorno" />
+                                    <button class="btn btn-sm @claseBoton"
+                                            type="submit"
+                                            title="Alternar favorito">
+                                        <i class="bi bi-star"></i>
+                                    </button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <p class="small text-body-secondary mt-3">
+        R⊕ y M⊕ representan radios y masas terrestres; pc significa pársec.
+        Los campos vacíos no tienen una medición consolidada.
+    </p>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+    <script>
+        // El resumen se calcula en C# y Chart.js solo se ocupa de representarlo.
+        const resumenMetodos = @Json.Serialize(Model.ResumenMetodos);
+        const lienzo = document.getElementById("grafico-metodos");
+
+        if (lienzo && Object.keys(resumenMetodos).length > 0) {
+            new Chart(lienzo, {
+                type: "bar",
+                data: {
+                    labels: Object.keys(resumenMetodos),
+                    datasets: [{
+                        label: "Planetas",
+                        data: Object.values(resumenMetodos),
+                        backgroundColor: "#4cc9f0"
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+                }
+            });
+        }
+    </script>
+}

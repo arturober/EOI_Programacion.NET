@@ -1,0 +1,43 @@
+@page
+@model NasaExplorer.Pages.AcercaModel
+@{
+    ViewData["Title"] = "Acerca del proyecto";
+}
+
+<div class="row justify-content-center">
+    <div class="col-xl-9">
+        <h1>Acerca de NASA Explorer</h1>
+        <p class="lead">
+            Es un proyecto docente de Razor Pages que integra distintas fuentes
+            oficiales sin exponer la clave privada al navegador.
+        </p>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="h4">Fuentes utilizadas</h2>
+                <ul class="mb-0">
+                    <li>NASA Open APIs: APOD y NeoWs.</li>
+                    <li>NASA Image and Video Library.</li>
+                    <li>DSCOVR EPIC API 2.0.</li>
+                    <li>EONET API v3.</li>
+                    <li>CCMC DONKI Webservice.</li>
+                    <li>NASA Exoplanet Archive mediante TAP.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="alert alert-secondary">
+            <strong>Decisión intencionada:</strong> no se incluyen Mars Rover
+            Photos ni la antigua Earth Imagery API porque fueron archivadas.
+            EONET usa expresamente la versión 3; la 2.1 está obsoleta.
+        </div>
+
+        <h2 class="h4">Uso responsable</h2>
+        <p>
+            La caché en memoria reduce peticiones repetidas. Una clave normal de
+            api.nasa.gov suele disponer de 1.000 peticiones por hora. Los datos,
+            imágenes y marcas pertenecen a sus respectivas fuentes y deben
+            acreditarse cuando se reutilicen.
+        </p>
+    </div>
+</div>
