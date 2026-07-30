@@ -1,0 +1,29 @@
+@page
+@model global::Recetas.Pages.Recetas.AreasModel
+@{
+    ViewData["Title"] = "Cocinas del mundo";
+}
+
+<header class="mb-4">
+    <h1>Cocinas del mundo</h1>
+    <p class="text-body-secondary">
+        Descubre recetas agrupadas por país o región.
+    </p>
+</header>
+
+<div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-5 g-3">
+    @foreach (string area in Model.Areas)
+    {
+        <div class="col">
+            <a class="card h-100 text-decoration-none shadow-sm"
+               asp-page="/Recetas/Listado"
+               asp-route-tipo="area"
+               asp-route-valor="@area">
+                <div class="card-body text-center">
+                    <i class="bi bi-globe-americas display-6 text-primary"></i>
+                    <h2 class="h6 text-body mt-2 mb-0">@area</h2>
+                </div>
+            </a>
+        </div>
+    }
+</div>

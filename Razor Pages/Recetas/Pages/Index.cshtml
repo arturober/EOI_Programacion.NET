@@ -1,0 +1,103 @@
+@page
+@model global::Recetas.Pages.IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-md-5 mb-5 bg-primary text-white rounded-4 shadow">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="badge text-bg-light text-primary mb-3">
+                Recetas de todo el mundo
+            </span>
+            <h1 class="display-4 fw-bold">¿Qué cocinamos hoy?</h1>
+            <p class="lead">
+                Descubre recetas, guarda tus favoritas y prepara un menú
+                semanal con su lista de la compra.
+            </p>
+
+            <form method="get"
+                  asp-page="/Recetas/Buscar"
+                  class="mt-4"
+                  role="search">
+                <div class="input-group input-group-lg">
+                    <input class="form-control"
+                           name="texto"
+                           placeholder="Busca una receta"
+                           aria-label="Buscar recetas"
+                           minlength="2"
+                           required />
+                    <button class="btn btn-warning" type="submit">
+                        <i class="bi bi-search me-1"></i>Buscar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-5 text-center">
+            <i class="bi bi-egg-fried display-1" aria-hidden="true"></i>
+            <p class="mt-3 mb-0">
+                Favoritos, planificación e ingredientes.
+            </p>
+        </div>
+    </div>
+</section>
+
+@if (Model.Aleatoria is not null)
+{
+    <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h2 class="mb-1">Sugerencia del momento</h2>
+                <p class="text-body-secondary mb-0">
+                    Una receta aleatoria para salir de la rutina.
+                </p>
+            </div>
+            <a class="btn btn-outline-primary" asp-page="/Index">
+                <i class="bi bi-shuffle me-1"></i>Otra receta
+            </a>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-5">
+                <partial name="_TarjetaReceta" model="Model.Aleatoria" />
+            </div>
+        </div>
+    </section>
+}
+
+@foreach ((string titulo, string descripcion, string categoria,
+    IReadOnlyList<RecetaResumen> recetas) seccion in new[]
+{
+    ("Opciones vegetarianas", "Platos sin carne para todos los días.",
+        "Vegetarian", Model.Vegetarianas),
+    ("Pescado y marisco", "Recetas para disfrutar de sabores del mar.",
+        "Seafood", Model.Pescado),
+    ("Postres", "Un final dulce para cualquier menú.",
+        "Dessert", Model.Postres)
+})
+{
+    <section class="mb-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+                <h2 class="mb-1">@seccion.titulo</h2>
+                <p class="text-body-secondary mb-0">@seccion.descripcion</p>
+            </div>
+            <a class="btn btn-outline-primary"
+               asp-page="/Recetas/Listado"
+               asp-route-tipo="categoria"
+               asp-route-valor="@seccion.categoria">
+                Ver todas
+            </a>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+            @foreach (RecetaResumen receta in seccion.recetas)
+            {
+                <div class="col">
+                    <partial name="_TarjetaReceta" model="receta" />
+                </div>
+            }
+        </div>
+    </section>
+}

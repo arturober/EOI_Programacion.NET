@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="titulo descripcion">
+  <title id="titulo">Imagen de receta no disponible</title>
+  <desc id="descripcion">Ilustración de un plato con cubiertos</desc>
+  <rect width="800" height="600" fill="#f1f3f5"/>
+  <circle cx="400" cy="300" r="170" fill="#ffffff" stroke="#adb5bd" stroke-width="18"/>
+  <circle cx="400" cy="300" r="105" fill="#e9ecef"/>
+  <path d="M190 145v310M160 145v115c0 40 60 40 60 0V145M610 145v310M610 145c70 45 70 160 0 195"
+        fill="none" stroke="#6c757d" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M340 315c35-70 90-70 125 0" fill="none" stroke="#adb5bd" stroke-width="15" stroke-linecap="round"/>
+</svg>

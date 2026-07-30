@@ -1,0 +1,45 @@
+@page
+@model global::Recetas.Pages.Recetas.ListadoModel
+@{
+    ViewData["Title"] = Model.Valor;
+}
+
+<header class="mb-4">
+    <nav aria-label="Migas de pan">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index">Inicio</a></li>
+            <li class="breadcrumb-item">
+                <a asp-page="@(Model.Tipo == "area" ? "/Recetas/Areas" : "/Recetas/Categorias")">
+                    @(Model.Tipo == "area" ? "Cocinas" : "Categorías")
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                @Model.Valor
+            </li>
+        </ol>
+    </nav>
+    <h1>@Model.Valor</h1>
+    <p class="text-body-secondary">
+        @Model.Resultados.Count recetas encontradas.
+    </p>
+</header>
+
+@if (Model.Resultados.Count > 0)
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (RecetaResumen receta in Model.Resultados)
+        {
+            <div class="col">
+                <partial name="_TarjetaReceta" model="receta" />
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-search display-1 text-body-secondary"></i>
+        <h2 class="h4 mt-3">No hay recetas que mostrar</h2>
+        <a class="btn btn-primary mt-2" asp-page="/Index">Volver al inicio</a>
+    </div>
+}

@@ -1,0 +1,41 @@
+@page
+@model global::Recetas.Pages.Recetas.CategoriasModel
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<header class="mb-4">
+    <h1>Categorías</h1>
+    <p class="text-body-secondary">
+        Explora el catálogo según el tipo de plato.
+    </p>
+</header>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+    @foreach (CategoriaReceta categoria in Model.Categorias)
+    {
+        <div class="col">
+            <article class="card h-100 shadow-sm">
+                <div class="ratio ratio-4x3 bg-body-tertiary">
+                    <img src="@categoria.ImagenUrl"
+                         class="w-100 h-100 object-fit-contain"
+                         alt="Categoría @categoria.Nombre"
+                         data-imagen
+                         loading="lazy" />
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h2 class="h5">@categoria.Nombre</h2>
+                    <p class="small text-body-secondary">
+                        @categoria.Descripcion
+                    </p>
+                    <a class="btn btn-outline-primary mt-auto"
+                       asp-page="/Recetas/Listado"
+                       asp-route-tipo="categoria"
+                       asp-route-valor="@categoria.Nombre">
+                        Ver recetas
+                    </a>
+                </div>
+            </article>
+        </div>
+    }
+</div>

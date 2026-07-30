@@ -1,0 +1,272 @@
+@{
+    // La ruta actual permite destacar la sección activa.
+    string pagina = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+    bool inicio = pagina == "/Index";
+    bool favoritos = pagina.StartsWith("/Favoritos");
+    bool menu = pagina.StartsWith("/Menu");
+    bool acerca = pagina == "/Acerca";
+
+    // Las páginas envían avisos mediante ViewData o TempData.
+    string? mensaje = ViewData["Mensaje"] as string
+        ?? TempData["Mensaje"] as string;
+    string? error = ViewData["Error"] as string
+        ?? TempData["Error"] as string;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+          content="Descubre recetas y planifica tu menú semanal." />
+
+    <title>@ViewData["Title"] - Recetas</title>
+
+    @* temas.js cambiará esta hoja cuando se seleccione un tema. *@
+    <link id="temaCss"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+          rel="stylesheet" />
+
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css"
+          rel="stylesheet" />
+</head>
+<body class="min-vh-100 d-flex flex-column"
+      data-mensaje="@(error ?? mensaje)"
+      data-icono="@(error is null ? "success" : "error")"
+      data-titulo="@(error is null ? "Operación completada" : "Ha ocurrido un problema")">
+    <nav class="navbar navbar-expand-xl bg-primary sticky-top shadow-sm"
+         data-bs-theme="dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" asp-page="/Index">
+                <i class="bi bi-egg-fried me-2"></i>Recetas
+            </a>
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal"
+                    aria-expanded="false"
+                    aria-label="Mostrar u ocultar el menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link rounded-pill px-3 @(inicio ? "bg-white text-primary fw-semibold" : "text-white")"
+                           asp-page="/Index">
+                            <i class="bi bi-house me-1"></i>Inicio
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <button class="nav-link dropdown-toggle text-white"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <i class="bi bi-grid me-1"></i>Explorar
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-page="/Recetas/Categorias">
+                                    Todas las categorías
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-page="/Recetas/Areas">
+                                    Cocinas del mundo
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                            @foreach (string categoria in new[]
+                            {
+                                "Beef", "Chicken", "Dessert", "Pasta",
+                                "Seafood", "Vegan", "Vegetarian"
+                            })
+                            {
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-page="/Recetas/Listado"
+                                       asp-route-tipo="categoria"
+                                       asp-route-valor="@categoria">
+                                        @categoria
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 @(favoritos ? "bg-white text-primary fw-semibold" : "text-white")"
+                               asp-page="/Favoritos/Index">
+                                <i class="bi bi-heart-fill me-1"></i>Favoritos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link rounded-pill px-3 @(menu ? "bg-white text-primary fw-semibold" : "text-white")"
+                               asp-page="/Menu/Index">
+                                <i class="bi bi-calendar-week me-1"></i>Mi menú
+                            </a>
+                        </li>
+                    }
+
+                    <li class="nav-item">
+                        <a class="nav-link rounded-pill px-3 @(acerca ? "bg-white text-primary fw-semibold" : "text-white")"
+                           asp-page="/Acerca">
+                            <i class="bi bi-info-circle me-1"></i>Acerca de
+                        </a>
+                    </li>
+                </ul>
+
+                <form class="d-flex my-2 my-xl-0 me-xl-3"
+                      method="get"
+                      asp-page="/Recetas/Buscar"
+                      role="search">
+                    <div class="input-group input-group-sm">
+                        <input class="form-control"
+                               name="texto"
+                               placeholder="Buscar recetas"
+                               aria-label="Buscar recetas"
+                               minlength="2"
+                               required />
+                        <button class="btn btn-light"
+                                type="submit"
+                                aria-label="Buscar">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <div class="dropdown me-xl-3">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i>
+                            @User.Identity.Name
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" asp-page="/Menu/Index">
+                                    <i class="bi bi-calendar-week me-2"></i>Mi menú
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item"
+                                   asp-page="/Favoritos/Index">
+                                    <i class="bi bi-heart me-2"></i>Favoritos
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li>
+                                <form method="post" asp-page="/Cuenta/Logout">
+                                    <button class="dropdown-item" type="submit">
+                                        <i class="bi bi-box-arrow-right me-2"></i>
+                                        Cerrar sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex gap-2 my-2 my-xl-0 me-xl-3">
+                        <a class="btn btn-outline-light btn-sm"
+                           asp-page="/Cuenta/Login">
+                            Entrar
+                        </a>
+                        <a class="btn btn-light btn-sm"
+                           asp-page="/Cuenta/Registro">
+                            Registrarse
+                        </a>
+                    </div>
+                }
+
+                <div class="d-flex align-items-center gap-2 py-2 py-xl-0">
+                    <label for="selectorTema"
+                           class="text-white fs-5"
+                           title="Seleccionar el tema">
+                        <i class="bi bi-palette" aria-hidden="true"></i>
+                        <span class="visually-hidden">Tema</span>
+                    </label>
+
+                    <select id="selectorTema"
+                            class="form-select form-select-sm"
+                            aria-label="Seleccionar el tema">
+                        <optgroup label="Bootstrap">
+                            <option value="bootstrap-light">Bootstrap claro</option>
+                            <option value="bootstrap-dark">Bootstrap oscuro</option>
+                        </optgroup>
+                        <optgroup label="Bootswatch">
+                            <option value="bootswatch-brite">Brite</option>
+                            <option value="bootswatch-cerulean">Cerulean</option>
+                            <option value="bootswatch-cosmo">Cosmo</option>
+                            <option value="bootswatch-cyborg">Cyborg</option>
+                            <option value="bootswatch-darkly">Darkly</option>
+                            <option value="bootswatch-flatly">Flatly</option>
+                            <option value="bootswatch-journal">Journal</option>
+                            <option value="bootswatch-litera">Litera</option>
+                            <option value="bootswatch-lumen">Lumen</option>
+                            <option value="bootswatch-lux">Lux</option>
+                            <option value="bootswatch-materia">Materia</option>
+                            <option value="bootswatch-minty">Minty</option>
+                            <option value="bootswatch-morph">Morph</option>
+                            <option value="bootswatch-pulse">Pulse</option>
+                            <option value="bootswatch-quartz">Quartz</option>
+                            <option value="bootswatch-sandstone">Sandstone</option>
+                            <option value="bootswatch-simplex">Simplex</option>
+                            <option value="bootswatch-sketchy">Sketchy</option>
+                            <option value="bootswatch-slate">Slate</option>
+                            <option value="bootswatch-solar">Solar</option>
+                            <option value="bootswatch-spacelab">Spacelab</option>
+                            <option value="bootswatch-superhero">Superhero</option>
+                            <option value="bootswatch-united">United</option>
+                            <option value="bootswatch-vapor">Vapor</option>
+                            <option value="bootswatch-yeti">Yeti</option>
+                            <option value="bootswatch-zephyr">Zephyr</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-4 flex-grow-1">
+        @RenderBody()
+    </main>
+
+    <footer class="border-top bg-body py-4 mt-4">
+        <div class="container text-center text-body-secondary small">
+            <span class="d-block">
+                Proyecto educativo con ASP.NET Core, Identity y SQLite.
+            </span>
+            <a href="https://www.themealdb.com/"
+               target="_blank"
+               rel="noopener"
+               class="link-secondary">
+                Datos e imágenes proporcionados por TheMealDB
+            </a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"></script>
+    <script src="~/js/temas.js" asp-append-version="true"></script>
+    <script src="~/js/sweetalert.js" asp-append-version="true"></script>
+    <script src="~/js/imagenes.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,220 @@
+@page "/receta/{id:int}"
+@model global::Recetas.Pages.Recetas.DetallesModel
+@{
+    ViewData["Title"] = string.IsNullOrWhiteSpace(Model.Receta.Nombre)
+        ? "Ficha de la receta"
+        : Model.Receta.Nombre;
+
+    // ViewContext da acceso explícito a la petición HTTP de esta página.
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<nav aria-label="Migas de pan">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Index">Inicio</a></li>
+        <li class="breadcrumb-item">
+            <a asp-page="/Recetas/Categorias">Recetas</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            @Model.Receta.Nombre
+        </li>
+    </ol>
+</nav>
+
+@if (Model.Receta.Id > 0)
+{
+    <article class="row g-5">
+        <div class="col-lg-5">
+            <div class="ratio ratio-4x3 bg-body-tertiary rounded shadow overflow-hidden">
+                @if (!string.IsNullOrWhiteSpace(Model.Receta.ImagenUrl))
+                {
+                    <img src="@Model.Receta.ImagenUrl"
+                         class="w-100 h-100 object-fit-cover"
+                         alt="Imagen de @Model.Receta.Nombre"
+                         data-imagen />
+                }
+                else
+                {
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="bi bi-egg-fried display-1 text-body-secondary"></i>
+                    </div>
+                }
+            </div>
+
+            <section class="card shadow-sm mt-4">
+                <div class="card-body">
+                    <h2 class="h5">Mi colección</h2>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form method="post"
+                              asp-page="/Favoritos/Accion"
+                              data-confirmar-quitar="@(Model.Receta.EsFavorita ? "true" : null)">
+                            <input type="hidden"
+                                   name="recetaId"
+                                   value="@Model.Receta.Id" />
+                            <input type="hidden"
+                                   name="accion"
+                                   value="@(Model.Receta.EsFavorita ? "quitar" : "agregar")" />
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@retorno" />
+
+                            <button class="btn @(Model.Receta.EsFavorita ? "btn-danger" : "btn-primary") w-100 mb-3"
+                                    type="submit">
+                                <i class="bi @(Model.Receta.EsFavorita ? "bi-heart-fill" : "bi-heart") me-1"></i>
+                                @(Model.Receta.EsFavorita
+                                    ? "Quitar de favoritos"
+                                    : "Añadir a favoritos")
+                            </button>
+                        </form>
+
+                        <form method="post" asp-page="/Menu/Accion">
+                            <input type="hidden"
+                                   name="recetaId"
+                                   value="@Model.Receta.Id" />
+                            <input type="hidden"
+                                   name="accion"
+                                   value="asignar" />
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@retorno" />
+
+                            <label class="form-label" for="diaMenu">
+                                Añadir al menú semanal
+                            </label>
+                            <div class="input-group">
+                                <select class="form-select"
+                                        id="diaMenu"
+                                        name="dia">
+                                    @foreach (DiaMenu dia in Enum.GetValues<DiaMenu>())
+                                    {
+                                        <option value="@dia">@dia.Titulo()</option>
+                                    }
+                                </select>
+                                <button class="btn btn-outline-primary"
+                                        type="submit">
+                                    Añadir
+                                </button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary w-100"
+                           asp-page="/Cuenta/Login"
+                           asp-route-returnUrl="@retorno">
+                            Entra para guardarla
+                        </a>
+                    }
+                </div>
+            </section>
+        </div>
+
+        <div class="col-lg-7">
+            <h1 class="display-5 fw-bold">@Model.Receta.Nombre</h1>
+
+            <div class="d-flex flex-wrap gap-2 my-3">
+                @if (!string.IsNullOrWhiteSpace(Model.Receta.Categoria))
+                {
+                    <a class="badge text-bg-primary text-decoration-none fs-6"
+                       asp-page="/Recetas/Listado"
+                       asp-route-tipo="categoria"
+                       asp-route-valor="@Model.Receta.Categoria">
+                        @Model.Receta.Categoria
+                    </a>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Receta.Area))
+                {
+                    <a class="badge text-bg-secondary text-decoration-none fs-6"
+                       asp-page="/Recetas/Listado"
+                       asp-route-tipo="area"
+                       asp-route-valor="@Model.Receta.Area">
+                        @Model.Receta.Area
+                    </a>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Receta.Etiquetas))
+                {
+                    @foreach (string etiqueta in Model.Receta.Etiquetas.Split(
+                        ',',
+                        StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        <span class="badge text-bg-light fs-6">@etiqueta</span>
+                    }
+                }
+            </div>
+
+            <h2 class="h4 mt-4">Ingredientes</h2>
+            <div class="row row-cols-1 row-cols-sm-2 g-3 mb-5">
+                @foreach (IngredienteReceta ingrediente in Model.Receta.Ingredientes)
+                {
+                    <div class="col">
+                        <div class="d-flex align-items-center gap-3 border rounded p-2 h-100">
+                            <img src="@ingrediente.UrlImagen"
+                                 width="64"
+                                 height="64"
+                                 class="object-fit-contain"
+                                 alt="@ingrediente.Nombre"
+                                 data-imagen
+                                 loading="lazy" />
+                            <span>@ingrediente.Texto</span>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <h2 class="h4">Preparación</h2>
+            @foreach (string parrafo in Model.Receta.Instrucciones.Split(
+                ['\r', '\n'],
+                StringSplitOptions.RemoveEmptyEntries
+                    | StringSplitOptions.TrimEntries))
+            {
+                <p class="lh-lg">@parrafo</p>
+            }
+
+            <div class="d-flex flex-wrap gap-2 mt-4">
+                @if (!string.IsNullOrWhiteSpace(Model.Receta.Fuente))
+                {
+                    <a class="btn btn-outline-primary"
+                       href="@Model.Receta.Fuente"
+                       target="_blank"
+                       rel="noopener">
+                        <i class="bi bi-link-45deg me-1"></i>Fuente original
+                    </a>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Receta.UrlYoutube))
+                {
+                    <a class="btn btn-outline-danger"
+                       href="@Model.Receta.UrlYoutube"
+                       target="_blank"
+                       rel="noopener">
+                        <i class="bi bi-youtube me-1"></i>Ver en YouTube
+                    </a>
+                }
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Receta.UrlYoutubeEmbed))
+            {
+                <section class="mt-5">
+                    <h2 class="h4">Vídeo</h2>
+                    <div class="ratio ratio-16x9 rounded overflow-hidden shadow-sm">
+                        <iframe src="@Model.Receta.UrlYoutubeEmbed"
+                                title="Vídeo de @Model.Receta.Nombre"
+                                allowfullscreen
+                                loading="lazy"></iframe>
+                    </div>
+                </section>
+            }
+        </div>
+    </article>
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-cloud-slash display-1 text-body-secondary"></i>
+        <h1 class="h3 mt-3">No se ha podido cargar la receta</h1>
+        <a class="btn btn-primary" asp-page="/Index">Volver al inicio</a>
+    </div>
+}

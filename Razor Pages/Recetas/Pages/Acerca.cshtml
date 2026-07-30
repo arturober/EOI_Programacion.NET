@@ -1,0 +1,69 @@
+@page
+@model global::Recetas.Pages.AcercaModel
+@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<header class="text-center mb-5">
+    <i class="bi bi-egg-fried display-1 text-primary"></i>
+    <h1 class="display-5 fw-bold mt-3">Recetas</h1>
+    <p class="lead">
+        Una aplicación educativa para aprender Razor Pages consumiendo datos
+        reales de TheMealDB.
+    </p>
+</header>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <section class="card h-100 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4">
+                    <i class="bi bi-diagram-3 me-2"></i>Cómo está construida
+                </h2>
+                <ul class="mb-0">
+                    <li>ASP.NET Core Razor Pages y C#.</li>
+                    <li>TheMealDB API V1.</li>
+                    <li>Identity para registro, acceso y cookies seguras.</li>
+                    <li>Entity Framework Core con una base SQLite local.</li>
+                    <li>Bootstrap, Bootswatch y SweetAlert2 desde CDN.</li>
+                    <li>Cliente tipado, DTO, caché y tratamiento de errores.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-6">
+        <section class="card h-100 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4">
+                    <i class="bi bi-shield-check me-2"></i>Cuentas y privacidad
+                </h2>
+                <p>
+                    El registro no exige confirmar el correo. Identity guarda
+                    un hash de la contraseña y nunca el texto original.
+                </p>
+                <p class="mb-0">
+                    Los favoritos y el menú semanal se guardan únicamente en
+                    el SQLite de esta aplicación.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12">
+        <section class="alert alert-info">
+            <h2 class="h5 alert-heading">Sobre TheMealDB</h2>
+            <p>
+                La clave de prueba <code>1</code> está autorizada para
+                desarrollo y enseñanza. Una publicación comercial o en una
+                tienda de aplicaciones requiere revisar el plan correspondiente.
+            </p>
+            <a class="alert-link"
+               href="https://www.themealdb.com/api.php"
+               target="_blank"
+               rel="noopener">
+                Consultar la documentación oficial de TheMealDB
+            </a>
+        </section>
+    </div>
+</div>
