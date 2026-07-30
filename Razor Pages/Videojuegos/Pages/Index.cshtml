@@ -1,0 +1,150 @@
+@page
+@model global::Videojuegos.Pages.IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-md-5 mb-5 bg-primary text-white rounded-4 shadow">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="badge text-bg-light text-primary mb-3">
+                Catálogo de videojuegos con RAWG
+            </span>
+            <h1 class="display-4 fw-bold">Organiza todo lo que quieres jugar</h1>
+            <p class="lead">
+                Descubre videojuegos, consulta sus fichas y crea una biblioteca
+                privada con tu progreso y tus valoraciones.
+            </p>
+
+            @if (Model.ApiKeyConfigurada)
+            {
+                <form method="get"
+                      asp-page="/Videojuegos/Buscar"
+                      class="mt-4"
+                      role="search">
+                    <div class="input-group input-group-lg">
+                        <input class="form-control"
+                               name="texto"
+                               placeholder="Busca un videojuego"
+                               aria-label="Buscar videojuegos"
+                               minlength="2"
+                               required />
+                        <button class="btn btn-warning" type="submit">
+                            <i class="bi bi-search me-1"></i>Buscar
+                        </button>
+                    </div>
+                </form>
+            }
+        </div>
+
+        <div class="col-lg-5 text-center">
+            <i class="bi bi-controller display-1" aria-hidden="true"></i>
+            <p class="mt-3 mb-0">
+                Pendientes, jugando, completados y abandonados.
+            </p>
+        </div>
+    </div>
+</section>
+
+@if (!Model.ApiKeyConfigurada)
+{
+    <section class="card border-warning shadow-sm">
+        <div class="card-body p-4 p-md-5">
+            <div class="d-flex gap-3 align-items-start">
+                <i class="bi bi-key-fill text-warning display-6"></i>
+                <div>
+                    <h2 class="h4">Falta configurar la clave de RAWG</h2>
+                    <p>
+                        Crea una clave gratuita en
+                        <a href="https://rawg.io/apidocs"
+                           target="_blank"
+                           rel="noopener">RAWG API</a>
+                        y ejecuta este comando dentro de la carpeta del proyecto:
+                    </p>
+                    <pre class="bg-body-tertiary border rounded p-3 mb-3"><code>dotnet user-secrets set "Rawg:ApiKey" "TU_CLAVE"</code></pre>
+                    <p class="mb-0">
+                        Después, detén la aplicación y vuelve a ejecutar
+                        <code>dotnet run</code>. La clave no se guardará en Git.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+}
+else
+{
+    <section class="mb-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+                <h2 class="mb-1">Más populares</h2>
+                <p class="text-body-secondary mb-0">
+                    Los videojuegos con mayor presencia en las listas de RAWG.
+                </p>
+            </div>
+            <a class="btn btn-outline-primary"
+               asp-page="/Videojuegos/Index"
+               asp-route-tipo="populares">
+                Ver todos
+            </a>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (VideojuegoResumen videojuego in Model.Populares)
+            {
+                <div class="col">
+                    <partial name="_TarjetaVideojuego" model="videojuego" />
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+                <h2 class="mb-1">Mejor valorados</h2>
+                <p class="text-body-secondary mb-0">
+                    Selección ordenada por su puntuación de Metacritic.
+                </p>
+            </div>
+            <a class="btn btn-outline-primary"
+               asp-page="/Videojuegos/Index"
+               asp-route-tipo="mejor-valorados">
+                Ver todos
+            </a>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (VideojuegoResumen videojuego in Model.MejorValorados)
+            {
+                <div class="col">
+                    <partial name="_TarjetaVideojuego" model="videojuego" />
+                </div>
+            }
+        </div>
+    </section>
+
+    <section>
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+                <h2 class="mb-1">Próximamente</h2>
+                <p class="text-body-secondary mb-0">
+                    Lanzamientos previstos para los próximos meses.
+                </p>
+            </div>
+            <a class="btn btn-outline-primary"
+               asp-page="/Videojuegos/Index"
+               asp-route-tipo="proximamente">
+                Ver todos
+            </a>
+        </div>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (VideojuegoResumen videojuego in Model.Proximamente)
+            {
+                <div class="col">
+                    <partial name="_TarjetaVideojuego" model="videojuego" />
+                </div>
+            }
+        </div>
+    </section>
+}

@@ -1,0 +1,108 @@
+@model VideojuegoResumen
+@{
+    // Permite volver al mismo listado después de cambiar la biblioteca.
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<article class="card h-100 shadow-sm">
+    <div class="position-relative">
+        <div class="ratio ratio-16x9 bg-body-tertiary">
+            @if (!string.IsNullOrWhiteSpace(Model.ImagenUrl))
+            {
+                <img src="@Model.ImagenUrl"
+                     class="w-100 h-100 object-fit-cover"
+                     alt="Imagen de @Model.Nombre"
+                     data-imagen
+                     loading="lazy" />
+            }
+            else
+            {
+                <div class="d-flex flex-column align-items-center justify-content-center text-body-secondary">
+                    <i class="bi bi-controller display-1"></i>
+                    <span>Sin imagen</span>
+                </div>
+            }
+        </div>
+
+        @if (Model.Metacritic is not null)
+        {
+            <span class="badge text-bg-success position-absolute bottom-0 start-0 m-2">
+                Metacritic @Model.Metacritic
+            </span>
+        }
+        else if (Model.Puntuacion is not null)
+        {
+            <span class="badge text-bg-warning position-absolute bottom-0 start-0 m-2">
+                <i class="bi bi-star-fill me-1"></i>
+                @Model.Puntuacion.Value.ToString("0.0")
+            </span>
+        }
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <form method="post"
+                  asp-page="/Biblioteca/Accion"
+                  class="position-absolute top-0 end-0 m-2 z-3"
+                  data-confirmar-quitar="@(Model.EstaEnBiblioteca ? "true" : null)">
+                <input type="hidden" name="videojuegoId" value="@Model.Id" />
+                <input type="hidden"
+                       name="accion"
+                       value="@(Model.EstaEnBiblioteca ? "quitar" : "agregar")" />
+                <input type="hidden" name="returnUrl" value="@retorno" />
+
+                <button class="btn @(Model.EstaEnBiblioteca ? "btn-danger" : "btn-light") rounded-circle shadow"
+                        type="submit"
+                        title="@(Model.EstaEnBiblioteca ? "Quitar de mi biblioteca" : "Añadir a mi biblioteca")"
+                        aria-label="@(Model.EstaEnBiblioteca ? "Quitar de mi biblioteca" : "Añadir a mi biblioteca")">
+                    <i class="bi @(Model.EstaEnBiblioteca ? "bi-heart-fill" : "bi-heart")"></i>
+                </button>
+            </form>
+        }
+        else
+        {
+            <a class="btn btn-light rounded-circle shadow position-absolute top-0 end-0 m-2 z-3"
+               asp-page="/Cuenta/Login"
+               asp-route-returnUrl="@retorno"
+               title="Inicia sesión para guardarlo"
+               aria-label="Inicia sesión para guardarlo">
+                <i class="bi bi-heart"></i>
+            </a>
+        }
+    </div>
+
+    <div class="card-body d-flex flex-column">
+        <h2 class="h5 card-title">
+            <a class="link-body-emphasis text-decoration-none"
+               asp-page="/Videojuegos/Detalles"
+               asp-route-id="@Model.Id">
+                @Model.Nombre
+            </a>
+        </h2>
+
+        <p class="small mb-1">@Model.GenerosTexto</p>
+        <p class="text-body-secondary small mb-2">
+            <i class="bi bi-calendar3 me-1"></i>@Model.FechaTexto
+        </p>
+        <p class="text-body-secondary small">
+            @Model.PlataformasTexto
+        </p>
+
+        <div class="d-flex gap-2 mt-auto">
+            <a class="btn btn-outline-primary flex-grow-1"
+               asp-page="/Videojuegos/Detalles"
+               asp-route-id="@Model.Id">
+                Ver ficha
+            </a>
+            <a class="btn btn-outline-secondary"
+               href="@Model.UrlRawg"
+               target="_blank"
+               rel="noopener"
+               title="Ver en RAWG"
+               aria-label="Ver @Model.Nombre en RAWG">
+                <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+        </div>
+    </div>
+</article>

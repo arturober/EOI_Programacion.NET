@@ -1,0 +1,79 @@
+@page
+@model global::Videojuegos.Pages.Videojuegos.BuscarModel
+@{
+    ViewData["Title"] = "Buscar videojuegos";
+
+    // Se prepara el modelo fuera de la etiqueta para que Razor lo interprete bien.
+    PaginacionVista paginacion = new()
+    {
+        PaginaActual = Model.Resultado.Pagina,
+        TotalPaginas = Model.Resultado.TotalPaginas,
+        PaginaRazor = "/Videojuegos/Buscar",
+        ValoresRuta = new()
+        {
+            ["texto"] = Model.Texto
+        }
+    };
+}
+
+<header class="mb-4">
+    <h1>Buscar videojuegos</h1>
+
+    <form method="get" class="mt-3" role="search">
+        <div class="input-group input-group-lg">
+            <input class="form-control"
+                   name="texto"
+                   value="@Model.Texto"
+                   placeholder="Nombre del videojuego"
+                   aria-label="Texto que se desea buscar"
+                   minlength="2"
+                   autofocus
+                   required />
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-search me-1"></i>Buscar
+            </button>
+        </div>
+    </form>
+</header>
+
+@if (Model.Texto.Length >= 2)
+{
+    <p class="text-body-secondary">
+        @Model.Resultado.TotalResultados.ToString("N0") resultados para
+        <strong>«@Model.Texto»</strong>.
+    </p>
+
+    @if (Model.Resultado.Resultados.Count > 0)
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (VideojuegoResumen videojuego in Model.Resultado.Resultados)
+            {
+                <div class="col">
+                    <partial name="_TarjetaVideojuego" model="videojuego" />
+                </div>
+            }
+        </div>
+
+        <partial name="_Paginacion" model="paginacion" />
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-emoji-frown display-1 text-body-secondary"></i>
+            <h2 class="h4 mt-3">No se han encontrado coincidencias</h2>
+            <p class="text-body-secondary">
+                Comprueba el nombre o prueba con menos palabras.
+            </p>
+        </div>
+    }
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-controller display-1 text-body-secondary"></i>
+        <h2 class="h4 mt-3">¿A qué quieres jugar?</h2>
+        <p class="text-body-secondary">
+            Escribe al menos dos caracteres para empezar.
+        </p>
+    </div>
+}

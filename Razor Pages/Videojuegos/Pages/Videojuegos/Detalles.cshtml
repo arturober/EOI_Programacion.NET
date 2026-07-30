@@ -1,0 +1,252 @@
+@page "/videojuego/{id:int}"
+@model global::Videojuegos.Pages.Videojuegos.DetallesModel
+@{
+    ViewData["Title"] = string.IsNullOrWhiteSpace(Model.Videojuego.Nombre)
+        ? "Ficha del videojuego"
+        : Model.Videojuego.Nombre;
+
+    // ViewContext da acceso explícito a la petición HTTP de esta página.
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<nav aria-label="Migas de pan">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Index">Inicio</a></li>
+        <li class="breadcrumb-item">
+            <a asp-page="/Videojuegos/Index"
+               asp-route-tipo="populares">Videojuegos</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            @Model.Videojuego.Nombre
+        </li>
+    </ol>
+</nav>
+
+@if (Model.Videojuego.Id > 0)
+{
+    <article>
+        <div class="card overflow-hidden shadow-sm mb-4">
+            <div class="ratio ratio-21x9 bg-body-tertiary">
+                @if (!string.IsNullOrWhiteSpace(Model.Videojuego.ImagenUrl))
+                {
+                    <img src="@Model.Videojuego.ImagenUrl"
+                         class="w-100 h-100 object-fit-cover"
+                         alt="Imagen de @Model.Videojuego.Nombre"
+                         data-imagen />
+                }
+                else
+                {
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="bi bi-controller display-1 text-body-secondary"></i>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold">@Model.Videojuego.Nombre</h1>
+
+                <div class="d-flex flex-wrap gap-2 my-3">
+                    <span class="badge text-bg-secondary fs-6">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        @Model.Videojuego.FechaTexto
+                    </span>
+
+                    @if (Model.Videojuego.Metacritic is not null)
+                    {
+                        <span class="badge text-bg-success fs-6">
+                            Metacritic @Model.Videojuego.Metacritic
+                        </span>
+                    }
+
+                    @if (Model.Videojuego.Puntuacion is not null)
+                    {
+                        <span class="badge text-bg-warning fs-6">
+                            <i class="bi bi-star-fill me-1"></i>
+                            @Model.Videojuego.Puntuacion.Value.ToString("0.0")
+                            (@Model.Videojuego.NumeroValoraciones.ToString("N0"))
+                        </span>
+                    }
+
+                    @if (Model.Videojuego.TiempoJuego > 0)
+                    {
+                        <span class="badge text-bg-info fs-6">
+                            <i class="bi bi-clock me-1"></i>
+                            @Model.Videojuego.TiempoJuego h
+                        </span>
+                    }
+                </div>
+
+                <h2 class="h4 mt-4">Descripción</h2>
+                @if (!string.IsNullOrWhiteSpace(Model.Videojuego.Descripcion))
+                {
+                    <p class="lh-lg">@Model.Videojuego.Descripcion</p>
+                }
+                else
+                {
+                    <p class="text-body-secondary">
+                        RAWG todavía no dispone de una descripción para este
+                        videojuego.
+                    </p>
+                }
+
+                @if (Model.Videojuego.Capturas.Count > 0)
+                {
+                    <section class="mt-5">
+                        <h2 class="h4">Capturas de pantalla</h2>
+
+                        <div id="carruselCapturas"
+                             class="carousel slide rounded overflow-hidden shadow-sm"
+                             data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @for (int indice = 0;
+                                      indice < Model.Videojuego.Capturas.Count;
+                                      indice++)
+                                {
+                                    <div class="carousel-item @(indice == 0 ? "active" : "")">
+                                        <div class="ratio ratio-16x9 bg-dark">
+                                            <img src="@Model.Videojuego.Capturas[indice]"
+                                                 class="w-100 h-100 object-fit-contain"
+                                                 alt="Captura @(indice + 1) de @Model.Videojuego.Nombre"
+                                                 data-imagen
+                                                 loading="lazy" />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            @if (Model.Videojuego.Capturas.Count > 1)
+                            {
+                                <button class="carousel-control-prev"
+                                        type="button"
+                                        data-bs-target="#carruselCapturas"
+                                        data-bs-slide="prev"
+                                        aria-label="Captura anterior">
+                                    <span class="carousel-control-prev-icon bg-dark rounded-circle p-3"
+                                          aria-hidden="true"></span>
+                                </button>
+                                <button class="carousel-control-next"
+                                        type="button"
+                                        data-bs-target="#carruselCapturas"
+                                        data-bs-slide="next"
+                                        aria-label="Captura siguiente">
+                                    <span class="carousel-control-next-icon bg-dark rounded-circle p-3"
+                                          aria-hidden="true"></span>
+                                </button>
+                            }
+                        </div>
+                    </section>
+                }
+            </div>
+
+            <aside class="col-lg-4">
+                <section class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h2 class="h5 card-title">Mi biblioteca</h2>
+
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <form method="post"
+                                  asp-page="/Biblioteca/Accion"
+                                  data-confirmar-quitar="@(Model.Videojuego.EstaEnBiblioteca ? "true" : null)">
+                                <input type="hidden"
+                                       name="videojuegoId"
+                                       value="@Model.Videojuego.Id" />
+                                <input type="hidden"
+                                       name="accion"
+                                       value="@(Model.Videojuego.EstaEnBiblioteca ? "quitar" : "agregar")" />
+                                <input type="hidden"
+                                       name="returnUrl"
+                                       value="@retorno" />
+
+                                <button class="btn @(Model.Videojuego.EstaEnBiblioteca ? "btn-danger" : "btn-primary") w-100"
+                                        type="submit">
+                                    <i class="bi @(Model.Videojuego.EstaEnBiblioteca ? "bi-heart-fill" : "bi-heart") me-1"></i>
+                                    @(Model.Videojuego.EstaEnBiblioteca
+                                        ? "Quitar de mi biblioteca"
+                                        : "Añadir a mi biblioteca")
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary w-100"
+                               asp-page="/Cuenta/Login"
+                               asp-route-returnUrl="@retorno">
+                                Inicia sesión para guardarlo
+                            </a>
+                        }
+                    </div>
+                </section>
+
+                <section class="card shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5 card-title">Información</h2>
+                        <dl class="mb-0">
+                            <dt>Géneros</dt>
+                            <dd>@Model.Videojuego.GenerosTexto</dd>
+
+                            <dt>Plataformas</dt>
+                            <dd>@Model.Videojuego.PlataformasTexto</dd>
+
+                            <dt>Desarrolladores</dt>
+                            <dd>
+                                @(Model.Videojuego.Desarrolladores.Count > 0
+                                    ? string.Join(", ", Model.Videojuego.Desarrolladores)
+                                    : "No indicados")
+                            </dd>
+
+                            <dt>Editores</dt>
+                            <dd>
+                                @(Model.Videojuego.Editores.Count > 0
+                                    ? string.Join(", ", Model.Videojuego.Editores)
+                                    : "No indicados")
+                            </dd>
+
+                            <dt>Clasificación</dt>
+                            <dd>@Model.Videojuego.ClasificacionEdad</dd>
+
+                            <dt>Tiendas</dt>
+                            <dd>
+                                @(Model.Videojuego.Tiendas.Count > 0
+                                    ? string.Join(", ", Model.Videojuego.Tiendas)
+                                    : "No indicadas")
+                            </dd>
+                        </dl>
+
+                        <div class="d-grid gap-2 mt-3">
+                            <a class="btn btn-outline-primary"
+                               href="@Model.Videojuego.UrlRawg"
+                               target="_blank"
+                               rel="noopener">
+                                <i class="bi bi-box-arrow-up-right me-1"></i>
+                                Ver en RAWG
+                            </a>
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Videojuego.SitioWeb))
+                            {
+                                <a class="btn btn-outline-secondary"
+                                   href="@Model.Videojuego.SitioWeb"
+                                   target="_blank"
+                                   rel="noopener">
+                                    Sitio web oficial
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </article>
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-cloud-slash display-1 text-body-secondary"></i>
+        <h1 class="h3 mt-3">No se ha podido cargar la ficha</h1>
+        <a class="btn btn-primary" asp-page="/Index">Volver al inicio</a>
+    </div>
+}

@@ -1,0 +1,60 @@
+@page "/videojuegos/{tipo?}"
+@model global::Videojuegos.Pages.Videojuegos.IndexModel
+@{
+    ViewData["Title"] = Model.Tipo.Titulo();
+
+    // Se prepara el modelo fuera de la etiqueta para que Razor lo interprete bien.
+    PaginacionVista paginacion = new()
+    {
+        PaginaActual = Model.Resultado.Pagina,
+        TotalPaginas = Model.Resultado.TotalPaginas,
+        PaginaRazor = "/Videojuegos/Index",
+        ValoresRuta = new()
+        {
+            ["tipo"] = Model.Tipo.ParaUrl()
+        }
+    };
+}
+
+<header class="mb-4">
+    <nav aria-label="Migas de pan">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-page="/Index">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                @Model.Tipo.Titulo()
+            </li>
+        </ol>
+    </nav>
+
+    <h1>@Model.Tipo.Titulo()</h1>
+    <p class="text-body-secondary">
+        @Model.Resultado.TotalResultados.ToString("N0") resultados encontrados.
+    </p>
+</header>
+
+@if (Model.Resultado.Resultados.Count > 0)
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (VideojuegoResumen videojuego in Model.Resultado.Resultados)
+        {
+            <div class="col">
+                <partial name="_TarjetaVideojuego" model="videojuego" />
+            </div>
+        }
+    </div>
+
+    <partial name="_Paginacion" model="paginacion" />
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-search display-1 text-body-secondary"></i>
+        <h2 class="h4 mt-3">No hay videojuegos que mostrar</h2>
+        <a class="btn btn-primary mt-2" asp-page="/Index">Volver al inicio</a>
+    </div>
+}
+
+<p class="text-center text-body-secondary small mt-4">
+    Información proporcionada por
+    <a href="https://rawg.io/" target="_blank" rel="noopener">RAWG</a>.
+</p>

@@ -1,0 +1,71 @@
+@page
+@model global::Videojuegos.Pages.AcercaModel
+@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<header class="text-center mb-5">
+    <i class="bi bi-controller display-1 text-primary"></i>
+    <h1 class="display-5 fw-bold mt-3">Videojuegos</h1>
+    <p class="lead">
+        Una aplicación educativa para aprender Razor Pages consumiendo datos
+        reales de una API externa.
+    </p>
+</header>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <section class="card h-100 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4">
+                    <i class="bi bi-diagram-3 me-2"></i>Cómo está construida
+                </h2>
+                <ul class="mb-0">
+                    <li>ASP.NET Core Razor Pages y C#.</li>
+                    <li>RAWG Video Games Database API.</li>
+                    <li>Identity para registro, acceso y cookies seguras.</li>
+                    <li>Entity Framework Core con una base SQLite local.</li>
+                    <li>Bootstrap, Bootswatch y SweetAlert2 desde CDN.</li>
+                    <li>Cliente tipado, DTO, caché y tratamiento de errores.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-6">
+        <section class="card h-100 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4">
+                    <i class="bi bi-shield-check me-2"></i>Cuentas y privacidad
+                </h2>
+                <p>
+                    El registro no exige confirmar el correo. Identity guarda
+                    un hash de la contraseña: nunca almacena la contraseña
+                    original.
+                </p>
+                <p class="mb-0">
+                    La biblioteca, el progreso, las valoraciones y los
+                    comentarios se guardan únicamente en el SQLite de esta
+                    aplicación.
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-12">
+        <section class="alert alert-info">
+            <h2 class="h5 alert-heading">Sobre RAWG</h2>
+            <p>
+                RAWG exige una clave para consultar su API y atribución mediante
+                enlaces activos. La aplicación añade la clave únicamente desde
+                el servidor y mantiene el enlace de atribución en sus páginas.
+            </p>
+            <a class="alert-link"
+               href="https://rawg.io/apidocs"
+               target="_blank"
+               rel="noopener">
+                Consultar la documentación y las condiciones de RAWG
+            </a>
+        </section>
+    </div>
+</div>

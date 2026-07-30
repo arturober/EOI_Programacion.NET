@@ -1,0 +1,270 @@
+@page
+@model global::Videojuegos.Pages.Biblioteca.IndexModel
+@{
+    ViewData["Title"] = "Mi biblioteca";
+
+    // La URL local permite volver aquí después de modificar la colección.
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<header class="mb-4">
+    <h1>
+        <i class="bi bi-collection-play-fill text-primary me-2"></i>
+        Mi biblioteca
+    </h1>
+    <p class="text-body-secondary">
+        Organiza tu colección, progreso y valoraciones personales.
+    </p>
+</header>
+
+<div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+    @foreach (EstadoVideojuego estado in Enum.GetValues<EstadoVideojuego>())
+    {
+        <div class="col">
+            <a class="card h-100 text-decoration-none @(Model.Filtro == estado.ToString() ? "border-primary border-2" : "")"
+               asp-page="/Biblioteca/Index"
+               asp-route-filtro="@estado.ToString().ToLowerInvariant()"
+               asp-route-orden="@Model.Orden">
+                <div class="card-body text-center">
+                    <span class="badge text-bg-@estado.ColorBootstrap() mb-2">
+                        @estado.Titulo()
+                    </span>
+                    <div class="display-6 text-body">@Model.Contar(estado)</div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <a class="btn @(Model.Filtro == "todos" ? "btn-primary" : "btn-outline-primary")"
+       asp-page="/Biblioteca/Index"
+       asp-route-orden="@Model.Orden">
+        Todos (@Model.Todos.Count)
+    </a>
+
+    @if (Model.Todos.Count > 1)
+    {
+        <form method="get" class="d-flex align-items-center gap-2">
+            @if (Model.Filtro != "todos")
+            {
+                <input type="hidden"
+                       name="filtro"
+                       value="@Model.Filtro.ToLowerInvariant()" />
+            }
+
+            <label for="orden" class="form-label mb-0">Ordenar</label>
+            <select id="orden"
+                    name="orden"
+                    class="form-select"
+                    onchange="this.form.submit()">
+                <option value="recientes"
+                        selected="@(Model.Orden == "recientes" ? "selected" : null)">
+                    Actividad reciente
+                </option>
+                <option value="titulo"
+                        selected="@(Model.Orden == "titulo" ? "selected" : null)">
+                    Título
+                </option>
+                <option value="lanzamiento"
+                        selected="@(Model.Orden == "lanzamiento" ? "selected" : null)">
+                    Lanzamiento
+                </option>
+                <option value="puntuacion"
+                        selected="@(Model.Orden == "puntuacion" ? "selected" : null)">
+                    Mi puntuación
+                </option>
+            </select>
+        </form>
+    }
+</div>
+
+@if (Model.Elementos.Count > 0)
+{
+    <div class="row row-cols-1 row-cols-lg-2 g-4">
+        @foreach (VideojuegoUsuario elemento in Model.Elementos)
+        {
+            <div class="col">
+                <article class="card h-100 shadow-sm">
+                    <div class="row g-0 h-100">
+                        <div class="col-sm-5">
+                            <div class="ratio ratio-16x9 h-100 bg-body-tertiary">
+                                @if (!string.IsNullOrWhiteSpace(elemento.Videojuego.ImagenUrl))
+                                {
+                                    <img src="@elemento.Videojuego.ImagenUrl"
+                                         class="w-100 h-100 object-fit-cover"
+                                         alt="Imagen de @elemento.Videojuego.Nombre"
+                                         data-imagen
+                                         loading="lazy" />
+                                }
+                                else
+                                {
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-controller display-1 text-body-secondary"></i>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-sm-7">
+                            <div class="card-body d-flex flex-column h-100">
+                                <div class="d-flex justify-content-between gap-2">
+                                    <h2 class="h5 card-title">
+                                        <a class="link-body-emphasis text-decoration-none"
+                                           asp-page="/Videojuegos/Detalles"
+                                           asp-route-id="@elemento.VideojuegoId">
+                                            @elemento.Videojuego.Nombre
+                                        </a>
+                                    </h2>
+                                    <span class="badge text-bg-@elemento.Estado.ColorBootstrap() align-self-start">
+                                        @elemento.Estado.Titulo()
+                                    </span>
+                                </div>
+
+                                <p class="small text-body-secondary">
+                                    @if (elemento.Videojuego.FechaLanzamiento is not null)
+                                    {
+                                        <span>
+                                            @elemento.Videojuego.FechaLanzamiento.Value.ToString("dd/MM/yyyy")
+                                        </span>
+                                    }
+                                    @if (elemento.PuntuacionPersonal is not null)
+                                    {
+                                        <span>
+                                            · Mi nota: @elemento.PuntuacionPersonal/10
+                                        </span>
+                                    }
+                                </p>
+
+                                @if (!string.IsNullOrWhiteSpace(elemento.Comentario))
+                                {
+                                    <p class="small">@elemento.Comentario</p>
+                                }
+
+                                <details class="mt-auto">
+                                    <summary class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-pencil me-1"></i>Editar
+                                    </summary>
+
+                                    <form method="post"
+                                          asp-page="/Biblioteca/Accion"
+                                          class="border rounded p-3 mt-2">
+                                        <input type="hidden"
+                                               name="videojuegoId"
+                                               value="@elemento.VideojuegoId" />
+                                        <input type="hidden"
+                                               name="accion"
+                                               value="actualizar" />
+                                        <input type="hidden"
+                                               name="returnUrl"
+                                               value="@retorno" />
+
+                                        <div class="mb-2">
+                                            <label class="form-label"
+                                                   for="estado-@elemento.VideojuegoId">
+                                                Estado
+                                            </label>
+                                            <select class="form-select form-select-sm"
+                                                    id="estado-@elemento.VideojuegoId"
+                                                    name="estado">
+                                                @foreach (EstadoVideojuego estado in Enum.GetValues<EstadoVideojuego>())
+                                                {
+                                                    <option value="@estado"
+                                                            selected="@(estado == elemento.Estado ? "selected" : null)">
+                                                        @estado.Titulo()
+                                                    </option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label class="form-label"
+                                                   for="puntuacion-@elemento.VideojuegoId">
+                                                Mi puntuación
+                                            </label>
+                                            <select class="form-select form-select-sm"
+                                                    id="puntuacion-@elemento.VideojuegoId"
+                                                    name="puntuacion">
+                                                <option value="">Sin puntuación</option>
+                                                @for (int nota = 1; nota <= 10; nota++)
+                                                {
+                                                    <option value="@nota"
+                                                            selected="@(nota == elemento.PuntuacionPersonal ? "selected" : null)">
+                                                        @nota
+                                                    </option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label"
+                                                   for="comentario-@elemento.VideojuegoId">
+                                                Comentario
+                                            </label>
+                                            <textarea class="form-control form-control-sm"
+                                                      id="comentario-@elemento.VideojuegoId"
+                                                      name="comentario"
+                                                      maxlength="500"
+                                                      rows="2">@elemento.Comentario</textarea>
+                                        </div>
+
+                                        <button class="btn btn-primary btn-sm w-100"
+                                                type="submit">
+                                            Guardar cambios
+                                        </button>
+                                    </form>
+                                </details>
+
+                                <form method="post"
+                                      asp-page="/Biblioteca/Accion"
+                                      class="mt-2"
+                                      data-confirmar-quitar="true">
+                                    <input type="hidden"
+                                           name="videojuegoId"
+                                           value="@elemento.VideojuegoId" />
+                                    <input type="hidden" name="accion" value="quitar" />
+                                    <input type="hidden"
+                                           name="returnUrl"
+                                           value="@retorno" />
+                                    <button class="btn btn-outline-danger btn-sm w-100"
+                                            type="submit">
+                                        <i class="bi bi-trash me-1"></i>Quitar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}
+else if (Model.Todos.Count > 0)
+{
+    <div class="text-center py-5">
+        <i class="bi bi-funnel display-1 text-body-secondary"></i>
+        <h2 class="h4 mt-3">No hay videojuegos con este estado</h2>
+        <a class="btn btn-primary" asp-page="/Biblioteca/Index">
+            Ver toda mi biblioteca
+        </a>
+    </div>
+}
+else
+{
+    <div class="card border-0 bg-body-tertiary">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-controller display-1 text-body-secondary"></i>
+            <h2 class="h4 mt-3">Tu biblioteca está vacía</h2>
+            <p class="text-body-secondary">
+                Pulsa el corazón de cualquier videojuego para guardarlo.
+            </p>
+            <a class="btn btn-primary"
+               asp-page="/Videojuegos/Index"
+               asp-route-tipo="populares">
+                Explorar videojuegos
+            </a>
+        </div>
+    </div>
+}
