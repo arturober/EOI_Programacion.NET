@@ -1,0 +1,16 @@
+bin/
+obj/
+
+Data/*.db
+Data/*.db-shm
+Data/*.db-wal
+
+appsettings.Local.json
+.env
+
+.vs/
+.vscode/
+.idea/
+
+*.user
+*.suo

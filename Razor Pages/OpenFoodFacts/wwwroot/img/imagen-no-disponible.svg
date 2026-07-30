@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="titulo descripcion">
+  <title id="titulo">Imagen de producto no disponible</title>
+  <desc id="descripcion">Ilustración de una bolsa de la compra</desc>
+  <rect width="800" height="600" fill="#f1f3f5"/>
+  <path d="M230 230h340l-35 260H265z" fill="#ffffff" stroke="#6c757d" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M315 240v-35c0-55 38-95 85-95s85 40 85 95v35" fill="none" stroke="#6c757d" stroke-width="18" stroke-linecap="round"/>
+  <path d="M335 365c40 45 90 45 130 0" fill="none" stroke="#adb5bd" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="330" cy="315" r="12" fill="#adb5bd"/>
+  <circle cx="470" cy="315" r="12" fill="#adb5bd"/>
+</svg>

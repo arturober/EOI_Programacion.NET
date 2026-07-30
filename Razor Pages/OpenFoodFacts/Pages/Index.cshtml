@@ -1,0 +1,119 @@
+@page
+@model global::OpenFoodFacts.Pages.IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-md-5 mb-5 bg-success text-white rounded-4 shadow">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="badge text-bg-light text-success mb-3">
+                Información abierta sobre alimentos
+            </span>
+            <h1 class="display-4 fw-bold">¿Qué contiene este producto?</h1>
+            <p class="lead">
+                Busca por nombre o código de barras, consulta sus ingredientes
+                y compara su información nutricional.
+            </p>
+
+            <form method="get"
+                  asp-page="/Productos/Buscar"
+                  class="mt-4"
+                  role="search">
+                <div class="input-group input-group-lg">
+                    <input class="form-control"
+                           name="texto"
+                           placeholder="Ejemplo: chocolate o 3017624010701"
+                           aria-label="Nombre o código de barras"
+                           minlength="2"
+                           required />
+                    <button class="btn btn-warning" type="submit">
+                        <i class="bi bi-search me-1"></i>Buscar
+                    </button>
+                </div>
+            </form>
+
+            <p class="small mt-2 mb-0 opacity-75">
+                La búsqueda se envía al pulsar el botón para respetar los
+                límites del servicio.
+            </p>
+        </div>
+
+        <div class="col-lg-5 text-center">
+            <i class="bi bi-upc-scan display-1" aria-hidden="true"></i>
+            <p class="mt-3 mb-0">
+                Nutri-Score, NOVA, ingredientes, alérgenos y nutrientes.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="mb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <div>
+            <h2 class="mb-1">Explora por categorías</h2>
+            <p class="text-body-secondary mb-0">
+                Accesos rápidos a algunos grupos habituales.
+            </p>
+        </div>
+        <a class="btn btn-outline-success"
+           asp-page="/Productos/Categorias">
+            Ver todas
+        </a>
+    </div>
+
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-6 g-3">
+        @foreach (CategoriaProducto categoria in CatalogoCategorias.Todas.Take(6))
+        {
+            <div class="col">
+                <a class="card h-100 text-decoration-none shadow-sm"
+                   asp-page="/Productos/Listado"
+                   asp-route-tipo="categoria"
+                   asp-route-valor="@categoria.Filtro">
+                    <div class="card-body text-center">
+                        <i class="bi @categoria.Icono display-6 text-success"></i>
+                        <h3 class="h6 text-body mt-2 mb-0">
+                            @categoria.Nombre
+                        </h3>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="mb-5">
+    <div class="mb-3">
+        <h2 class="mb-1">Productos populares en España</h2>
+        <p class="text-body-secondary mb-0">
+            Una selección ordenada según las consultas registradas en
+            Open Food Facts.
+        </p>
+    </div>
+
+    @if (Model.Destacados.Count > 0)
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (ProductoResumen producto in Model.Destacados)
+            {
+                <div class="col">
+                    <partial name="_TarjetaProducto" model="producto" />
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No se han podido cargar productos destacados en este momento.
+            Puedes utilizar el buscador o explorar las categorías.
+        </div>
+    }
+</section>
+
+<aside class="alert alert-warning">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    La información procede de una base de datos colaborativa y puede estar
+    incompleta. No sustituye el etiquetado del envase ni el consejo de un
+    profesional sanitario.
+</aside>

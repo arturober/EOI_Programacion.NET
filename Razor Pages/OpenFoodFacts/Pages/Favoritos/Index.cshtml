@@ -1,0 +1,79 @@
+@page
+@model global::OpenFoodFacts.Pages.Favoritos.IndexModel
+@{
+    ViewData["Title"] = "Mis favoritos";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+    <header>
+        <h1>
+            <i class="bi bi-heart-fill text-danger me-2"></i>
+            Mis productos favoritos
+        </h1>
+        <p class="text-body-secondary mb-0">
+            Tu colección guardada en SQLite.
+        </p>
+    </header>
+
+    <div class="d-flex flex-wrap gap-2">
+        @if (Model.Productos.Count >= 2)
+        {
+            <a class="btn btn-success"
+               asp-page="/Comparar/Index">
+                <i class="bi bi-bar-chart me-1"></i>Comparar
+            </a>
+        }
+
+        @if (Model.Productos.Count > 1)
+        {
+            <form method="get" class="d-flex align-items-center gap-2">
+                <label for="orden" class="form-label mb-0">Ordenar</label>
+                <select id="orden"
+                        name="orden"
+                        class="form-select"
+                        onchange="this.form.submit()">
+                    @foreach ((string valor, string texto) opcion in new[]
+                    {
+                        ("recientes", "Más recientes"),
+                        ("titulo", "Nombre"),
+                        ("marca", "Marca"),
+                        ("nutriscore", "Nutri-Score")
+                    })
+                    {
+                        <option value="@opcion.valor"
+                                selected="@(Model.Orden == opcion.valor ? "selected" : null)">
+                            @opcion.texto
+                        </option>
+                    }
+                </select>
+            </form>
+        }
+    </div>
+</div>
+
+@if (Model.Productos.Count > 0)
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (ProductoResumen producto in Model.Productos)
+        {
+            <div class="col">
+                <partial name="_TarjetaProducto" model="producto" />
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="card border-0 bg-body-tertiary">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-heart display-1 text-body-secondary"></i>
+            <h2 class="h4 mt-3">Todavía no tienes productos favoritos</h2>
+            <p class="text-body-secondary">
+                Pulsa el corazón de cualquier tarjeta para guardarlo.
+            </p>
+            <a class="btn btn-success" asp-page="/Productos/Categorias">
+                Explorar productos
+            </a>
+        </div>
+    </div>
+}

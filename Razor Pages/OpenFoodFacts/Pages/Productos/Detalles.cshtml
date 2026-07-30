@@ -1,0 +1,331 @@
+@page "/producto/{codigo}"
+@model global::OpenFoodFacts.Pages.Productos.DetallesModel
+@{
+    ViewData["Title"] = string.IsNullOrWhiteSpace(Model.Producto.Nombre)
+        ? "Ficha del producto"
+        : Model.Producto.Nombre;
+
+    // ViewContext da acceso explícito a la petición HTTP de esta página.
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<nav aria-label="Migas de pan">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Index">Inicio</a></li>
+        <li class="breadcrumb-item">
+            <a asp-page="/Productos/Categorias">Productos</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+            @Model.Producto.Nombre
+        </li>
+    </ol>
+</nav>
+
+@if (!string.IsNullOrWhiteSpace(Model.Producto.Codigo))
+{
+    <article class="row g-5">
+        <div class="col-lg-5">
+            <div class="ratio ratio-4x3 bg-body-tertiary rounded shadow overflow-hidden">
+                @if (!string.IsNullOrWhiteSpace(Model.Producto.ImagenUrl))
+                {
+                    <img src="@Model.Producto.ImagenUrl"
+                         class="w-100 h-100 object-fit-contain p-3"
+                         alt="Envase de @Model.Producto.Nombre"
+                         data-imagen />
+                }
+                else
+                {
+                    <div class="d-flex align-items-center justify-content-center">
+                        <i class="bi bi-basket2 display-1 text-body-secondary"></i>
+                    </div>
+                }
+            </div>
+
+            <section class="card shadow-sm mt-4">
+                <div class="card-body">
+                    <h2 class="h5">Mi colección</h2>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <form method="post"
+                              asp-page="/Favoritos/Accion"
+                              data-confirmar-quitar="@(Model.Producto.EsFavorito ? "true" : null)">
+                            <input type="hidden"
+                                   name="codigo"
+                                   value="@Model.Producto.Codigo" />
+                            <input type="hidden"
+                                   name="accion"
+                                   value="@(Model.Producto.EsFavorito ? "quitar" : "agregar")" />
+                            <input type="hidden"
+                                   name="returnUrl"
+                                   value="@retorno" />
+
+                            <button class="btn @(Model.Producto.EsFavorito ? "btn-danger" : "btn-success") w-100"
+                                    type="submit">
+                                <i class="bi @(Model.Producto.EsFavorito ? "bi-heart-fill" : "bi-heart") me-1"></i>
+                                @(Model.Producto.EsFavorito
+                                    ? "Quitar de favoritos"
+                                    : "Añadir a favoritos")
+                            </button>
+                        </form>
+
+                        @if (Model.Producto.EsFavorito)
+                        {
+                            <a class="btn btn-outline-success w-100 mt-2"
+                               asp-page="/Comparar/Index">
+                                <i class="bi bi-bar-chart me-1"></i>
+                                Comparar mis productos
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a class="btn btn-success w-100"
+                           asp-page="/Cuenta/Login"
+                           asp-route-returnUrl="@retorno">
+                            Entra para guardarlo
+                        </a>
+                    }
+                </div>
+            </section>
+
+            <a class="btn btn-outline-secondary w-100 mt-3"
+               href="https://world.openfoodfacts.org/product/@Model.Producto.Codigo"
+               target="_blank"
+               rel="noopener">
+                <i class="bi bi-box-arrow-up-right me-1"></i>
+                Ver en Open Food Facts
+            </a>
+        </div>
+
+        <div class="col-lg-7">
+            <h1 class="display-5 fw-bold">@Model.Producto.Nombre</h1>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Producto.NombreGenerico))
+            {
+                <p class="lead">@Model.Producto.NombreGenerico</p>
+            }
+
+            <p class="text-body-secondary">
+                @if (!string.IsNullOrWhiteSpace(Model.Producto.Marca))
+                {
+                    <span class="me-3">
+                        <i class="bi bi-building me-1"></i>@Model.Producto.Marca
+                    </span>
+                }
+                @if (!string.IsNullOrWhiteSpace(Model.Producto.Cantidad))
+                {
+                    <span class="me-3">
+                        <i class="bi bi-box-seam me-1"></i>@Model.Producto.Cantidad
+                    </span>
+                }
+                <span>
+                    <i class="bi bi-upc-scan me-1"></i>@Model.Producto.Codigo
+                </span>
+            </p>
+
+            <section class="row row-cols-1 row-cols-sm-3 g-3 my-4">
+                <div class="col">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <span class="badge fs-5 @Model.Producto.NutriScore.ClaseNutriScore()">
+                                @(string.IsNullOrWhiteSpace(Model.Producto.NutriScore)
+                                    ? "?"
+                                    : Model.Producto.NutriScore.ToUpperInvariant())
+                            </span>
+                            <h2 class="h6 mt-2 mb-1">Nutri-Score</h2>
+                            <p class="small text-body-secondary mb-0">
+                                Calidad nutricional
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <span class="badge fs-5 @Model.Producto.GrupoNova.ClaseNova()">
+                                @(Model.Producto.GrupoNova?.ToString() ?? "?")
+                            </span>
+                            <h2 class="h6 mt-2 mb-1">Grupo NOVA</h2>
+                            <p class="small text-body-secondary mb-0">
+                                Grado de procesamiento
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <span class="badge fs-5 @Model.Producto.GreenScore.ClaseGreenScore()">
+                                @(string.IsNullOrWhiteSpace(Model.Producto.GreenScore)
+                                    ? "?"
+                                    : Model.Producto.GreenScore.ToUpperInvariant())
+                            </span>
+                            <h2 class="h6 mt-2 mb-1">Green-Score</h2>
+                            <p class="small text-body-secondary mb-0">
+                                Impacto ambiental
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="accordion mb-4" id="ayudaPuntuaciones">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#explicacionPuntuaciones"
+                                aria-expanded="false"
+                                aria-controls="explicacionPuntuaciones">
+                            ¿Qué significan estas puntuaciones?
+                        </button>
+                    </h2>
+                    <div id="explicacionPuntuaciones"
+                         class="accordion-collapse collapse"
+                         data-bs-parent="#ayudaPuntuaciones">
+                        <div class="accordion-body">
+                            <p>
+                                <strong>Nutri-Score</strong> resume la calidad
+                                nutricional con letras de A a E.
+                            </p>
+                            <p>
+                                <strong>NOVA</strong> clasifica el grado de
+                                procesamiento desde 1 hasta 4.
+                            </p>
+                            <p class="mb-0">
+                                <strong>Green-Score</strong> resume aspectos
+                                del impacto ambiental. Un signo de interrogación
+                                significa que faltan datos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="h4">Información nutricional</h2>
+            <p class="small text-body-secondary">
+                Valores por 100 g o 100 ml, según el producto.
+            </p>
+            <div class="table-responsive mb-5">
+                <table class="table table-striped table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nutriente</th>
+                            <th scope="col" class="text-end">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (NutrienteProducto nutriente in Model.Producto.Nutrientes)
+                        {
+                            <tr>
+                                <th scope="row">@nutriente.Nombre</th>
+                                <td class="text-end">@nutriente.Texto</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 class="h4">Ingredientes</h2>
+            @if (!string.IsNullOrWhiteSpace(Model.Producto.Ingredientes))
+            {
+                <p class="lh-lg">@Model.Producto.Ingredientes</p>
+            }
+            else
+            {
+                <p class="text-body-secondary">
+                    No se ha registrado la lista de ingredientes.
+                </p>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Producto.Alergenos))
+            {
+                <div class="alert alert-danger">
+                    <strong>
+                        <i class="bi bi-exclamation-octagon me-1"></i>
+                        Alérgenos registrados:
+                    </strong>
+                    @Model.Producto.Alergenos
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Producto.Trazas))
+            {
+                <div class="alert alert-warning">
+                    <strong>Posibles trazas:</strong> @Model.Producto.Trazas
+                </div>
+            }
+
+            <section class="card mt-4">
+                <div class="card-body">
+                    <h2 class="h4">Otros datos</h2>
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Categorías</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.Producto.Categorias)
+                                ? "Sin datos"
+                                : Model.Producto.Categorias)
+                        </dd>
+
+                        <dt class="col-sm-4">Etiquetas</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.Producto.Etiquetas)
+                                ? "Sin datos"
+                                : Model.Producto.Etiquetas)
+                        </dd>
+
+                        <dt class="col-sm-4">Países de venta</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.Producto.Paises)
+                                ? "Sin datos"
+                                : Model.Producto.Paises)
+                        </dd>
+
+                        <dt class="col-sm-4">Envase</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.Producto.Envase)
+                                ? "Sin datos"
+                                : Model.Producto.Envase)
+                        </dd>
+
+                        <dt class="col-sm-4">Tamaño de ración</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.Producto.TamanoRacion)
+                                ? "Sin datos"
+                                : Model.Producto.TamanoRacion)
+                        </dd>
+
+                        <dt class="col-sm-4">Aditivos</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.Producto.Aditivos.Count > 0)
+                            {
+                                @string.Join(", ", Model.Producto.Aditivos)
+                            }
+                            else
+                            {
+                                <span>Sin datos</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </section>
+
+            <aside class="alert alert-warning mt-4 mb-0">
+                Los datos son colaborativos y pueden contener errores.
+                Comprueba siempre el envase, especialmente si tienes alergias.
+            </aside>
+        </div>
+    </article>
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-cloud-slash display-1 text-body-secondary"></i>
+        <h1 class="h3 mt-3">No se ha podido cargar el producto</h1>
+        <a class="btn btn-success" asp-page="/Index">Volver al inicio</a>
+    </div>
+}

@@ -1,0 +1,218 @@
+@page
+@model global::OpenFoodFacts.Pages.Comparar.IndexModel
+@{
+    ViewData["Title"] = "Comparar productos";
+
+    // Facilita mostrar todos los nutrientes con el mismo formato.
+    string Mostrar(double? valor, string unidad = "g") =>
+        valor.HasValue ? $"{valor.Value:0.##} {unidad}" : "—";
+}
+
+<header class="mb-4">
+    <h1>
+        <i class="bi bi-bar-chart text-success me-2"></i>
+        Comparar productos
+    </h1>
+    <p class="text-body-secondary">
+        Selecciona entre dos y cuatro favoritos para comparar sus valores por
+        100 g o 100 ml.
+    </p>
+</header>
+
+@if (Model.Favoritos.Count >= 2)
+{
+    <form method="get" class="card shadow-sm mb-5">
+        <div class="card-header">
+            <h2 class="h5 mb-0">Seleccionar favoritos</h2>
+        </div>
+        <div class="card-body">
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                @foreach (ProductoGuardado producto in Model.Favoritos)
+                {
+                    <div class="col">
+                        <label class="border rounded p-3 d-flex gap-3 align-items-center h-100">
+                            <input class="form-check-input flex-shrink-0"
+                                   type="checkbox"
+                                   name="codigos"
+                                   value="@producto.Codigo"
+                                   checked="@(Model.Seleccionados.Contains(producto.Codigo) ? "checked" : null)" />
+
+                            @if (!string.IsNullOrWhiteSpace(producto.ImagenUrl))
+                            {
+                                <img src="@producto.ImagenUrl"
+                                     width="56"
+                                     height="56"
+                                     class="object-fit-contain"
+                                     alt=""
+                                     data-imagen />
+                            }
+                            <span>
+                                <strong class="d-block">@producto.Nombre</strong>
+                                <span class="small text-body-secondary">
+                                    @producto.Marca
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                }
+            </div>
+
+            <button class="btn btn-success mt-3" type="submit">
+                <i class="bi bi-bar-chart me-1"></i>Comparar selección
+            </button>
+        </div>
+    </form>
+
+    @if (Model.Comparados.Count >= 2)
+    {
+        <section>
+            <h2 class="h3 mb-3">Resultado de la comparación</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Dato</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <th scope="col" class="text-center">
+                                    @producto.Nombre
+                                </th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Imagen</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-center">
+                                    @if (!string.IsNullOrWhiteSpace(producto.ImagenUrl))
+                                    {
+                                        <img src="@producto.ImagenUrl"
+                                             width="80"
+                                             height="80"
+                                             class="object-fit-contain"
+                                             alt="Envase de @producto.Nombre"
+                                             data-imagen />
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-image fs-2 text-body-secondary"></i>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Nutri-Score</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-center">
+                                    <span class="badge @producto.NutriScore.ClaseNutriScore()">
+                                        @producto.NutriScore.TextoNutriScore()
+                                    </span>
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Grupo NOVA</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-center">
+                                    <span class="badge @producto.GrupoNova.ClaseNova()">
+                                        @(producto.GrupoNova?.ToString() ?? "?")
+                                    </span>
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Energía</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-end">
+                                    @Mostrar(producto.EnergiaKcal100g, "kcal")
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Grasas</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-end">@Mostrar(producto.Grasas100g)</td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Grasas saturadas</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-end">
+                                    @Mostrar(producto.GrasasSaturadas100g)
+                                </td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Hidratos de carbono</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-end">@Mostrar(producto.Hidratos100g)</td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Azúcares</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-end">@Mostrar(producto.Azucares100g)</td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Fibra</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-end">@Mostrar(producto.Fibra100g)</td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Proteínas</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-end">@Mostrar(producto.Proteinas100g)</td>
+                            }
+                        </tr>
+                        <tr>
+                            <th scope="row">Sal</th>
+                            @foreach (ProductoGuardado producto in Model.Comparados)
+                            {
+                                <td class="text-end">@Mostrar(producto.Sal100g)</td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="small text-body-secondary">
+                Una cantidad menor no implica por sí sola que un producto sea
+                mejor: hay que valorar el alimento completo, la ración y la dieta.
+            </p>
+        </section>
+    }
+    else if (Model.Seleccionados.Count > 0)
+    {
+        <div class="alert alert-info">
+            Selecciona al menos dos productos válidos para compararlos.
+        </div>
+    }
+}
+else
+{
+    <div class="card border-0 bg-body-tertiary">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-bar-chart display-1 text-body-secondary"></i>
+            <h2 class="h4 mt-3">Necesitas al menos dos favoritos</h2>
+            <p class="text-body-secondary">
+                Guarda varios productos y vuelve a esta página.
+            </p>
+            <a class="btn btn-success" asp-page="/Productos/Categorias">
+                Explorar productos
+            </a>
+        </div>
+    </div>
+}

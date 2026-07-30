@@ -1,0 +1,70 @@
+@page
+@model global::OpenFoodFacts.Pages.Productos.BuscarModel
+@{
+    ViewData["Title"] = "Buscar productos";
+}
+
+<header class="mb-4">
+    <h1>Buscar productos</h1>
+    <form method="get" class="mt-3" role="search">
+        <div class="input-group input-group-lg">
+            <input class="form-control"
+                   name="texto"
+                   value="@Model.Texto"
+                   placeholder="Nombre o código de barras"
+                   aria-label="Texto que se desea buscar"
+                   minlength="2"
+                   autofocus
+                   required />
+            <button class="btn btn-success" type="submit">
+                <i class="bi bi-search me-1"></i>Buscar
+            </button>
+        </div>
+    </form>
+    <p class="form-text">
+        Puedes escribir un nombre, una marca o directamente los números del
+        código de barras.
+    </p>
+</header>
+
+@if (Model.Texto.Length >= 2)
+{
+    <p class="text-body-secondary">
+        @Model.Resultado.Total resultados para
+        <strong>«@Model.Texto»</strong>.
+    </p>
+
+    @if (Model.Resultado.Productos.Count > 0)
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (ProductoResumen producto in Model.Resultado.Productos)
+            {
+                <div class="col">
+                    <partial name="_TarjetaProducto" model="producto" />
+                </div>
+            }
+        </div>
+
+        <partial name="_Paginacion" model="Model.Paginacion" />
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-emoji-frown display-1 text-body-secondary"></i>
+            <h2 class="h4 mt-3">No se han encontrado coincidencias</h2>
+            <p class="text-body-secondary">
+                Prueba con otro nombre, una marca o el código de barras.
+            </p>
+        </div>
+    }
+}
+else
+{
+    <div class="text-center py-5">
+        <i class="bi bi-upc-scan display-1 text-body-secondary"></i>
+        <h2 class="h4 mt-3">Busca un alimento envasado</h2>
+        <p class="text-body-secondary">
+            Escribe al menos dos caracteres para comenzar.
+        </p>
+    </div>
+}
