@@ -1,0 +1,57 @@
+@page
+@model Futbol.Pages.AcercaModel
+@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <h1 class="display-6 fw-bold">Acerca del proyecto</h1>
+        <p class="lead">
+            Aplicación educativa para practicar Razor Pages consumiendo
+            una API REST real y guardando datos propios por usuario.
+        </p>
+
+        <h2 class="h4 mt-4">Qué se practica</h2>
+        <ul>
+            <li>Inyección de dependencias, HttpClient y configuración.</li>
+            <li>JSON, DTO, consultas asíncronas y tratamiento de errores.</li>
+            <li>Razor Pages, Tag Helpers y formularios protegidos.</li>
+            <li>Identity, cookies, registro e inicio de sesión.</li>
+            <li>Entity Framework Core, relaciones y SQLite.</li>
+            <li>Caché en memoria para respetar límites de una API.</li>
+        </ul>
+
+        <h2 class="h4 mt-4">Limitaciones de los datos</h2>
+        <p>
+            El plan gratuito de football-data.org incluye un conjunto
+            limitado de competiciones, resultados con retraso y diez
+            peticiones por minuto. Algunas plantillas o estadísticas
+            avanzadas pueden requerir otro plan.
+        </p>
+    </div>
+
+    <aside class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Tecnologías</h2>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge text-bg-primary">.NET 10</span>
+                    <span class="badge text-bg-primary">Razor Pages</span>
+                    <span class="badge text-bg-primary">Identity</span>
+                    <span class="badge text-bg-primary">SQLite</span>
+                    <span class="badge text-bg-primary">Bootstrap</span>
+                    <span class="badge text-bg-primary">Bootswatch</span>
+                    <span class="badge text-bg-primary">SweetAlert2</span>
+                </div>
+                <hr />
+                <a href="https://www.football-data.org/"
+                   target="_blank"
+                   rel="noopener"
+                   class="btn btn-outline-primary w-100">
+                    Visitar football-data.org
+                </a>
+            </div>
+        </div>
+    </aside>
+</div>

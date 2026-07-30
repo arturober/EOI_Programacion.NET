@@ -1,0 +1,13 @@
+@host = http://localhost:5193
+
+### Abrir el catálogo de personajes de la aplicación
+GET {{host}}/Personajes
+
+### Consultar directamente un personaje en la API externa
+GET https://rickandmortyapi.com/api/character/1
+
+### Consultar directamente los episodios de la API externa
+GET https://rickandmortyapi.com/api/episode
+
+### Consultar directamente las localizaciones de la API externa
+GET https://rickandmortyapi.com/api/location

@@ -1,0 +1,86 @@
+@page
+@model Futbol.Pages.Cuenta.RegistroModel
+@{
+    ViewData["Title"] = "Crear cuenta";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-9 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4 p-lg-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus display-3 text-primary"></i>
+                    <h1 class="h2 mt-2">Crear una cuenta</h1>
+                    <p class="text-body-secondary">
+                        No se exige confirmación por correo electrónico.
+                    </p>
+                </div>
+
+                <form method="post"
+                      asp-route-returnUrl="@Model.ReturnUrl">
+                    <div asp-validation-summary="ModelOnly"
+                         class="alert alert-danger"
+                         role="alert"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Entrada.Nombre"
+                               class="form-control"
+                               autocomplete="name"
+                               placeholder="Tu nombre" />
+                        <label asp-for="Entrada.Nombre"></label>
+                        <span asp-validation-for="Entrada.Nombre"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Entrada.Email"
+                               class="form-control"
+                               autocomplete="email"
+                               placeholder="nombre@ejemplo.com" />
+                        <label asp-for="Entrada.Email"></label>
+                        <span asp-validation-for="Entrada.Email"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Entrada.Contrasena"
+                               class="form-control"
+                               autocomplete="new-password"
+                               placeholder="Contraseña" />
+                        <label asp-for="Entrada.Contrasena"></label>
+                        <span asp-validation-for="Entrada.Contrasena"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Entrada.ConfirmacionContrasena"
+                               class="form-control"
+                               autocomplete="new-password"
+                               placeholder="Repetir contraseña" />
+                        <label asp-for="Entrada.ConfirmacionContrasena"></label>
+                        <span asp-validation-for="Entrada.ConfirmacionContrasena"
+                              class="text-danger small"></span>
+                    </div>
+
+                    <div class="alert alert-info small">
+                        Debe tener al menos 8 caracteres, una mayúscula,
+                        una minúscula y un número.
+                    </div>
+
+                    <button class="btn btn-primary btn-lg w-100"
+                            type="submit">
+                        Registrarme
+                    </button>
+                </form>
+
+                <p class="text-center mt-4 mb-0">
+                    ¿Ya tienes cuenta?
+                    <a asp-page="/Cuenta/Login"
+                       asp-route-returnUrl="@Model.ReturnUrl">
+                        Inicia sesión
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

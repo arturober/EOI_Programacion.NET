@@ -1,0 +1,89 @@
+@page
+@model RickAndMorty.Pages.Personajes.IndexModel
+@{
+    ViewData["Title"] = "Personajes";
+}
+
+<div class="mb-4">
+    <p class="text-primary fw-semibold mb-1">Catálogo</p>
+    <h1 class="display-6 fw-bold">Personajes</h1>
+    <p class="text-body-secondary">
+        Combina los filtros para encontrar variantes de cualquier universo.
+    </p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3">
+        <div class="col-md-6 col-xl-3">
+            <label asp-for="Nombre" class="form-label">Nombre</label>
+            <input asp-for="Nombre"
+                   class="form-control"
+                   placeholder="Rick, Morty..." />
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <label asp-for="Estado" class="form-label">Estado</label>
+            <select asp-for="Estado" class="form-select">
+                <option value="">Todos</option>
+                <option value="alive">Vivo</option>
+                <option value="dead">Muerto</option>
+                <option value="unknown">Desconocido</option>
+            </select>
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <label asp-for="Especie" class="form-label">Especie</label>
+            <input asp-for="Especie"
+                   class="form-control"
+                   placeholder="Human, Alien..." />
+        </div>
+        <div class="col-md-6 col-xl-3">
+            <label asp-for="Genero" class="form-label">Género</label>
+            <select asp-for="Genero" class="form-select">
+                <option value="">Todos</option>
+                <option value="female">Femenino</option>
+                <option value="male">Masculino</option>
+                <option value="genderless">Sin género</option>
+                <option value="unknown">Desconocido</option>
+            </select>
+        </div>
+        <div class="col-12 d-flex flex-wrap gap-2">
+            <button class="btn btn-primary" type="submit">
+                <i class="bi bi-search me-1"></i>Buscar
+            </button>
+            <a class="btn btn-outline-secondary"
+               asp-page="/Personajes/Index">
+                Limpiar filtros
+            </a>
+        </div>
+    </div>
+</form>
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">@Model.ErrorApi</div>
+}
+else if (Model.Resultado.Resultados.Count == 0)
+{
+    <div class="alert alert-info">
+        No hay personajes que coincidan con los filtros.
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h5 mb-0">Resultados</h2>
+        <span class="badge text-bg-secondary">
+            @Model.Resultado.Informacion.TotalResultados personajes
+        </span>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (PersonajeDto personaje in Model.Resultado.Resultados)
+        {
+            <div class="col">
+                <partial name="_TarjetaPersonaje" model="personaje" />
+            </div>
+        }
+    </div>
+
+    <partial name="_Paginacion" model="Model.Paginacion" />
+}

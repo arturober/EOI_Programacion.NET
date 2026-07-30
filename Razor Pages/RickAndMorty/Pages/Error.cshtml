@@ -1,0 +1,22 @@
+@page
+@model RickAndMorty.Pages.ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="card card-body text-center py-5 shadow-sm">
+    <i class="bi bi-exclamation-octagon display-1 text-danger"></i>
+    <h1 class="h2 mt-3">No se ha podido completar la operación</h1>
+    <p class="text-body-secondary">
+        Vuelve a intentarlo dentro de unos instantes.
+    </p>
+    @if (Model.MostrarRequestId)
+    {
+        <p class="small">
+            Identificador: <code>@Model.RequestId</code>
+        </p>
+    }
+    <div>
+        <a class="btn btn-primary" asp-page="/Index">Volver al inicio</a>
+    </div>
+</div>

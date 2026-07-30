@@ -1,0 +1,281 @@
+@page
+@model Futbol.Pages.Competiciones.DetallesModel
+@{
+    string nombre = Model.Competicion?.Nombre
+        ?? Model.Clasificacion?.Competicion?.Nombre
+        ?? Model.Goleadores?.Competicion?.Nombre
+        ?? Model.Equipos?.Competicion?.Nombre
+        ?? Model.Codigo;
+
+    ViewData["Title"] = nombre;
+
+    // Las clasificaciones TOTAL son las tablas generales visibles al usuario.
+    IReadOnlyList<ClasificacionDto> tablas =
+        Model.Clasificacion?.Clasificaciones
+            .Where(elemento => elemento.Tipo == "TOTAL")
+            .ToList()
+        ?? new List<ClasificacionDto>();
+}
+
+<div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+    @if (!string.IsNullOrWhiteSpace(Model.Competicion?.Emblema))
+    {
+        <img src="@Model.Competicion.Emblema"
+             data-imagen
+             style="width: 90px; height: 90px; object-fit: contain;"
+             alt="Emblema de @nombre" />
+    }
+    <div>
+        <a asp-page="/Competiciones/Index"
+           class="small text-decoration-none">
+            <i class="bi bi-arrow-left me-1"></i>Competiciones
+        </a>
+        <h1 class="display-6 fw-bold mb-1">@nombre</h1>
+        <p class="text-body-secondary mb-0">
+            @(Model.Competicion?.Area?.Nombre ?? "Competición de fútbol")
+            @if (Model.Competicion?.TemporadaActual?.JornadaActual is not null)
+            {
+                <span>
+                    · Jornada @Model.Competicion.TemporadaActual.JornadaActual
+                </span>
+            }
+        </p>
+    </div>
+</div>
+
+<ul class="nav nav-pills flex-nowrap overflow-x-auto gap-2 mb-4"
+    aria-label="Secciones de la competición">
+    <li class="nav-item">
+        <a class="nav-link @(Model.Seccion == "clasificacion" ? "active" : "")"
+           asp-page="/Competiciones/Detalles"
+           asp-route-codigo="@Model.Codigo"
+           asp-route-seccion="clasificacion">
+            <i class="bi bi-table me-1"></i>Clasificación
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Model.Seccion == "partidos" ? "active" : "")"
+           asp-page="/Competiciones/Detalles"
+           asp-route-codigo="@Model.Codigo"
+           asp-route-seccion="partidos">
+            <i class="bi bi-calendar3 me-1"></i>Partidos
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Model.Seccion == "goleadores" ? "active" : "")"
+           asp-page="/Competiciones/Detalles"
+           asp-route-codigo="@Model.Codigo"
+           asp-route-seccion="goleadores">
+            <i class="bi bi-award me-1"></i>Goleadores
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(Model.Seccion == "equipos" ? "active" : "")"
+           asp-page="/Competiciones/Detalles"
+           asp-route-codigo="@Model.Codigo"
+           asp-route-seccion="equipos">
+            <i class="bi bi-people me-1"></i>Equipos
+        </a>
+    </li>
+</ul>
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-warning" role="alert">
+        <h2 class="h5 alert-heading">
+            <i class="bi bi-info-circle me-2"></i>No se puede mostrar esta sección
+        </h2>
+        <p class="mb-0">@Model.ErrorApi</p>
+    </div>
+}
+else if (Model.Seccion == "clasificacion" && Model.Clasificacion is not null)
+{
+    @if (tablas.Count == 0)
+    {
+        <div class="alert alert-info">
+            Esta competición no publica una clasificación general.
+        </div>
+    }
+
+    @foreach (ClasificacionDto clasificacion in tablas)
+    {
+        <section class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h2 class="h5 mb-0">
+                    @(clasificacion.Grupo
+                        ?? TextoFutbol.Fase(clasificacion.Fase))
+                </h2>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">Pos.</th>
+                            <th scope="col">Equipo</th>
+                            <th scope="col" class="text-center">PJ</th>
+                            <th scope="col" class="text-center">G</th>
+                            <th scope="col" class="text-center">E</th>
+                            <th scope="col" class="text-center">P</th>
+                            <th scope="col" class="text-center">GF</th>
+                            <th scope="col" class="text-center">GC</th>
+                            <th scope="col" class="text-center">DG</th>
+                            <th scope="col" class="text-center">Pts.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (FilaClasificacionDto fila in clasificacion.Tabla)
+                        {
+                            <tr>
+                                <td class="text-center fw-semibold">
+                                    @fila.Posicion
+                                </td>
+                                <td>
+                                    <a asp-page="/Equipos/Detalles"
+                                       asp-route-id="@fila.Equipo.Id"
+                                       class="text-decoration-none text-body d-flex align-items-center gap-2">
+                                        <img src="@fila.Equipo.Escudo"
+                                             data-imagen
+                                             style="width: 30px; height: 30px; object-fit: contain;"
+                                             alt="" />
+                                        <span>
+                                            @(fila.Equipo.NombreCorto
+                                                ?? fila.Equipo.Nombre)
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="text-center">@fila.Jugados</td>
+                                <td class="text-center">@fila.Ganados</td>
+                                <td class="text-center">@fila.Empatados</td>
+                                <td class="text-center">@fila.Perdidos</td>
+                                <td class="text-center">@fila.GolesFavor</td>
+                                <td class="text-center">@fila.GolesContra</td>
+                                <td class="text-center">@fila.Diferencia</td>
+                                <td class="text-center fw-bold">@fila.Puntos</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    }
+}
+else if (Model.Seccion == "partidos")
+{
+    @if (Model.Partidos.Count == 0)
+    {
+        <div class="alert alert-info">
+            No hay partidos entre las dos semanas anteriores y los
+            próximos 45 días.
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-lg-2 g-4">
+            @foreach (PartidoDto partido in Model.Partidos)
+            {
+                <div class="col">
+                    <partial name="_Partido" model="partido" />
+                </div>
+            }
+        </div>
+    }
+}
+else if (Model.Seccion == "goleadores" && Model.Goleadores is not null)
+{
+    @if (Model.Goleadores.Goleadores.Count == 0)
+    {
+        <div class="alert alert-info">
+            No hay datos de goleadores disponibles.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Jugador</th>
+                            <th scope="col">Equipo</th>
+                            <th scope="col" class="text-center">PJ</th>
+                            <th scope="col" class="text-center">Goles</th>
+                            <th scope="col" class="text-center">Asist.</th>
+                            <th scope="col" class="text-center">Pen.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int indice = 0;
+                            indice < Model.Goleadores.Goleadores.Count;
+                            indice++)
+                        {
+                            GoleadorDto goleador =
+                                Model.Goleadores.Goleadores[indice];
+                            <tr>
+                                <td class="fw-semibold">@(indice + 1)</td>
+                                <td>
+                                    <span class="fw-semibold">
+                                        @goleador.Jugador.Nombre
+                                    </span>
+                                    <span class="d-block small text-body-secondary">
+                                        @goleador.Jugador.Nacionalidad
+                                    </span>
+                                </td>
+                                <td>
+                                    <a asp-page="/Equipos/Detalles"
+                                       asp-route-id="@goleador.Equipo.Id"
+                                       class="text-decoration-none text-body">
+                                        @goleador.Equipo.NombreCorto
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    @(goleador.PartidosJugados?.ToString() ?? "-")
+                                </td>
+                                <td class="text-center fw-bold">
+                                    @(goleador.Goles?.ToString() ?? "-")
+                                </td>
+                                <td class="text-center">
+                                    @(goleador.Asistencias?.ToString() ?? "-")
+                                </td>
+                                <td class="text-center">
+                                    @(goleador.Penaltis?.ToString() ?? "-")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+else if (Model.Seccion == "equipos" && Model.Equipos is not null)
+{
+    <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-4">
+        @foreach (EquipoResumenDto equipo in Model.Equipos.Equipos
+            .OrderBy(elemento => elemento.Nombre))
+        {
+            <div class="col">
+                <article class="card h-100 text-center shadow-sm">
+                    <div class="card-body">
+                        <img src="@equipo.Escudo"
+                             data-imagen
+                             class="mb-3"
+                             style="width: 90px; height: 90px; object-fit: contain;"
+                             alt="Escudo de @equipo.Nombre" />
+                        <h2 class="h6">@equipo.Nombre</h2>
+                        <span class="badge text-bg-secondary">
+                            @(equipo.Siglas ?? "—")
+                        </span>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a class="btn btn-outline-primary btn-sm w-100"
+                           asp-page="/Equipos/Detalles"
+                           asp-route-id="@equipo.Id">
+                            Ver equipo
+                        </a>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

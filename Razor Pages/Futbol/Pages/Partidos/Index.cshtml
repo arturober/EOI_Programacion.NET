@@ -1,0 +1,80 @@
+@page
+@model Futbol.Pages.Partidos.IndexModel
+@{
+    ViewData["Title"] = "Partidos";
+    DateOnly fecha = Model.Fecha ?? DateOnly.FromDateTime(DateTime.Today);
+    string fechaAnterior = fecha.AddDays(-1).ToString("yyyy-MM-dd");
+    string fechaSiguiente = fecha.AddDays(1).ToString("yyyy-MM-dd");
+}
+
+<div class="row align-items-end g-3 mb-4">
+    <div class="col-lg">
+        <p class="text-primary fw-semibold mb-1">Calendario</p>
+        <h1 class="display-6 fw-bold mb-1">Partidos por fecha</h1>
+        <p class="text-body-secondary mb-0">
+            Los horarios se muestran en la zona horaria del servidor.
+        </p>
+    </div>
+    <div class="col-lg-auto">
+        <form method="get" class="card card-body shadow-sm">
+            <label asp-for="Fecha" class="form-label fw-semibold">
+                Selecciona una fecha
+            </label>
+            <div class="input-group">
+                <input asp-for="Fecha"
+                       type="date"
+                       class="form-control"
+                       required />
+                <button class="btn btn-primary" type="submit">
+                    <i class="bi bi-search me-1"></i>Consultar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="d-flex flex-wrap gap-2 mb-4">
+    <a class="btn btn-outline-secondary"
+       asp-page="/Partidos/Index"
+       asp-route-fecha="@fechaAnterior">
+        <i class="bi bi-chevron-left"></i> Día anterior
+    </a>
+    <a class="btn btn-outline-primary"
+       asp-page="/Partidos/Index">
+        Hoy
+    </a>
+    <a class="btn btn-outline-secondary"
+       asp-page="/Partidos/Index"
+       asp-route-fecha="@fechaSiguiente">
+        Día siguiente <i class="bi bi-chevron-right"></i>
+    </a>
+</div>
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorApi
+    </div>
+}
+else if (Model.Partidos.Count == 0)
+{
+    <div class="alert alert-info">
+        No hay partidos disponibles para el @fecha.ToString("dd/MM/yyyy").
+    </div>
+}
+else
+{
+    <h2 class="h4 mb-3">
+        @fecha.ToString("dddd, d 'de' MMMM 'de' yyyy")
+        <span class="badge text-bg-primary">@Model.Partidos.Count</span>
+    </h2>
+
+    <div class="row row-cols-1 row-cols-lg-2 g-4">
+        @foreach (PartidoDto partido in Model.Partidos)
+        {
+            <div class="col">
+                <partial name="_Partido" model="partido" />
+            </div>
+        }
+    </div>
+}

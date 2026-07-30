@@ -1,0 +1,98 @@
+@page
+@model RickAndMorty.Pages.IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-lg-5 mb-4 rounded-4 bg-primary text-white shadow">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <span class="badge text-bg-light text-primary mb-3">
+                Wubba Lubba Dub-Dub
+            </span>
+            <h1 class="display-5 fw-bold">
+                Explora el multiverso de Rick and Morty
+            </h1>
+            <p class="lead mb-4">
+                Descubre personajes, episodios, planetas y dimensiones.
+                Crea una cuenta para guardar tus personajes favoritos.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-light btn-lg"
+                   asp-page="/Personajes/Index">
+                    <i class="bi bi-people me-2"></i>Ver personajes
+                </a>
+                <a class="btn btn-outline-light btn-lg"
+                   asp-page="/Episodios/Index">
+                    <i class="bi bi-tv me-2"></i>Guía de episodios
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center">
+            <i class="bi bi-radioactive"
+               style="font-size: 9rem;"
+               aria-hidden="true"></i>
+        </div>
+    </div>
+</section>
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorApi
+    </div>
+}
+else
+{
+    <section class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+        <div class="col">
+            <div class="card text-center h-100 border-primary">
+                <div class="card-body">
+                    <i class="bi bi-people display-5 text-primary"></i>
+                    <p class="display-6 fw-bold my-2">@Model.TotalPersonajes</p>
+                    <p class="mb-0 text-body-secondary">Personajes</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center h-100 border-primary">
+                <div class="card-body">
+                    <i class="bi bi-tv display-5 text-primary"></i>
+                    <p class="display-6 fw-bold my-2">@Model.TotalEpisodios</p>
+                    <p class="mb-0 text-body-secondary">Episodios</p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card text-center h-100 border-primary">
+                <div class="card-body">
+                    <i class="bi bi-globe display-5 text-primary"></i>
+                    <p class="display-6 fw-bold my-2">
+                        @Model.TotalLocalizaciones
+                    </p>
+                    <p class="mb-0 text-body-secondary">Localizaciones</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <p class="text-primary fw-semibold mb-1">Conoce al reparto</p>
+            <h2 class="h3 mb-0">Primeros personajes</h2>
+        </div>
+        <a asp-page="/Personajes/Index"
+           class="btn btn-outline-primary">
+            Ver todos
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+        @foreach (PersonajeDto personaje in Model.Personajes)
+        {
+            <div class="col">
+                <partial name="_TarjetaPersonaje" model="personaje" />
+            </div>
+        }
+    </div>
+}

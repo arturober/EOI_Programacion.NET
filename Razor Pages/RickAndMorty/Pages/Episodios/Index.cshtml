@@ -1,0 +1,85 @@
+@page
+@model RickAndMorty.Pages.Episodios.IndexModel
+@{
+    ViewData["Title"] = "Episodios";
+}
+
+<div class="mb-4">
+    <p class="text-primary fw-semibold mb-1">Guía de la serie</p>
+    <h1 class="display-6 fw-bold">Episodios</h1>
+    <p class="text-body-secondary">
+        Busca por título o utiliza códigos como S01 o S03E07.
+    </p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-5">
+            <label asp-for="Nombre" class="form-label">Título</label>
+            <input asp-for="Nombre"
+                   class="form-control"
+                   placeholder="Pilot, Ricklantis..." />
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Codigo" class="form-label">Código</label>
+            <input asp-for="Codigo"
+                   class="form-control"
+                   placeholder="S01E01" />
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button class="btn btn-primary flex-grow-1" type="submit">
+                <i class="bi bi-search me-1"></i>Buscar
+            </button>
+            <a class="btn btn-outline-secondary"
+               asp-page="/Episodios/Index"
+               aria-label="Limpiar filtros">
+                <i class="bi bi-x-lg"></i>
+            </a>
+        </div>
+    </div>
+</form>
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">@Model.ErrorApi</div>
+}
+else if (Model.Resultado.Resultados.Count == 0)
+{
+    <div class="alert alert-info">
+        No hay episodios que coincidan con los filtros.
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (EpisodioDto episodio in Model.Resultado.Resultados)
+        {
+            <div class="col">
+                <article class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <span class="badge text-bg-primary mb-3">
+                            @episodio.Codigo
+                        </span>
+                        <h2 class="h5">@episodio.Nombre</h2>
+                        <p class="text-body-secondary">
+                            <i class="bi bi-calendar3 me-1"></i>
+                            @episodio.FechaEmision
+                        </p>
+                        <p class="small mb-0">
+                            @episodio.Personajes.Count personajes
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a class="btn btn-outline-primary w-100"
+                           asp-page="/Episodios/Detalles"
+                           asp-route-id="@episodio.Id">
+                            Ver episodio
+                        </a>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+
+    <partial name="_Paginacion" model="Model.Paginacion" />
+}

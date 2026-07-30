@@ -1,0 +1,73 @@
+@page
+@model RickAndMorty.Pages.Localizaciones.DetallesModel
+@{
+    ViewData["Title"] = Model.Localizacion?.Nombre ?? "Localización";
+}
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorApi
+    </div>
+}
+else if (Model.Localizacion is not null)
+{
+    <section class="card shadow-sm mb-4">
+        <div class="card-body p-4">
+            <a asp-page="/Localizaciones/Index"
+               class="small text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i>Localizaciones
+            </a>
+            <div class="row align-items-center g-4 mt-1">
+                <div class="col-md-auto text-center">
+                    <i class="bi bi-globe-americas text-primary"
+                       style="font-size: 8rem;"></i>
+                </div>
+                <div class="col-md">
+                    <p class="text-primary fw-semibold mb-1">
+                        @Model.Localizacion.Tipo
+                    </p>
+                    <h1 class="display-6 fw-bold">
+                        @Model.Localizacion.Nombre
+                    </h1>
+                    <p class="lead mb-0">
+                        <i class="bi bi-stars me-2"></i>
+                        @Model.Localizacion.Dimension
+                    </p>
+                </div>
+                <div class="col-md-auto text-center">
+                    <span class="display-5 fw-bold d-block">
+                        @Model.Localizacion.Residentes.Count
+                    </span>
+                    <span class="text-body-secondary">residentes</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h3 mb-0">Residentes conocidos</h2>
+        @if (Model.ResidentesRecortados)
+        {
+            <span class="badge text-bg-info">Mostrando los primeros 40</span>
+        }
+    </div>
+
+    @if (Model.Residentes.Count == 0)
+    {
+        <div class="alert alert-info">
+            No hay residentes asociados a esta localización.
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            @foreach (PersonajeDto personaje in Model.Residentes)
+            {
+                <div class="col">
+                    <partial name="_TarjetaPersonaje" model="personaje" />
+                </div>
+            }
+        </div>
+    }
+}

@@ -1,0 +1,83 @@
+@page
+@model RickAndMorty.Pages.Favoritos.IndexModel
+@{
+    ViewData["Title"] = "Favoritos";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<div class="mb-4">
+    <p class="text-primary fw-semibold mb-1">Zona privada</p>
+    <h1 class="display-6 fw-bold">Mis personajes favoritos</h1>
+    <p class="text-body-secondary">
+        Esta colección se guarda en SQLite y pertenece únicamente a tu cuenta.
+    </p>
+</div>
+
+@if (Model.Personajes.Count == 0)
+{
+    <div class="card card-body text-center py-5 shadow-sm">
+        <i class="bi bi-heart display-1 text-primary"></i>
+        <h2 class="h4 mt-3">Todavía no tienes favoritos</h2>
+        <p class="text-body-secondary">
+            Abre la ficha de un personaje y pulsa «Añadir a favoritos».
+        </p>
+        <div>
+            <a class="btn btn-primary"
+               asp-page="/Personajes/Index">
+                Explorar personajes
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (PersonajeFavorito personaje in Model.Personajes)
+        {
+            <div class="col">
+                <article class="card h-100 shadow-sm">
+                    <img src="@personaje.ImagenUrl"
+                         data-imagen
+                         class="card-img-top"
+                         alt="Imagen de @personaje.Nombre" />
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between gap-2">
+                            <h2 class="h5">@personaje.Nombre</h2>
+                            <span class="badge align-self-start @TextoRickAndMorty.ClaseEstado(personaje.Estado)">
+                                @TextoRickAndMorty.Estado(personaje.Estado)
+                            </span>
+                        </div>
+                        <p class="text-body-secondary mb-0">
+                            @personaje.Especie
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent d-flex gap-2">
+                        <a class="btn btn-primary flex-grow-1"
+                           asp-page="/Personajes/Detalles"
+                           asp-route-id="@personaje.PersonajeId">
+                            Ver personaje
+                        </a>
+                        <form method="post"
+                              asp-page="/Favoritos/Accion"
+                              asp-page-handler="Eliminar"
+                              data-confirmar-quitar="true">
+                            <input type="hidden"
+                                   name="PersonajeId"
+                                   value="@personaje.PersonajeId" />
+                            <input type="hidden"
+                                   name="ReturnUrl"
+                                   value="@retorno" />
+                            <button class="btn btn-outline-danger"
+                                    type="submit"
+                                    aria-label="Quitar @personaje.Nombre">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,54 @@
+@page
+@model RickAndMorty.Pages.Episodios.DetallesModel
+@{
+    ViewData["Title"] = Model.Episodio?.Nombre ?? "Episodio";
+}
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorApi
+    </div>
+}
+else if (Model.Episodio is not null)
+{
+    <section class="card shadow-sm mb-4">
+        <div class="card-body p-4">
+            <a asp-page="/Episodios/Index"
+               class="small text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i>Episodios
+            </a>
+            <div class="d-flex flex-wrap align-items-center gap-3 mt-2">
+                <i class="bi bi-tv display-2 text-primary"></i>
+                <div>
+                    <span class="badge text-bg-primary mb-2">
+                        @Model.Episodio.Codigo
+                    </span>
+                    <h1 class="display-6 fw-bold mb-1">
+                        @Model.Episodio.Nombre
+                    </h1>
+                    <p class="text-body-secondary mb-0">
+                        <i class="bi bi-calendar3 me-1"></i>
+                        Emitido el @Model.Episodio.FechaEmision
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h3 mb-0">Personajes del episodio</h2>
+        <span class="badge text-bg-secondary">
+            @Model.Personajes.Count
+        </span>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4 g-4">
+        @foreach (PersonajeDto personaje in Model.Personajes)
+        {
+            <div class="col">
+                <partial name="_TarjetaPersonaje" model="personaje" />
+            </div>
+        }
+    </div>
+}

@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>RickAndMorty-Razor-2026</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Identity y Entity Framework guardan usuarios y favoritos en SQLite. -->
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
+                      Version="10.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"
+                      Version="10.0.0" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3"
+                      Version="2.1.11" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,16 @@
+@page
+@model Futbol.Pages.Cuenta.AccesoDenegadoModel
+@{
+    ViewData["Title"] = "Acceso denegado";
+}
+
+<div class="card card-body text-center py-5 shadow-sm">
+    <i class="bi bi-shield-lock display-1 text-danger"></i>
+    <h1 class="h2 mt-3">Acceso denegado</h1>
+    <p class="text-body-secondary">
+        Tu cuenta no tiene permiso para abrir esta página.
+    </p>
+    <div>
+        <a class="btn btn-primary" asp-page="/Index">Volver al inicio</a>
+    </div>
+</div>

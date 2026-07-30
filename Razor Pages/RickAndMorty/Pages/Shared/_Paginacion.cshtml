@@ -1,0 +1,54 @@
+@model RickAndMorty.Modelos.PaginacionVista
+@{
+    // Se crean diccionarios fuera de los atributos de los Tag Helper.
+    Dictionary<string, string> rutaAnterior = new(Model.Parametros)
+    {
+        ["pagina"] = Math.Max(1, Model.PaginaActual - 1).ToString()
+    };
+    Dictionary<string, string> rutaSiguiente = new(Model.Parametros)
+    {
+        ["pagina"] = Math.Min(
+            Model.TotalPaginas,
+            Model.PaginaActual + 1).ToString()
+    };
+}
+
+@if (Model.TotalPaginas > 1)
+{
+    <nav class="d-flex justify-content-center align-items-center gap-3 mt-4"
+         aria-label="Paginación">
+        @if (Model.PaginaActual > 1)
+        {
+            <a class="btn btn-outline-primary"
+               asp-page="@Model.PaginaRazor"
+               asp-all-route-data="rutaAnterior">
+                <i class="bi bi-chevron-left me-1"></i>Anterior
+            </a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary" disabled>
+                <i class="bi bi-chevron-left me-1"></i>Anterior
+            </button>
+        }
+
+        <span class="badge rounded-pill text-bg-secondary fs-6">
+            @Model.PaginaActual / @Model.TotalPaginas
+        </span>
+
+        @if (Model.PaginaActual < Model.TotalPaginas)
+        {
+            <a class="btn btn-outline-primary"
+               asp-page="@Model.PaginaRazor"
+               asp-all-route-data="rutaSiguiente">
+                Siguiente<i class="bi bi-chevron-right ms-1"></i>
+            </a>
+        }
+        else
+        {
+            <button class="btn btn-outline-secondary" disabled>
+                Siguiente<i class="bi bi-chevron-right ms-1"></i>
+            </button>
+        }
+    </nav>
+}

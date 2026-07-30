@@ -1,0 +1,21 @@
+# Compilación de .NET
+bin/
+obj/
+
+# Archivos locales de Visual Studio y VS Code
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Base de datos local y archivos auxiliares de SQLite
+Data/*.db
+Data/*.db-shm
+Data/*.db-wal
+
+# Configuración privada o específica de cada equipo
+appsettings.Local.json
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

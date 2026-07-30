@@ -1,0 +1,191 @@
+@page
+@model RickAndMorty.Pages.Personajes.DetallesModel
+@{
+    ViewData["Title"] = Model.Personaje?.Nombre ?? "Personaje";
+
+    // La ruta actual permite volver después de entrar o modificar favoritos.
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+
+    int? origenId = TextoRickAndMorty.ExtraerId(
+        Model.Personaje?.Origen.Url);
+    int? localizacionId = TextoRickAndMorty.ExtraerId(
+        Model.Personaje?.Localizacion.Url);
+}
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorApi
+    </div>
+}
+else if (Model.Personaje is not null)
+{
+    <section class="card shadow-sm mb-4">
+        <div class="row g-0">
+            <div class="col-md-5 col-lg-4">
+                <img src="@Model.Personaje.Imagen"
+                     data-imagen
+                     class="img-fluid rounded-start w-100"
+                     alt="Imagen de @Model.Personaje.Nombre" />
+            </div>
+            <div class="col-md-7 col-lg-8">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-wrap justify-content-between gap-2">
+                        <div>
+                            <a asp-page="/Personajes/Index"
+                               class="small text-decoration-none">
+                                <i class="bi bi-arrow-left me-1"></i>Personajes
+                            </a>
+                            <h1 class="display-6 fw-bold mt-2">
+                                @Model.Personaje.Nombre
+                            </h1>
+                        </div>
+                        <span class="badge align-self-start fs-6 @TextoRickAndMorty.ClaseEstado(Model.Personaje.Estado)">
+                            @TextoRickAndMorty.Estado(Model.Personaje.Estado)
+                        </span>
+                    </div>
+
+                    <dl class="row mt-4">
+                        <dt class="col-sm-4">Especie</dt>
+                        <dd class="col-sm-8">@Model.Personaje.Especie</dd>
+
+                        <dt class="col-sm-4">Tipo</dt>
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.Personaje.Tipo)
+                                ? "Sin subtipo"
+                                : Model.Personaje.Tipo)
+                        </dd>
+
+                        <dt class="col-sm-4">Género</dt>
+                        <dd class="col-sm-8">
+                            @TextoRickAndMorty.Genero(Model.Personaje.Genero)
+                        </dd>
+
+                        <dt class="col-sm-4">Origen</dt>
+                        <dd class="col-sm-8">
+                            @if (origenId is not null)
+                            {
+                                <a asp-page="/Localizaciones/Detalles"
+                                   asp-route-id="@origenId">
+                                    @Model.Personaje.Origen.Nombre
+                                </a>
+                            }
+                            else
+                            {
+                                <span>@Model.Personaje.Origen.Nombre</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Última localización</dt>
+                        <dd class="col-sm-8">
+                            @if (localizacionId is not null)
+                            {
+                                <a asp-page="/Localizaciones/Detalles"
+                                   asp-route-id="@localizacionId">
+                                    @Model.Personaje.Localizacion.Nombre
+                                </a>
+                            }
+                            else
+                            {
+                                <span>@Model.Personaje.Localizacion.Nombre</span>
+                            }
+                        </dd>
+                    </dl>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        @if (Model.EsFavorito)
+                        {
+                            <form method="post"
+                                  asp-page="/Favoritos/Accion"
+                                  asp-page-handler="Eliminar"
+                                  data-confirmar-quitar="true">
+                                <input type="hidden"
+                                       name="PersonajeId"
+                                       value="@Model.Personaje.Id" />
+                                <input type="hidden"
+                                       name="ReturnUrl"
+                                       value="@retorno" />
+                                <button class="btn btn-outline-danger"
+                                        type="submit">
+                                    <i class="bi bi-heart-fill me-1"></i>
+                                    Quitar de favoritos
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post"
+                                  asp-page="/Favoritos/Accion"
+                                  asp-page-handler="Agregar">
+                                <input type="hidden"
+                                       name="PersonajeId"
+                                       value="@Model.Personaje.Id" />
+                                <input type="hidden"
+                                       name="Nombre"
+                                       value="@Model.Personaje.Nombre" />
+                                <input type="hidden"
+                                       name="Estado"
+                                       value="@Model.Personaje.Estado" />
+                                <input type="hidden"
+                                       name="Especie"
+                                       value="@Model.Personaje.Especie" />
+                                <input type="hidden"
+                                       name="ImagenUrl"
+                                       value="@Model.Personaje.Imagen" />
+                                <input type="hidden"
+                                       name="ReturnUrl"
+                                       value="@retorno" />
+                                <button class="btn btn-warning"
+                                        type="submit">
+                                    <i class="bi bi-heart me-1"></i>
+                                    Añadir a favoritos
+                                </button>
+                            </form>
+                        }
+                    }
+                    else
+                    {
+                        <a class="btn btn-warning"
+                           asp-page="/Cuenta/Login"
+                           asp-route-returnUrl="@retorno">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                            Entra para guardar el personaje
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h3 mb-0">Apariciones</h2>
+            <span class="badge text-bg-secondary">
+                @Model.Episodios.Count episodios
+            </span>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+            @foreach (EpisodioDto episodio in Model.Episodios
+                .OrderBy(elemento => elemento.Codigo))
+            {
+                <div class="col">
+                    <a class="card card-body h-100 text-decoration-none text-body shadow-sm"
+                       asp-page="/Episodios/Detalles"
+                       asp-route-id="@episodio.Id">
+                        <span class="badge text-bg-primary align-self-start mb-2">
+                            @episodio.Codigo
+                        </span>
+                        <span class="fw-semibold">@episodio.Nombre</span>
+                        <span class="small text-body-secondary">
+                            @episodio.FechaEmision
+                        </span>
+                    </a>
+                </div>
+            }
+        </div>
+    </section>
+}

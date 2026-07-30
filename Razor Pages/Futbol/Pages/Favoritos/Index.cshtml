@@ -1,0 +1,83 @@
+@page
+@model Futbol.Pages.Favoritos.IndexModel
+@{
+    ViewData["Title"] = "Mis equipos";
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+}
+
+<div class="mb-4">
+    <p class="text-primary fw-semibold mb-1">Zona privada</p>
+    <h1 class="display-6 fw-bold">Mis equipos favoritos</h1>
+    <p class="text-body-secondary">
+        Esta lista se guarda en SQLite y pertenece exclusivamente a tu cuenta.
+    </p>
+</div>
+
+@if (Model.Equipos.Count == 0)
+{
+    <div class="card card-body text-center py-5 shadow-sm">
+        <i class="bi bi-star display-1 text-primary"></i>
+        <h2 class="h4 mt-3">Todavía no tienes favoritos</h2>
+        <p class="text-body-secondary">
+            Abre una competición, entra en la ficha de un equipo y pulsa
+            «Añadir a favoritos».
+        </p>
+        <div>
+            <a class="btn btn-primary"
+               asp-page="/Competiciones/Index">
+                Explorar competiciones
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (EquipoFavorito equipo in Model.Equipos)
+        {
+            <div class="col">
+                <article class="card h-100 text-center shadow-sm">
+                    <div class="card-body">
+                        <img src="@equipo.EscudoUrl"
+                             data-imagen
+                             class="mb-3"
+                             style="width: 110px; height: 110px; object-fit: contain;"
+                             alt="Escudo de @equipo.Nombre" />
+                        <h2 class="h5">@equipo.Nombre</h2>
+                        @if (!string.IsNullOrWhiteSpace(equipo.Competicion))
+                        {
+                            <p class="text-body-secondary">
+                                @equipo.Competicion
+                            </p>
+                        }
+                    </div>
+                    <div class="card-footer bg-transparent d-flex gap-2">
+                        <a class="btn btn-primary flex-grow-1"
+                           asp-page="/Equipos/Detalles"
+                           asp-route-id="@equipo.EquipoId">
+                            Ver equipo
+                        </a>
+                        <form method="post"
+                              asp-page="/Favoritos/Accion"
+                              asp-page-handler="Eliminar"
+                              data-confirmar-quitar="true">
+                            <input type="hidden"
+                                   name="EquipoId"
+                                   value="@equipo.EquipoId" />
+                            <input type="hidden"
+                                   name="ReturnUrl"
+                                   value="@retorno" />
+                            <button class="btn btn-outline-danger"
+                                    type="submit"
+                                    aria-label="Quitar @equipo.Nombre">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+}

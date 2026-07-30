@@ -1,0 +1,56 @@
+@page
+@model RickAndMorty.Pages.AcercaModel
+@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <h1 class="display-6 fw-bold">Acerca del proyecto</h1>
+        <p class="lead">
+            Aplicación educativa para aprender Razor Pages consumiendo
+            una API REST pública y relacionando datos externos con datos locales.
+        </p>
+
+        <h2 class="h4 mt-4">Qué se practica</h2>
+        <ul>
+            <li>HttpClient, JSON, DTO e inyección de dependencias.</li>
+            <li>Filtros, paginación y relaciones entre recursos REST.</li>
+            <li>Razor Pages, Tag Helpers y formularios protegidos.</li>
+            <li>Identity, registro, cookies y control de acceso.</li>
+            <li>Entity Framework Core, índices únicos y SQLite.</li>
+            <li>Caché en memoria y tratamiento de errores externos.</li>
+        </ul>
+
+        <h2 class="h4 mt-4">API utilizada</h2>
+        <p>
+            The Rick and Morty API es pública y no requiere clave. Sus
+            recursos principales son personajes, episodios y localizaciones.
+            Los listados se entregan en páginas de veinte resultados.
+        </p>
+    </div>
+
+    <aside class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Tecnologías</h2>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge text-bg-primary">.NET 10</span>
+                    <span class="badge text-bg-primary">Razor Pages</span>
+                    <span class="badge text-bg-primary">Identity</span>
+                    <span class="badge text-bg-primary">SQLite</span>
+                    <span class="badge text-bg-primary">Bootstrap</span>
+                    <span class="badge text-bg-primary">Bootswatch</span>
+                    <span class="badge text-bg-primary">SweetAlert2</span>
+                </div>
+                <hr />
+                <a href="https://rickandmortyapi.com/documentation"
+                   target="_blank"
+                   rel="noopener"
+                   class="btn btn-outline-primary w-100">
+                    Abrir la documentación
+                </a>
+            </div>
+        </div>
+    </aside>
+</div>

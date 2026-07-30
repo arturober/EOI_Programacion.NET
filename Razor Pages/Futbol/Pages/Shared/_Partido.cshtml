@@ -1,0 +1,75 @@
+@model Futbol.DTOs.PartidoDto
+@{
+    // La hora se convierte desde UTC a la zona horaria del servidor.
+    DateTime fechaLocal = Model.FechaUtc.ToLocalTime().DateTime;
+    bool terminado = Model.Estado == "FINISHED";
+    bool enDirecto = Model.Estado is "IN_PLAY" or "PAUSED";
+}
+
+<article class="card shadow-sm h-100">
+    <div class="card-header d-flex justify-content-between gap-2">
+        <span class="small text-body-secondary">
+            @(Model.Competicion?.Nombre ?? "Competición")
+        </span>
+        <span class="badge @(enDirecto ? "text-bg-danger" : terminado ? "text-bg-secondary" : "text-bg-primary")">
+            @TextoFutbol.Estado(Model.Estado)
+        </span>
+    </div>
+    <div class="card-body">
+        <p class="small text-body-secondary mb-3">
+            <i class="bi bi-calendar3 me-1"></i>
+            @fechaLocal.ToString("dd/MM/yyyy HH:mm")
+            @if (Model.Jornada is not null)
+            {
+                <span> · Jornada @Model.Jornada</span>
+            }
+        </p>
+
+        <div class="row align-items-center text-center g-2">
+            <div class="col">
+                <a asp-page="/Equipos/Detalles"
+                   asp-route-id="@Model.Local.Id"
+                   class="text-decoration-none text-body">
+                    <img src="@Model.Local.Escudo"
+                         data-imagen
+                         class="mb-2"
+                         style="width: 54px; height: 54px; object-fit: contain;"
+                         alt="Escudo de @Model.Local.Nombre" />
+                    <span class="d-block fw-semibold">
+                        @(Model.Local.NombreCorto ?? Model.Local.Nombre)
+                    </span>
+                </a>
+            </div>
+
+            <div class="col-auto">
+                @if (terminado || enDirecto)
+                {
+                    <span class="display-6 fw-bold">
+                        @(Model.Marcador.Final.Local?.ToString() ?? "-")
+                        -
+                        @(Model.Marcador.Final.Visitante?.ToString() ?? "-")
+                    </span>
+                }
+                else
+                {
+                    <span class="fs-4 text-body-secondary">vs.</span>
+                }
+            </div>
+
+            <div class="col">
+                <a asp-page="/Equipos/Detalles"
+                   asp-route-id="@Model.Visitante.Id"
+                   class="text-decoration-none text-body">
+                    <img src="@Model.Visitante.Escudo"
+                         data-imagen
+                         class="mb-2"
+                         style="width: 54px; height: 54px; object-fit: contain;"
+                         alt="Escudo de @Model.Visitante.Nombre" />
+                    <span class="d-block fw-semibold">
+                        @(Model.Visitante.NombreCorto ?? Model.Visitante.Nombre)
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</article>

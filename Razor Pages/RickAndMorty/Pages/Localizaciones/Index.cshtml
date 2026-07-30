@@ -1,0 +1,91 @@
+@page
+@model RickAndMorty.Pages.Localizaciones.IndexModel
+@{
+    ViewData["Title"] = "Localizaciones";
+}
+
+<div class="mb-4">
+    <p class="text-primary fw-semibold mb-1">Multiverso</p>
+    <h1 class="display-6 fw-bold">Localizaciones</h1>
+    <p class="text-body-secondary">
+        Planetas, estaciones espaciales, dimensiones y realidades alternativas.
+    </p>
+</div>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+            <label asp-for="Nombre" class="form-label">Nombre</label>
+            <input asp-for="Nombre"
+                   class="form-control"
+                   placeholder="Earth, Citadel..." />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Tipo" class="form-label">Tipo</label>
+            <input asp-for="Tipo"
+                   class="form-control"
+                   placeholder="Planet..." />
+        </div>
+        <div class="col-md-3">
+            <label asp-for="Dimension" class="form-label">Dimensión</label>
+            <input asp-for="Dimension"
+                   class="form-control"
+                   placeholder="Dimension C-137" />
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+            <button class="btn btn-primary flex-grow-1" type="submit">
+                <i class="bi bi-search"></i>
+                <span class="visually-hidden">Buscar</span>
+            </button>
+            <a class="btn btn-outline-secondary"
+               asp-page="/Localizaciones/Index"
+               aria-label="Limpiar filtros">
+                <i class="bi bi-x-lg"></i>
+            </a>
+        </div>
+    </div>
+</form>
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">@Model.ErrorApi</div>
+}
+else if (Model.Resultado.Resultados.Count == 0)
+{
+    <div class="alert alert-info">
+        No hay localizaciones que coincidan con los filtros.
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+        @foreach (LocalizacionDto localizacion in Model.Resultado.Resultados)
+        {
+            <div class="col">
+                <article class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <i class="bi bi-globe-americas display-5 text-primary"></i>
+                        <h2 class="h5 mt-3">@localizacion.Nombre</h2>
+                        <dl class="row small mb-0">
+                            <dt class="col-4">Tipo</dt>
+                            <dd class="col-8">@localizacion.Tipo</dd>
+                            <dt class="col-4">Dimensión</dt>
+                            <dd class="col-8">@localizacion.Dimension</dd>
+                            <dt class="col-4">Residentes</dt>
+                            <dd class="col-8">@localizacion.Residentes.Count</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <a class="btn btn-outline-primary w-100"
+                           asp-page="/Localizaciones/Detalles"
+                           asp-route-id="@localizacion.Id">
+                            Explorar
+                        </a>
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+
+    <partial name="_Paginacion" model="Model.Paginacion" />
+}

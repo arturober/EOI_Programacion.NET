@@ -1,0 +1,12 @@
+@host = http://localhost:5187
+@token = PEGA_AQUI_TU_TOKEN
+
+### Comprobar directamente las competiciones de la API externa
+GET https://api.football-data.org/v4/competitions
+X-Auth-Token: {{token}}
+
+### Consultar los partidos de hoy en la aplicación
+GET {{host}}/Partidos
+
+### Consultar la clasificación de Primera División en la aplicación
+GET {{host}}/Competiciones/Detalles?codigo=PD&seccion=clasificacion

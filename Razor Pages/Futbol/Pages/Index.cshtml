@@ -1,0 +1,123 @@
+@page
+@model Futbol.Pages.IndexModel
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="p-4 p-lg-5 mb-4 rounded-4 bg-primary text-white shadow">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-8">
+            <span class="badge text-bg-light text-primary mb-3">
+                ASP.NET Core Razor Pages
+            </span>
+            <h1 class="display-5 fw-bold">
+                Todo el fútbol en una aplicación
+            </h1>
+            <p class="lead mb-4">
+                Consulta partidos, competiciones, clasificaciones,
+                goleadores y plantillas. Regístrate para guardar tus equipos.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-light btn-lg"
+                   asp-page="/Partidos/Index">
+                    <i class="bi bi-calendar-event me-2"></i>Ver partidos
+                </a>
+                <a class="btn btn-outline-light btn-lg"
+                   asp-page="/Competiciones/Index">
+                    <i class="bi bi-trophy me-2"></i>Competiciones
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center">
+            <i class="bi bi-dribbble"
+               style="font-size: 9rem;"
+               aria-hidden="true"></i>
+        </div>
+    </div>
+</section>
+
+@if (!Model.ApiConfigurada)
+{
+    <div class="alert alert-warning shadow-sm" role="alert">
+        <h2 class="h5 alert-heading">
+            <i class="bi bi-key me-2"></i>Falta configurar el token
+        </h2>
+        <p class="mb-2">
+            Regístrate gratis en football-data.org y ejecuta este comando
+            desde la carpeta donde está <code>Futbol.csproj</code>:
+        </p>
+        <pre class="bg-dark text-light rounded p-3 mb-0"><code>dotnet user-secrets set "FootballData:ApiKey" "TU_TOKEN"</code></pre>
+    </div>
+}
+else if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorApi
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <div>
+            <p class="text-primary fw-semibold mb-1">Agenda</p>
+            <h2 class="h3 mb-0">Partidos de hoy</h2>
+        </div>
+        <a asp-page="/Partidos/Index" class="btn btn-outline-primary">
+            Abrir calendario
+        </a>
+    </div>
+
+    @if (Model.Partidos.Count == 0)
+    {
+        <div class="alert alert-info">
+            No hay partidos disponibles hoy en las competiciones de tu plan.
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-lg-2 g-4">
+            @foreach (PartidoDto partido in Model.Partidos.Take(6))
+            {
+                <div class="col">
+                    <partial name="_Partido" model="partido" />
+                </div>
+            }
+        </div>
+    }
+}
+
+<section class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+    <div class="col">
+        <div class="card h-100 border-0 bg-body-tertiary">
+            <div class="card-body">
+                <i class="bi bi-table fs-1 text-primary"></i>
+                <h2 class="h5 mt-3">Clasificaciones</h2>
+                <p class="text-body-secondary mb-0">
+                    Posiciones, puntos, victorias, goles y racha reciente.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 border-0 bg-body-tertiary">
+            <div class="card-body">
+                <i class="bi bi-people fs-1 text-primary"></i>
+                <h2 class="h5 mt-3">Equipos y plantillas</h2>
+                <p class="text-body-secondary mb-0">
+                    Fichas de clubes, entrenador, estadio y jugadores.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 border-0 bg-body-tertiary">
+            <div class="card-body">
+                <i class="bi bi-star fs-1 text-primary"></i>
+                <h2 class="h5 mt-3">Tus favoritos</h2>
+                <p class="text-body-secondary mb-0">
+                    Una colección privada guardada por usuario en SQLite.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>

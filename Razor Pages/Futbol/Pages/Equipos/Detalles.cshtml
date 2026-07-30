@@ -1,0 +1,262 @@
+@page
+@model Futbol.Pages.Equipos.DetallesModel
+@{
+    ViewData["Title"] = Model.Equipo?.Nombre ?? "Equipo";
+
+    // La URL actual permite volver aquí después de iniciar sesión o guardar.
+    string retorno =
+        $"{ViewContext.HttpContext.Request.Path}"
+        + $"{ViewContext.HttpContext.Request.QueryString}";
+
+    string competicion = Model.Equipo?.Competiciones.FirstOrDefault()?.Nombre
+        ?? "";
+}
+
+@if (Model.ErrorApi is not null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle me-2"></i>@Model.ErrorApi
+    </div>
+}
+else if (Model.Equipo is not null)
+{
+    <section class="card shadow-sm mb-4">
+        <div class="card-body p-4">
+            <div class="row align-items-center g-4">
+                <div class="col-md-auto text-center">
+                    <img src="@Model.Equipo.Escudo"
+                         data-imagen
+                         style="width: 150px; height: 150px; object-fit: contain;"
+                         alt="Escudo de @Model.Equipo.Nombre" />
+                </div>
+                <div class="col-md">
+                    <p class="text-primary fw-semibold mb-1">
+                        @(Model.Equipo.Area?.Nombre ?? "Equipo")
+                    </p>
+                    <h1 class="display-6 fw-bold">@Model.Equipo.Nombre</h1>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        @if (Model.Equipo.Fundacion is not null)
+                        {
+                            <span class="badge text-bg-secondary">
+                                Fundado en @Model.Equipo.Fundacion
+                            </span>
+                        }
+                        @if (!string.IsNullOrWhiteSpace(Model.Equipo.Estadio))
+                        {
+                            <span class="badge text-bg-secondary">
+                                <i class="bi bi-geo-alt me-1"></i>
+                                @Model.Equipo.Estadio
+                            </span>
+                        }
+                    </div>
+
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        @if (Model.EsFavorito)
+                        {
+                            <form method="post"
+                                  asp-page="/Favoritos/Accion"
+                                  asp-page-handler="Eliminar"
+                                  data-confirmar-quitar="true">
+                                <input type="hidden"
+                                       name="EquipoId"
+                                       value="@Model.Equipo.Id" />
+                                <input type="hidden"
+                                       name="ReturnUrl"
+                                       value="@retorno" />
+                                <button class="btn btn-outline-danger"
+                                        type="submit">
+                                    <i class="bi bi-star-fill me-1"></i>
+                                    Quitar de favoritos
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form method="post"
+                                  asp-page="/Favoritos/Accion"
+                                  asp-page-handler="Agregar">
+                                <input type="hidden"
+                                       name="EquipoId"
+                                       value="@Model.Equipo.Id" />
+                                <input type="hidden"
+                                       name="Nombre"
+                                       value="@Model.Equipo.Nombre" />
+                                <input type="hidden"
+                                       name="NombreCorto"
+                                       value="@Model.Equipo.NombreCorto" />
+                                <input type="hidden"
+                                       name="EscudoUrl"
+                                       value="@Model.Equipo.Escudo" />
+                                <input type="hidden"
+                                       name="Competicion"
+                                       value="@competicion" />
+                                <input type="hidden"
+                                       name="ReturnUrl"
+                                       value="@retorno" />
+                                <button class="btn btn-warning"
+                                        type="submit">
+                                    <i class="bi bi-star me-1"></i>
+                                    Añadir a favoritos
+                                </button>
+                            </form>
+                        }
+                    }
+                    else
+                    {
+                        <a class="btn btn-warning"
+                           asp-page="/Cuenta/Login"
+                           asp-route-returnUrl="@retorno">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>
+                            Entra para guardar el equipo
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-5">
+            <section class="card h-100 shadow-sm">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Información del club</h2>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Nombre corto</dt>
+                        <dd class="col-sm-8">@Model.Equipo.NombreCorto</dd>
+
+                        <dt class="col-sm-4">Siglas</dt>
+                        <dd class="col-sm-8">@Model.Equipo.Siglas</dd>
+
+                        <dt class="col-sm-4">Colores</dt>
+                        <dd class="col-sm-8">
+                            @(Model.Equipo.Colores ?? "Sin datos")
+                        </dd>
+
+                        <dt class="col-sm-4">Dirección</dt>
+                        <dd class="col-sm-8">
+                            @(Model.Equipo.Direccion ?? "Sin datos")
+                        </dd>
+
+                        <dt class="col-sm-4">Entrenador</dt>
+                        <dd class="col-sm-8">
+                            @(Model.Equipo.Entrenador?.Nombre ?? "Sin datos")
+                        </dd>
+                    </dl>
+
+                    @if (Model.SitioWebSeguro is not null)
+                    {
+                        <a class="btn btn-outline-primary mt-3"
+                           href="@Model.SitioWebSeguro"
+                           target="_blank"
+                           rel="noopener">
+                            <i class="bi bi-globe me-1"></i>Sitio oficial
+                        </a>
+                    }
+                </div>
+            </section>
+        </div>
+
+        <div class="col-lg-7">
+            <section class="card h-100 shadow-sm">
+                <div class="card-header">
+                    <h2 class="h5 mb-0">Competiciones activas</h2>
+                </div>
+                <div class="list-group list-group-flush">
+                    @foreach (CompeticionDto item in Model.Equipo.Competiciones)
+                    {
+                        <a class="list-group-item list-group-item-action d-flex align-items-center gap-3"
+                           asp-page="/Competiciones/Detalles"
+                           asp-route-codigo="@item.Codigo">
+                            <img src="@item.Emblema"
+                                 data-imagen
+                                 style="width: 36px; height: 36px; object-fit: contain;"
+                                 alt="" />
+                            <span>@item.Nombre</span>
+                        </a>
+                    }
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <h2 class="h4 mb-3">Últimos resultados</h2>
+            <div class="d-grid gap-3">
+                @foreach (PartidoDto partido in Model.UltimosPartidos)
+                {
+                    <partial name="_Partido" model="partido" />
+                }
+                @if (Model.UltimosPartidos.Count == 0)
+                {
+                    <div class="alert alert-info">No hay resultados.</div>
+                }
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <h2 class="h4 mb-3">Próximos partidos</h2>
+            <div class="d-grid gap-3">
+                @foreach (PartidoDto partido in Model.ProximosPartidos)
+                {
+                    <partial name="_Partido" model="partido" />
+                }
+                @if (Model.ProximosPartidos.Count == 0)
+                {
+                    <div class="alert alert-info">
+                        No hay partidos programados.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <section class="card shadow-sm">
+        <div class="card-header">
+            <h2 class="h5 mb-0">Plantilla</h2>
+        </div>
+        @if (Model.Equipo.Plantilla.Count == 0)
+        {
+            <div class="card-body">
+                <div class="alert alert-info mb-0">
+                    La plantilla no está incluida en tu plan o no hay datos.
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Dorsal</th>
+                            <th scope="col">Jugador</th>
+                            <th scope="col">Posición</th>
+                            <th scope="col">Nacionalidad</th>
+                            <th scope="col">Nacimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (PersonaDto jugador in Model.Equipo.Plantilla
+                            .OrderBy(elemento => elemento.Posicion)
+                            .ThenBy(elemento => elemento.Nombre))
+                        {
+                            <tr>
+                                <td>@(jugador.Dorsal?.ToString() ?? "—")</td>
+                                <td class="fw-semibold">@jugador.Nombre</td>
+                                <td>@TextoFutbol.Posicion(jugador.Posicion)</td>
+                                <td>@jugador.Nacionalidad</td>
+                                <td>
+                                    @(jugador.FechaNacimiento?.ToString("dd/MM/yyyy")
+                                        ?? "Sin datos")
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+}
