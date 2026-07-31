@@ -38,7 +38,7 @@ try
         string? input = Console.ReadLine();
 
         if (int.TryParse(input, out categoriaId) &&
-            categorias.Exists(c => c.Id == categoriaId))
+            (categoriaId == 0 || categorias.Exists(c => c.Id == categoriaId)))
         {
             break;
         }
@@ -48,7 +48,7 @@ try
 
     List<PreguntaDto>? preguntas =
         await cliente.GetFromJsonAsync<List<PreguntaDto>>(
-            $"preguntas?cantidad=10&categoriaId={categoriaId}");ç
+            $"preguntas?cantidad=10&categoriaId={categoriaId}");
 
     int aciertos = 0;
 
@@ -57,7 +57,7 @@ try
         PreguntaDto pregunta = preguntas[posicion];
 
         Console.WriteLine($"\nPregunta {posicion + 1} / {preguntas.Count}:");
-        Console.WriteLine($"(Categoría {pregunta.Categoria.Nombre})");
+        Console.WriteLine($"(Categoría {pregunta.Categoria.Nombre})\n");
         Console.WriteLine(pregunta.Enunciado);
         for (int i = 0; i < pregunta.Respuestas.Length; i++)
         {
@@ -86,9 +86,11 @@ try
         }
         else
         {
-            Console.WriteLine($"Incorrecto. La respuesta correcta era: {pregunta.RespuestaCorrecta}");
+            Console.WriteLine($"Incorrecto. La respuesta correcta era: {pregunta.Respuestas[pregunta.RespuestaCorrecta - 1]}");
         }
     }
+
+    Console.WriteLine($"\nJuego terminado. Aciertos: {aciertos} de {preguntas?.Count}\n");
 }
 catch (Exception ex)
 {
