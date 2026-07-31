@@ -1,0 +1,14 @@
+<Project Sdk="Godot.NET.Sdk/4.7.1">
+
+  <PropertyGroup>
+    <!-- El proyecto utiliza .NET 8, compatible con Godot 4.7.1. -->
+    <TargetFramework>net8.0</TargetFramework>
+
+    <!-- Nullable ayuda a detectar posibles accesos a valores nulos. -->
+    <Nullable>enable</Nullable>
+
+    <!-- Los espacios de nombres habituales se importan automáticamente. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

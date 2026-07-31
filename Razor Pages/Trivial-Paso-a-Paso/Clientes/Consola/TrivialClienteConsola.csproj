@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- OutputType Exe indica que el resultado será una aplicación de consola. -->
+    <OutputType>Exe</OutputType>
+
+    <!-- El proyecto utiliza .NET 10, igual que la API de trivial. -->
+    <TargetFramework>net10.0</TargetFramework>
+
+    <!-- Los using habituales se añaden automáticamente al compilar. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <!-- Nullable ayuda a detectar posibles valores null durante la compilación. -->
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>
+
