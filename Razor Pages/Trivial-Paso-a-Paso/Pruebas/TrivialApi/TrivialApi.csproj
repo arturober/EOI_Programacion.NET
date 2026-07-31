@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- La aplicación utiliza el SDK web porque combina Razor Pages y archivos estáticos. -->
+  <PropertyGroup>
+    <!-- Esta colección de proyectos está preparada para la versión 10 de .NET. -->
+    <TargetFramework>net10.0</TargetFramework>
+
+    <!-- Nullable ayuda a detectar en compilación posibles accesos a valores nulos. -->
+    <Nullable>enable</Nullable>
+
+    <!-- Los espacios de nombres habituales se importan automáticamente. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- El proveedor SQLite permite utilizar Entity Framework Core con trivial.db. -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.10" />
+
+    <!-- Se fija la versión 2.1.12 para no restaurar la versión 2.1.11,
+         que contiene una compilación vulnerable de SQLite. -->
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- La base se copia al compilar y al publicar para que la aplicación la encuentre. -->
+    <None Update="Data\trivial.db"
+          CopyToOutputDirectory="PreserveNewest"
+          CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

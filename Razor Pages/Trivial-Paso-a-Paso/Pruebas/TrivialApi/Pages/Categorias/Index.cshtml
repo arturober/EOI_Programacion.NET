@@ -1,0 +1,48 @@
+@page
+@model Categorias.IndexModel
+@{
+    ViewData["Title"] = "Categorías";
+}
+
+<header>
+    <h1>Categorías</h1>
+
+    <a class="btn btn-primary mb-3" asp-page="/Categorias/Crear">Crear nueva categoría</a>
+</header>
+
+<div class="row">
+    <table class="table table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Preguntas</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Categoria categoria in Model.Categorias)
+            {
+                <tr>
+                    <td>@categoria.Nombre</td>
+                    <td>
+                        <span class="badge bg-secondary">
+                            @categoria.Preguntas.Count
+                        </span>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" 
+                            asp-page="/Categorias/Editar" 
+                            asp-route-id="@categoria.Id">Editar</a>
+
+                        <form method="post" 
+                            asp-page-handler="Eliminar"
+                            class="d-inline formulario-eliminar">
+                            <input type="hidden" name="id" value="@categoria.Id" />
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

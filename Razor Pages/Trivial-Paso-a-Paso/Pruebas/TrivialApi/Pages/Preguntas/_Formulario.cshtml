@@ -1,0 +1,56 @@
+@model Pregunta
+
+<div class="mb-3">
+    <label asp-for="Enunciado" class="form-label"></label>
+    <textarea asp-for="Enunciado" class="form-control" autofocus rows="3"></textarea>
+    <span asp-validation-for="Enunciado" class="text-danger"></span>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <label asp-for="Respuesta1" class="form-label"></label>
+        <input asp-for="Respuesta1" class="form-control" />
+        <span asp-validation-for="Respuesta1" class="text-danger"></span>
+    </div>
+    <div class="col">
+        <label asp-for="Respuesta2" class="form-label"></label>
+        <input asp-for="Respuesta2" class="form-control" />
+        <span asp-validation-for="Respuesta2" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <label asp-for="Respuesta3" class="form-label"></label>
+        <input asp-for="Respuesta3" class="form-control" />
+        <span asp-validation-for="Respuesta3" class="text-danger"></span>
+    </div>
+    <div class="col">
+        <label asp-for="Respuesta4" class="form-label"></label>
+        <input asp-for="Respuesta4" class="form-control" />
+        <span asp-validation-for="Respuesta4" class="text-danger"></span>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col">
+        <label asp-for="RespuestaCorrecta" class="form-label"></label>
+        <select asp-for="RespuestaCorrecta" class="form-select">
+            <option value="1">Respuesta 1</option>
+            <option value="2">Respuesta 2</option>
+            <option value="3">Respuesta 3</option>
+            <option value="4">Respuesta 4</option>
+        </select>
+        <span asp-validation-for="RespuestaCorrecta" class="text-danger"></span>
+    </div>
+    <div class="col">
+        <label asp-for="CategoriaId" class="form-label"></label>
+        <select asp-for="CategoriaId" class="form-select"
+                asp-items="@(ViewData["Categorias"] as SelectList)">
+            <option value="0">-- Selecciona una categoría --</option>
+        </select>
+        <span asp-validation-for="CategoriaId" class="text-danger"></span>
+    </div>
+</div>
+
+

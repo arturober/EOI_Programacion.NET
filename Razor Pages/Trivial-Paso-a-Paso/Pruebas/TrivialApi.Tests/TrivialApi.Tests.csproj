@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Permite descubrir y ejecutar las pruebas con dotnet test. -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk"
+                      Version="18.8.1" />
+
+    <!-- Framework de pruebas y adaptador para Visual Studio. -->
+    <PackageReference Include="xunit"
+                      Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio"
+                      Version="3.1.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>
+        runtime; build; native; contentfiles; analyzers; buildtransitive
+      </IncludeAssets>
+    </PackageReference>
+
+    <!-- Incluye WebApplicationFactory y el servidor HTTP de pruebas. -->
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing"
+                      Version="10.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- El proyecto de pruebas puede utilizar Program, los DTO y el contexto. -->
+    <ProjectReference Include="..\TrivialApi\TrivialApi.csproj" />
+  </ItemGroup>
+
+</Project>

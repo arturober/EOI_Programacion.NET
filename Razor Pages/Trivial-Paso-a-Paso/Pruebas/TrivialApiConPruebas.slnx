@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="TrivialApi/TrivialApi.csproj" />
+  <Project Path="TrivialApi.Tests/TrivialApi.Tests.csproj" />
+</Solution>
