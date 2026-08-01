@@ -5,19 +5,6 @@ const claveTema = "temaTrivial";
 const temaGuardado =
     localStorage.getItem(claveTema) ?? "bootstrap-light";
 
-// Esta lista permite que los componentes de Bootstrap adapten también sus
-// fondos, bordes y textos cuando la hoja elegida utiliza colores oscuros.
-const temasOscuros = [
-    "bootstrap-dark",
-    "bootswatch-cyborg",
-    "bootswatch-darkly",
-    "bootswatch-quartz",
-    "bootswatch-slate",
-    "bootswatch-solar",
-    "bootswatch-superhero",
-    "bootswatch-vapor"
-];
-
 function cambiarTema(tema) {
     // Los valores de Bootswatch comienzan por un prefijo que no forma parte
     // del nombre de la carpeta utilizada en su CDN.
@@ -34,7 +21,7 @@ function cambiarTema(tema) {
     // dataset.bsTheme representa el atributo HTML data-bs-theme.
     // Bootstrap consulta este atributo para elegir su paleta clara u oscura.
     document.documentElement.dataset.bsTheme =
-        temasOscuros.includes(tema) ? "dark" : "light";
+        tema === "bootstrap-dark" ? "dark" : "light";
 
     // localStorage conserva la elección incluso después de cerrar el navegador.
     localStorage.setItem(claveTema, tema);

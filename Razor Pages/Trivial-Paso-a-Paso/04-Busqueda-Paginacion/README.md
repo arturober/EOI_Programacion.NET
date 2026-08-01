@@ -62,12 +62,6 @@ persistencia de una pregunta modificada.
 La administración no tiene autenticación. Consulta el procedimiento detallado
 en el [README general](../README.md).
 
-## Archivo añadido
-
-```text
-wwwroot/js/busqueda-preguntas.js
-```
-
 ## Archivos ampliados
 
 ```text

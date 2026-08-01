@@ -25,7 +25,7 @@ document.querySelectorAll(".formulario-eliminar").forEach(formulario => {
             : "";
 
         const resultado = await Swal.fire({
-            title: "¿Confirmar eliminación?",
+            title: "¿Estás seguro?",
             text: `Se eliminará ${formulario.dataset.elemento} "${formulario.dataset.nombre}".${aviso} Esta operación no se puede deshacer.`,
             icon: "warning",
             showCancelButton: true,

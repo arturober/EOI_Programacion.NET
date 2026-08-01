@@ -451,12 +451,6 @@ Pages/Preguntas/Editar.cshtml.cs
 Pages/Preguntas/_Formulario.cshtml
 ```
 
-### De la versión 3 a la 4
-
-```text
-wwwroot/js/busqueda-preguntas.js
-```
-
 ### De la versión 4 a la 5
 
 ```text

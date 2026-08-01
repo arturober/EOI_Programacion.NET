@@ -32,7 +32,9 @@
                    type="search"
                    placeholder="Escribe parte de la pregunta..."
                    autocomplete="off"
-                   autofocus />
+                   autofocus 
+                   onfocus="this.setSelectionRange(this.value.length, this.value.length); this.onfocus = null"
+                   oninput="clearTimeout(this.espera); this.espera = setTimeout(() => this.form.requestSubmit(), 300)" />
         </div>
 
         <div class="col-md-6">
@@ -134,10 +136,4 @@
             </li>
         </ul>
     </nav>
-}
-
-@section Scripts {
-    @* Este archivo añade búsqueda automática sin mezclar JavaScript con Razor. *@
-    <script src="~/js/busqueda-preguntas.js"
-            asp-append-version="true"></script>
 }
