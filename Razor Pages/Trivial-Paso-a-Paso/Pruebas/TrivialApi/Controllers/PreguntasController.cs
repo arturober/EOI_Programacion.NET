@@ -56,9 +56,7 @@ public class PreguntasController(TrivialContext contexto) : ControllerBase
             pregunta.CategoriaId, pregunta.Categoria!.Nombre);
 
         return new PreguntaDto(
-            pregunta.Id, pregunta.Enunciado, pregunta.CategoriaId,
-            respuestas, pregunta.RespuestaCorrecta,
-            categoria);
+            pregunta.Id, pregunta.Enunciado, respuestas,
+            pregunta.RespuestaCorrecta, categoria);
     }
 }
-

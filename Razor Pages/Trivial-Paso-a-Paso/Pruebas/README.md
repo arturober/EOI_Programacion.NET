@@ -11,7 +11,7 @@ del trivial sin abrir un navegador y sin ejecutar previamente `dotnet run`.
 ## Proyectos
 
 ```text
-TrivialApiConPruebas
+Pruebas
 ├── TrivialApi
 │   └── Aplicación ASP.NET Core y API REST
 ├── TrivialApi.Tests
@@ -22,7 +22,7 @@ TrivialApiConPruebas
 
 ## Ejecutar las pruebas
 
-Abre una terminal en la carpeta `TrivialApiConPruebas` y ejecuta:
+Abre una terminal en la carpeta `Pruebas` y ejecuta:
 
 ```bash
 dotnet test

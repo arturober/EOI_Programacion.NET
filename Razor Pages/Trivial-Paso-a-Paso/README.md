@@ -23,14 +23,13 @@ Trivial-Paso-a-Paso
 ├── Clientes
 │   ├── Consola
 │   ├── Godot
-│   ├── HTML y JS
 │   └── JavaScript
 ├── Pruebas
 ├── .gitignore
 └── README.md
 ```
 
-Cada carpeta es autosuficiente e incluye:
+Cada etapa numerada es autosuficiente e incluye:
 
 - Su propia solución `Trivial.sln`.
 - El proyecto `TrivialApi`.
@@ -58,8 +57,10 @@ entregarla individualmente.
 - Bootswatch.
 - SweetAlert2.
 
-Las bibliotecas de interfaz se descargan desde CDN. Solo es necesario restaurar
-el paquete NuGet de Entity Framework Core para SQLite.
+Las bibliotecas de interfaz se descargan desde CDN. Los proyectos fijan
+Entity Framework Core para SQLite en la versión `10.0.10` y
+`SQLitePCLRaw.bundle_e_sqlite3` en la versión `2.1.12`. Esta última referencia
+evita restaurar la versión `2.1.11`, afectada por una vulnerabilidad conocida.
 
 ## Requisitos
 
@@ -195,14 +196,14 @@ https://tu-sitio.runasp.net/api/preguntas?cantidad=10
 ```
 
 En las versiones 6 y 7, el cliente situado en `wwwroot/cliente` se sirve desde
-la propia aplicación. Su archivo `trivial.js` contiene inicialmente
-`http://localhost:5000/api`; antes de publicarlo debe sustituirse esa dirección
-por `/api` para que utilice el mismo dominio y puerto que Razor Pages.
+la propia aplicación. Su archivo `trivial.js` ya utiliza la dirección relativa
+`/api`, por lo que funciona tanto en local como al publicarlo sin modificar el
+código.
 
 CORS solo interviene cuando un cliente web de otro origen consulta la API. En
-el código actual, `07-Version-Definitiva` habilita la política necesaria para
-el cliente independiente de `Clientes/JavaScript`. La configuración abierta
-es útil para prácticas, pero en una aplicación real convendría permitir
+las versiones 5, 6 y 7 está habilitada la política `PermitirTodos`, necesaria
+para el cliente independiente de `Clientes/JavaScript`. La configuración
+abierta es útil para prácticas, pero en una aplicación real convendría permitir
 únicamente los orígenes necesarios.
 
 ### Seguridad
@@ -214,7 +215,8 @@ protege la administración antes de abrir el sitio a terceros.
 Los clientes de consola, Godot y JavaScript, así como el proyecto de pruebas,
 no se publican dentro de `/wwwroot`: consumen o prueban una API que se ejecuta
 por separado. El cliente JavaScript debe servirse como sitio estático y
-conectarse a la dirección HTTPS de la versión 7.
+conectarse a la dirección HTTPS de una versión 5, 6 o 7. Para las prácticas se
+recomienda la versión 7 porque es la etapa más completa.
 
 ## Estrategia de crecimiento
 
@@ -400,14 +402,14 @@ a Entity Framework ni a SQLite:
 
 - [Consola](Clientes/Consola/) utiliza C# y `HttpClient`.
 - [Godot](Clientes/Godot/) ofrece una interfaz gráfica de escritorio con C#.
-- [HTML y JS](<Clientes/HTML y JS/>) conserva el ejemplo web mínimo original.
 - [JavaScript](Clientes/JavaScript/) es el cliente web independiente completo,
   con dirección de servidor configurable, Bootstrap Icons, SweetAlert2 y
   selector de temas.
 
 El nuevo cliente JavaScript no se integra en `TrivialApi/wwwroot` ni contiene
 enlaces hacia las Razor Pages. Para las prácticas se recomienda conectarlo con
-`07-Version-Definitiva`, que permite peticiones CORS desde otro origen.
+`07-Version-Definitiva`, aunque las versiones 5 y 6 también permiten peticiones
+CORS desde otro origen.
 
 ## Archivos que permanecen estables
 

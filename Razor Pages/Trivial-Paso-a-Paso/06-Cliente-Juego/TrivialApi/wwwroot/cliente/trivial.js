@@ -108,6 +108,11 @@ function mostrarPregunta() {
 }
 
 async function responder(numero) {
+    // Desactivamos las opciones para que un doble clic no responda dos veces.
+    respuestas.querySelectorAll("button").forEach(boton => {
+        boton.disabled = true;
+    });
+
     const pregunta = preguntas[posicion];
     const esCorrecta = numero === pregunta.respuestaCorrecta;
 

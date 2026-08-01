@@ -108,22 +108,13 @@ https://tu-sitio.runasp.net/api/categorias
 https://tu-sitio.runasp.net/api/preguntas?cantidad=10
 ```
 
-Antes de publicar el cliente integrado, cambia en
-`wwwroot/cliente/trivial.js` la dirección local:
-
-```javascript
-const api = "http://localhost:5000/api";
-```
-
-por la ruta relativa:
-
 ```javascript
 const api = "/api";
 ```
 
-Después prueba una búsqueda, una operación CRUD, el juego, SweetAlert y varios
-temas. La ruta relativa hará que el cliente integrado utilice el mismo dominio
-y puerto que la aplicación publicada.
+Esta ruta relativa ya está incluida en `wwwroot/cliente/trivial.js`; no hay que
+modificarla antes de publicar. Después prueba una búsqueda, una operación CRUD,
+el juego, SweetAlert y varios temas.
 
 El cliente independiente no se incluye al ejecutar `dotnet publish` porque se
 encuentra fuera de `TrivialApi`. Puede abrirse localmente con un servidor web

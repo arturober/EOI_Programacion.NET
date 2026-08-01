@@ -78,7 +78,7 @@ public class ApiTrivialTests(FabricaApi fabrica)
         Assert.Equal(2, preguntas.Count);
         Assert.All(
             preguntas,
-            pregunta => Assert.Equal(ciencia.Id, pregunta.CategoriaId));
+            pregunta => Assert.Equal(ciencia.Id, pregunta.Categoria.Id));
     }
 
     [Fact]

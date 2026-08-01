@@ -72,8 +72,8 @@ https://tu-sitio.runasp.net/api/preguntas?cantidad=10
 ```
 
 La API JSON es de solo lectura, pero la administración Razor mantiene el CRUD
-público. Esta etapa permite abrir las direcciones directamente en el navegador,
-pero todavía no registra una política CORS para páginas web de otro origen.
+público. Esta etapa también registra CORS para que los clientes web externos
+puedan consultar esos endpoints durante las prácticas.
 
 Consulta el procedimiento completo en el
 [README general](../README.md).
@@ -284,27 +284,31 @@ por Id.
 CORS controla si un navegador permite que una página de otro origen consulte
 la API.
 
-En esta etapa los controladores REST ya existen, pero `Program.cs` todavía no
-registra ni aplica una política CORS. Esto no afecta al navegador cuando se abre
-directamente un endpoint, ni a clientes nativos como los de consola y Godot.
-
-Sí afecta a un cliente HTML servido desde otra dirección o desde otro puerto.
-Para probar el cliente web independiente incluido en:
-
-```text
-Clientes/JavaScript
-```
-
-utilice `07-Version-Definitiva`, donde se define la política didáctica:
+Esta etapa registra la política `PermitirTodos`:
 
 ```csharp
-politica.AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+builder.Services.AddCors(opciones =>
+{
+    opciones.AddPolicy("PermitirTodos", politica =>
+    {
+        politica
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 ```
 
-Esta configuración abierta es apropiada para el ejercicio. En una aplicación
-real conviene especificar únicamente los orígenes permitidos.
+Después de `UseRouting` se aplica con:
+
+```csharp
+app.UseCors("PermitirTodos");
+```
+
+Por ello, el [cliente JavaScript independiente](../Clientes/JavaScript/) puede
+conectarse a esta versión o a cualquiera posterior. La configuración abierta es
+apropiada para el ejercicio; en una aplicación real conviene especificar
+únicamente los orígenes permitidos.
 
 ## Direcciones disponibles
 

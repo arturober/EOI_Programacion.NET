@@ -1,4 +1,5 @@
-const api = "http://localhost:5000/api";
+// La dirección relativa funciona en cualquier puerto y también al publicar.
+const api = "/api";
 
 let preguntas = [];
 let posicion = 0;

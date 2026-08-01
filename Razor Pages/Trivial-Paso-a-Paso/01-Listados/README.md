@@ -118,12 +118,17 @@ en el [README general](../README.md).
 - Que se necesita el proveedor SQLite de Entity Framework.
 - Que la base debe copiarse al compilar y publicar.
 
-El paquete relevante es:
+Los paquetes relevantes son:
 
 ```xml
 <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"
-                  Version="10.0.0" />
+                  Version="10.0.10" />
+<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3"
+                  Version="2.1.12" />
 ```
+
+La segunda referencia fija una versión corregida de la biblioteca nativa de
+SQLite y evita que NuGet restaure la versión vulnerable `2.1.11`.
 
 ## 2. Cadena de conexión
 

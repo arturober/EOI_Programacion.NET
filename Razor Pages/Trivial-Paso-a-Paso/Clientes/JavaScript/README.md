@@ -62,13 +62,12 @@ GET /api/preguntas?cantidad=10
 GET /api/preguntas?categoriaId=2&cantidad=10
 ```
 
-Aunque los endpoints existen desde `05-API-REST`, un navegador también exige
-que el servidor permita el origen del cliente mediante CORS. En el código
-actual del itinerario esa configuración está incluida en
-`07-Version-Definitiva`.
+Además de los endpoints, un navegador exige que el servidor permita el origen
+del cliente mediante CORS. El itinerario incluye esa configuración desde
+`05-API-REST` y la conserva en las versiones 6 y 7.
 
-Por tanto, para utilizar este cliente sin modificar el servidor se recomienda
-ejecutar o publicar:
+Puede utilizarse cualquier versión desde `05-API-REST`. Para una demostración
+con todas las mejoras de interfaz se recomienda ejecutar o publicar:
 
 ```text
 07-Version-Definitiva/TrivialApi
@@ -266,13 +265,14 @@ Compruebe:
 2. Que el puerto coincide con el mostrado por `dotnet run`.
 3. Que se ha escrito la raíz, sin `/api`.
 4. Que `/api/categorias` responde en el navegador.
-5. Que se está utilizando la versión 7 o un servidor con CORS equivalente.
+5. Que se está utilizando la versión 5 o posterior, o un servidor con CORS
+   equivalente.
 
 ### El navegador menciona CORS
 
 El cliente y la API tienen orígenes distintos aunque ambos estén en el mismo
-ordenador si utilizan puertos diferentes. Ejecute `07-Version-Definitiva`, que
-registra la política `PermitirTodo` para las prácticas.
+ordenador si utilizan puertos diferentes. Ejecute la versión 5, 6 o 7, que
+registran la política `PermitirTodos` para las prácticas.
 
 En una aplicación real no se debería utilizar `AllowAnyOrigin`; convendría
 permitir únicamente las direcciones desde las que se publique el cliente.
