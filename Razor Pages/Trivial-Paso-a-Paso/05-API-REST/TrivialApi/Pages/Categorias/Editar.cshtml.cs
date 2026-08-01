@@ -6,22 +6,26 @@ using TrivialApi.Models;
 
 namespace TrivialApi.Pages.Categorias;
 
+// Esta página carga una categoría y guarda posteriormente sus cambios.
 public class EditarModel(TrivialContext contexto) : PageModel
 {
+    // La misma propiedad sirve para mostrar y para recibir el formulario.
     [BindProperty]
     public Categoria Categoria { get; set; } = new();
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
+        // FindAsync busca directamente por la clave primaria.
         Categoria? categoria = await contexto.Categorias.FindAsync(id);
 
-        if (categoria == null)
+        if (categoria is null)
         {
+            // NotFound produce una respuesta HTTP 404 si el Id no existe.
             return NotFound();
         }
 
+        // Entregamos la entidad encontrada a los Tag Helpers de la vista.
         Categoria = categoria;
-
         return Page();
     }
 
@@ -32,20 +36,26 @@ public class EditarModel(TrivialContext contexto) : PageModel
             return Page();
         }
 
-        bool categoriaExistente = await contexto.Categorias.AnyAsync(c => c.Id != Categoria.Id && c.Nombre.ToLower() == Categoria.Nombre.ToLower());
+        // Excluimos la propia fila al comprobar si el nombre ya está ocupado.
+        bool nombreRepetido = await contexto.Categorias.AnyAsync(categoria =>
+            categoria.Id != Categoria.Id &&
+            categoria.Nombre.ToLower() == Categoria.Nombre.ToLower());
 
-        if (categoriaExistente)
+        if (nombreRepetido)
         {
-            ModelState.AddModelError("Categoria.Nombre", "Ya existe una categoría con el mismo nombre.");
+            ModelState.AddModelError(
+                "Categoria.Nombre",
+                "Ya existe otra categoría con ese nombre.");
             return Page();
         }
 
-
+        // Attach conecta la entidad recibida con el contexto.
+        // Modified indica que Entity Framework debe generar un UPDATE.
         contexto.Attach(Categoria).State = EntityState.Modified;
         await contexto.SaveChangesAsync();
 
-        TempData["Mensaje"] = "Categoría editada correctamente.";
-
-        return RedirectToPage("./Index");
+        TempData["Mensaje"] = "La categoría se ha actualizado correctamente.";
+        return RedirectToPage("Index");
     }
 }
+

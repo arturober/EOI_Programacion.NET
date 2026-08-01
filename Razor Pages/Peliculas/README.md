@@ -127,6 +127,108 @@ Abre la dirección que muestre el terminal. Con el perfil incluido suele ser:
 En el primer arranque se crea automáticamente `Data/peliculas.db` con las
 tablas de Identity, películas y favoritas.
 
+## Publicación en MonsterASP.NET
+
+MonsterASP.NET admite aplicaciones ASP.NET Core con .NET 10. Como el proyecto
+se trabaja principalmente desde Visual Studio Code, el método recomendado es
+usar la terminal integrada y subir un ZIP.
+
+### Preparar la publicación desde VS Code
+
+Desde la carpeta `Peliculas`:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Este comando coloca directamente en el ZIP los archivos de `publicacion`, sin
+crear una carpeta intermedia.
+
+### Subir el ZIP
+
+1. Abre **Files** en el panel del sitio.
+2. Entra en `/wwwroot`.
+3. Sube `publicacion.zip`.
+4. Extrae el archivo dentro de `/wwwroot`.
+5. Permite sobrescribir los archivos de la aplicación, pero no borres
+   previamente todo el directorio.
+6. Reinicia la aplicación o el AppPool.
+
+En `/wwwroot` deben quedar directamente `Peliculas.dll`, `web.config`,
+`appsettings.json`, la carpeta `wwwroot` y el resto de archivos publicados.
+No subas el código fuente, el `.csproj`, `bin` ni `obj`.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+WebDeploy queda como
+[alternativa para quienes usen Visual Studio](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio).
+
+### Configurar el token de TMDB
+
+User Secrets no se incluye al publicar. En el panel de MonsterASP.NET abre:
+
+```text
+Websites → Manage website → Scripting → Environment Variables
+```
+
+Añade:
+
+```text
+Nombre: Tmdb__TokenAcceso
+Valor:  TU_API_READ_ACCESS_TOKEN
+```
+
+Utiliza el token largo denominado **API Read Access Token**, no la clave corta
+`API Key`. Introduce solo el valor:
+
+- sin comillas;
+- sin espacios al principio o al final;
+- sin escribir `Bearer`;
+- sin añadir `Tmdb:TokenAcceso=`.
+
+La aplicación construye automáticamente la cabecera `Authorization: Bearer`.
+Los dos guiones bajos equivalen a `Tmdb:TokenAcceso`. Guarda los cambios y
+reinicia la aplicación o el AppPool. Consulta la
+[documentación de variables de entorno](https://help.monsterasp.net/books/development/page/environment-variables-as-configuration-store).
+
+No publiques `appsettings.Local.json` ni guardes el token real en Git.
+
+### Identity y conservación de SQLite
+
+Las cuentas son locales: no hace falta configurar Google, Microsoft ni un
+servidor de correo. El correo no necesita confirmación. Identity almacena
+usuarios, contraseñas protegidas y favoritas en
+`Data/peliculas.db`.
+
+`EnsureCreatedAsync` crea la base y sus tablas en el primer arranque. En
+publicaciones posteriores:
+
+- conserva `Data/peliculas.db`;
+- no actives la eliminación de archivos adicionales del destino en WebDeploy;
+- no sustituyas la base del servidor por una base local vacía;
+- realiza una copia de seguridad antes de actualizar;
+- recuerda que `EnsureCreatedAsync` no migra una base existente.
+
+### Comprobación posterior
+
+1. Comprueba que desaparece el aviso «Falta el token de TMDB».
+2. Abre un listado y la ficha de una película.
+3. Registra una cuenta, cierra la sesión y vuelve a entrar.
+4. Añade una película a favoritas.
+5. Reinicia la aplicación y comprueba que cuenta y favorita permanecen.
+
+Si el token falta o es incorrecto, TMDB normalmente devolverá `401`. Para
+errores HTTP 500 consulta `Websites → Manage → Logs` o habilita temporalmente
+los [logs de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging);
+desactívalos al terminar.
+
 ## Cómo se registra un usuario
 
 1. Pulsa **Registrarse** en la barra superior.

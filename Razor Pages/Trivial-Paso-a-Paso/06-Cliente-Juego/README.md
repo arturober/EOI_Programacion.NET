@@ -297,7 +297,7 @@ La misma función se utiliza al cargar categorías y al empezar.
 10. Crear una categoría vacía y seleccionarla.
 11. Detener el servidor y comprobar el error.
 
-## Preguntas para evaluar los conceptos aprendidos
+## Preguntas para el alumnado
 
 1. ¿De dónde proceden las categorías?
 2. ¿Qué representa una promesa?

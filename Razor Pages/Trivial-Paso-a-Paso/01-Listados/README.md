@@ -9,7 +9,7 @@ edición o borrado, ni API ni cliente JavaScript.
 
 ## Objetivos
 
-Al terminar esta versión, se debería poder explicar:
+Al terminar esta versión, el alumnado debería poder explicar:
 
 - Qué responsabilidad tiene `Program.cs`.
 - Qué representa una entidad.
@@ -177,7 +177,7 @@ La entidad contiene:
 - Enunciado.
 - Cuatro respuestas.
 - Número de respuesta correcta.
-- Clave ajena de categoría.
+- Clave foránea de categoría.
 - Propiedad de navegación.
 
 `CategoriaId` es el valor almacenado en la tabla. `Categoria` permite acceder
@@ -202,7 +202,7 @@ public DbSet<Pregunta> Preguntas => Set<Pregunta>();
 
 - Índice único para el nombre de la categoría.
 - Relación uno a muchos.
-- Clave ajena.
+- Clave foránea.
 - Borrado en cascada.
 
 Aunque todavía no se borra nada, la relación se define desde el principio para
@@ -325,10 +325,10 @@ Al abrir `/Preguntas`:
 9. Comprobar el menú hamburguesa.
 10. Comprobar el desplazamiento de la tabla.
 
-## Preguntas para evaluar los conceptos aprendidos
+## Preguntas para el alumnado
 
 1. ¿Por qué `Categoria` tiene una lista de preguntas?
-2. ¿Dónde se encuentra realmente la clave ajena?
+2. ¿Dónde se encuentra realmente la clave foránea?
 3. ¿Qué diferencia hay entre `CategoriaId` y `Categoria`?
 4. ¿Qué método ejecuta la consulta?
 5. ¿Qué ocurriría si se quitara `Include`?

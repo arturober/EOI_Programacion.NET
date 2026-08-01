@@ -4,45 +4,58 @@
     ViewData["Title"] = "Preguntas";
 }
 
-<header class="mb-3">
-    <h1>Preguntas</h1>
-
-    <a class="btn btn-primary" asp-page="/Preguntas/Crear">Crear nueva pregunta</a>
-</header>
-
-<form method="get" class="card card-body shadow-sm mb-4">
-    <div class="row g3">
-        <div class="col">
-            <label for="Busqueda" class="form-label">Buscar:</label>
-            <input asp-for="Busqueda" 
-                class="form-control" 
-                type="search" 
-                autocomplete="off"
-                autofocus
-                placeholder="Buscar pregunta..."
-                onfocus="this.setSelectionRange(this.value.length, this.value.length); this.onfocus = null"
-                oninput="clearTimeout(this.espera); this.espera = setTimeout(() => this.form.requestSubmit(), 300)" />
-
-        </div>
-        <div class="col">
-            <label asp-for="CategoriaId" class="form-label"></label>
-            <select asp-for="CategoriaId" class="form-select"
-                    asp-items="@(ViewData["Categorias"] as SelectList)"
-                    onchange="this.form.requestSubmit()">
-                <option value="0">-- Selecciona una categoría --</option>
-            </select>
-            <span asp-validation-for="CategoriaId" class="text-danger"></span>
-        </div>
+<header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Preguntas</h1>
+        <p class="text-body-secondary mb-0">
+            Mostrando @Model.Preguntas.Count de
+            @Model.TotalResultados resultados.
+        </p>
     </div>
 
+    <a class="btn btn-primary" asp-page="Crear">
+        Nueva pregunta
+    </a>
+</header>
+
+@* El formulario GET coloca los filtros en la dirección y permite compartirlos. *@
+<form id="formularioBusqueda"
+      method="get"
+      class="card card-body shadow-sm mb-4">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Busqueda" class="form-label fw-semibold">
+                Buscar
+            </label>
+            <input asp-for="Busqueda"
+                   class="form-control"
+                   type="search"
+                   placeholder="Escribe parte de la pregunta..."
+                   autocomplete="off"
+                   autofocus />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="CategoriaId" class="form-label fw-semibold">
+                Categoría
+            </label>
+            <select asp-for="CategoriaId"
+                    asp-items="Model.Categorias"
+                    class="form-select">
+                <option value="">Todas las categorías</option>
+            </select>
+        </div>
+    </div>
 </form>
 
-<div class="row">
-    <table class="table table-striped">
+@* Bootstrap adapta la tabla y alinea verticalmente el contenido de sus filas. *@
+<div class="table-responsive rounded shadow-sm border">
+    <table class="table table-hover align-middle mb-0">
         <thead>
             <tr>
                 <th>Pregunta</th>
-                <th>Categoria</th>
+                <th>Categoría</th>
+                <th class="text-end">Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -51,25 +64,80 @@
                 <tr>
                     <td>@pregunta.Enunciado</td>
                     <td>
-                        <span class="badge bg-secondary">
+                        <span class="badge text-bg-secondary">
                             @pregunta.Categoria?.Nombre
                         </span>
                     </td>
-                    <td>
-                        <a class="btn btn-primary" 
-                            asp-page="/Preguntas/Editar" 
-                            asp-route-id="@pregunta.Id">Editar</a>
+                    <td class="text-end text-nowrap">
+                        <a class="btn btn-sm btn-outline-primary"
+                           asp-page="Editar"
+                           asp-route-id="@pregunta.Id">
+                            Editar
+                        </a>
 
-                        <form method="post" 
-                            asp-page-handler="Eliminar"
-                            class="d-inline formulario-eliminar">
-                            <input type="hidden" name="id" value="@pregunta.Id" />
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        @* La confirmación nativa se sustituirá por SweetAlert
+                           en la última versión sin cambiar el método del servidor. *@
+                        <form method="post"
+                              asp-page-handler="Eliminar"
+                              class="d-inline"
+                              onsubmit="return confirm('¿Quieres eliminar esta pregunta?');">
+                            <input type="hidden" name="id"
+                                   value="@pregunta.Id" />
+
+                            @* Estos campos permiten regresar a los mismos filtros. *@
+                            <input type="hidden" name="busqueda"
+                                   value="@Model.Busqueda" />
+                            <input type="hidden" name="categoriaId"
+                                   value="@Model.CategoriaId" />
+                            <input type="hidden" name="pagina"
+                                   value="@Model.Pagina" />
+
+                            <button class="btn btn-sm btn-outline-danger"
+                                    type="submit">
+                                Eliminar
+                            </button>
                         </form>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
 </div>
+
+@if (Model.TotalPaginas > 1)
+{
+    @* Los enlaces conservan los filtros mientras modifican solo la página. *@
+    <nav class="mt-4" aria-label="Páginas de preguntas">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.Pagina == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-route-pagina="@(Model.Pagina - 1)"
+                   asp-route-busqueda="@Model.Busqueda"
+                   asp-route-categoriaId="@Model.CategoriaId">
+                    Anterior
+                </a>
+            </li>
+
+            <li class="page-item disabled">
+                <span class="page-link">
+                    Página @Model.Pagina de @Model.TotalPaginas
+                </span>
+            </li>
+
+            <li class="page-item @(Model.Pagina == Model.TotalPaginas ? "disabled" : "")">
+                <a class="page-link"
+                   asp-route-pagina="@(Model.Pagina + 1)"
+                   asp-route-busqueda="@Model.Busqueda"
+                   asp-route-categoriaId="@Model.CategoriaId">
+                    Siguiente
+                </a>
+            </li>
+        </ul>
+    </nav>
+}
+
+@section Scripts {
+    @* Este archivo añade búsqueda automática sin mezclar JavaScript con Razor. *@
+    <script src="~/js/busqueda-preguntas.js"
+            asp-append-version="true"></script>
+}

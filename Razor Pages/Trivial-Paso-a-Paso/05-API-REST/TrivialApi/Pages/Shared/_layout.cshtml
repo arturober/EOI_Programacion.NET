@@ -1,50 +1,96 @@
+@{
+    // Leemos la ruta actual para destacar la sección activa de la navegación.
+    string pagina = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+    bool inicio = pagina == "/Index";
+    bool preguntas = pagina.StartsWith("/Preguntas");
+    bool categorias = pagina.StartsWith("/Categorias");
+}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="utf-8" />
 
+    @* Viewport hace que Bootstrap adapte el diseño al ancho del dispositivo. *@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Aplicación de ejemplo para la asignatura de Desarrollo de Aplicaciones Web" />
+    <meta name="description"
+          content="Proyecto educativo de preguntas de trivial." />
 
-    <title>@ViewData["Title"] - TrivialApi</title>
+    @* Cada página establece su título mediante ViewData. *@
+    <title>@ViewData["Title"] - Trivial</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" 
+    @* Bootstrap proporciona todos los estilos; no necesitamos CSS propio. *@
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
           rel="stylesheet" />
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top shadow-sm bg-primary">
+<body class="bg-body-tertiary min-vh-100 d-flex flex-column">
+    @* La barra se mantiene visible al desplazarse y se contrae en móvil. *@
+    <nav class="navbar navbar-expand-lg bg-primary sticky-top shadow-sm"
+         data-bs-theme="dark">
         <div class="container">
-            <a class="navbar-brand" asp-page="/Index">TrivialApi</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand fw-bold" asp-page="/Index">
+                Trivial
+            </a>
+
+            @* Este botón controla el menú hamburguesa en pantallas pequeñas. *@
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menuPrincipal"
+                    aria-controls="menuPrincipal"
+                    aria-expanded="false"
+                    aria-label="Mostrar u ocultar el menú">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" asp-page="/Categorias/Index">Categorías</a>
+                        <a class="nav-link @(inicio ? "active fw-semibold" : "")"
+                           asp-page="/Index">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-page="/Preguntas/Index">Preguntas</a>
+                        <a class="nav-link @(preguntas ? "active fw-semibold" : "")"
+                           asp-page="/Preguntas/Index">Preguntas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(categorias ? "active fw-semibold" : "")"
+                           asp-page="/Categorias/Index">Categorías</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main class="container py-4 -flex-grow-1">
-        @if (TempData["Mensaje"] != null)
+    @* RenderBody inserta aquí el contenido particular de cada Razor Page. *@
+    <main class="container py-4 flex-grow-1">
+        @* TempData conserva el mensaje durante la redirección posterior al formulario. *@
+        @if (TempData["Mensaje"] is string mensaje)
         {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                @TempData["Mensaje"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <div class="alert alert-success alert-dismissible fade show"
+                 role="alert">
+                @mensaje
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Cerrar"></button>
             </div>
         }
 
         @RenderBody()
     </main>
 
+    <footer class="border-top bg-body py-4 mt-4">
+        <div class="container text-center text-body-secondary small">
+            Proyecto educativo desarrollado con ASP.NET Core,
+            Razor Pages, Entity Framework Core y SQLite.
+        </div>
+    </footer>
+
+    @* El JavaScript de Bootstrap hace funcionar el menú hamburguesa. *@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
+    @* Cada página puede incorporar scripts adicionales mediante esta sección. *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

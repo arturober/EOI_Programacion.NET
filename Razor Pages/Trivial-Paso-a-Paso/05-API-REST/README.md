@@ -328,7 +328,7 @@ conviene especificar orígenes permitidos.
 11. Pedir cantidad cero.
 12. Pedir cantidad superior a 1.000.
 
-## Preguntas para evaluar los conceptos aprendidos
+## Preguntas para el alumnado
 
 1. ¿Qué diferencia hay entre entidad y DTO?
 2. ¿Por qué no se devuelve `Categoria` directamente?

@@ -4,19 +4,25 @@
     ViewData["Title"] = "Editar categoría";
 }
 
-<section class="card shadow-sm p-4">
-    <div class="col-md-6 offset-md-3">
-        <h1>Editar categoría</h1>
+<section class="card shadow-sm mx-auto">
+    <div class="card-body p-4">
+        <h1 class="h2 mb-4">Editar categoría</h1>
 
         <form method="post">
+            @* El campo oculto conserva el Id que identifica la fila a modificar. *@
             <input asp-for="Categoria.Id" type="hidden" />
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger"></div>
 
-            <partial name="_Formulario" for="Categoria" />
+            <partial name="_Formulario" model="Model.Categoria" />
 
-            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            <a asp-page="/Categorias/Index" class="btn btn-secondary">Cancelar</a>
+            <button class="btn btn-primary" type="submit">
+                Guardar
+            </button>
+            <a class="btn btn-outline-secondary" asp-page="Index">
+                Cancelar
+            </a>
         </form>
     </div>
 </section>

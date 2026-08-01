@@ -4,25 +4,30 @@
     ViewData["Title"] = "Categorías";
 }
 
-<header>
-    <h1>Categorías</h1>
+<header class="mb-4">
+    <h1 class="mb-1">Categorías</h1>
+    <p class="text-body-secondary mb-0">
+        Cada categoría agrupa un conjunto de preguntas.
+    </p>
 </header>
 
-<div class="row">
-    <table class="table table-hover table-striped">
+@* table-responsive permite desplazar la tabla horizontalmente en móviles estrechos. *@
+<div class="table-responsive rounded shadow-sm border">
+    <table class="table table-hover align-middle mb-0">
         <thead>
             <tr>
                 <th>Nombre</th>
-                <th>Preguntas</th>
+                <th class="text-end">Preguntas</th>
             </tr>
         </thead>
         <tbody>
+            @* Razor genera una fila por cada objeto recibido desde el PageModel. *@
             @foreach (Categoria categoria in Model.Categorias)
             {
                 <tr>
                     <td>@categoria.Nombre</td>
-                    <td>
-                        <span class="badge bg-secondary">
+                    <td class="text-end">
+                        <span class="badge text-bg-secondary">
                             @categoria.Preguntas.Count
                         </span>
                     </td>
@@ -31,3 +36,4 @@
         </tbody>
     </table>
 </div>
+

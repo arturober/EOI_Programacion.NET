@@ -84,6 +84,96 @@ También puedes copiar `appsettings.Local.example.json` como
 `appsettings.Local.json` y cambiar allí el contacto. Este último archivo está
 excluido de Git.
 
+## Publicación en MonsterASP.NET
+
+MonsterASP.NET es compatible con aplicaciones ASP.NET Core creadas con .NET 10.
+Desde Visual Studio Code, el método recomendado consiste en publicar desde la
+terminal y subir un ZIP.
+
+### Preparar la publicación desde VS Code
+
+Abre la terminal integrada en la carpeta `OpenFoodFacts`:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+El ZIP contiene los archivos publicados sin una carpeta `publicacion`
+adicional. Para subirlo:
+
+1. Abre **Files** en MonsterASP.NET.
+2. Entra en `/wwwroot`.
+3. Sube y extrae `publicacion.zip`.
+4. Permite sustituir los archivos anteriores, sin borrar todo `/wwwroot`.
+5. Reinicia la aplicación o el AppPool.
+
+Dentro de `/wwwroot` deben quedar directamente `OpenFoodFacts.dll`,
+`web.config`, `appsettings.json` y la carpeta `wwwroot`. No subas el código
+fuente, el `.csproj`, `bin` ni `obj`.
+
+Consulta la
+[guía oficial de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+WebDeploy se mantiene como
+[alternativa para Visual Studio](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio).
+
+### Configurar el contacto de producción
+
+Open Food Facts no necesita una clave de API, pero pide que la aplicación se
+identifique mediante un contacto real. User Secrets no se envía al servidor.
+En el panel abre:
+
+```text
+Websites → Manage website → Scripting → Environment Variables
+```
+
+Añade:
+
+```text
+Nombre: OpenFoodFacts__Contacto
+Valor:  tu-correo@dominio.es
+```
+
+No mantengas `contacto@example.com` en una publicación pública. Los dos
+guiones bajos equivalen a `OpenFoodFacts:Contacto`. Guarda el cambio y
+reinicia la aplicación o el AppPool. Consulta la
+[guía de variables de entorno](https://help.monsterasp.net/books/development/page/environment-variables-as-configuration-store).
+
+No publiques `appsettings.Local.json`.
+
+### Identity y SQLite
+
+No hay que configurar un proveedor externo de acceso ni un servidor de correo.
+Las cuentas son locales, el correo no necesita confirmación e Identity guarda
+usuarios, contraseñas protegidas y favoritos en
+`Data/openfoodfacts.db`.
+
+La base se crea automáticamente en el primer arranque. Para conservarla:
+
+- no elimines ni sobrescribas `Data/openfoodfacts.db` al republicar;
+- no actives la eliminación de archivos adicionales del destino;
+- no subas una base local salvo que quieras reemplazar la del servidor;
+- realiza una copia de seguridad antes de modificar las entidades;
+- recuerda que `EnsureCreatedAsync` no migra una base existente.
+
+### Comprobación posterior
+
+1. Busca un producto y comprueba que no se usa el contacto de ejemplo.
+2. Registra una cuenta, cierra la sesión y vuelve a entrar.
+3. Añade dos productos favoritos y prueba la comparación.
+4. Reinicia la aplicación y comprueba que la cuenta y los favoritos continúan.
+
+Ante un error HTTP 500 consulta `Websites → Manage → Logs`. También puedes
+habilitar temporalmente los
+[logs de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging)
+y desactivarlos al terminar.
+
 ## Registro e inicio de sesión
 
 La autenticación local utiliza **ASP.NET Core Identity**. El usuario indica su

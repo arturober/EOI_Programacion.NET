@@ -1,15 +1,92 @@
 @page
 @model IndexModel
 @{
+    // Este valor se incorpora al elemento title de la plantilla.
     ViewData["Title"] = "Inicio";
+
+    // Request contiene el protocolo y el servidor utilizados en esta ejecución.
+    // De esta forma los enlaces funcionan aunque cambie el puerto.
+    string urlBase = $"{Request.Scheme}://{Request.Host}";
 }
 
-<section class="text-center">
-    <h1 class="display-4">Bienvenido a TrivialApi</h1>
-    <p>Este es un ejemplo de una aplicación web construida con Razor Pages y Entity Framework Core.</p>
-    <p>Total de preguntas: @Model.TotalPreguntas</p>
-    <p>Total de categorías: @Model.TotalCategorias</p>
+@* Esta cabecera presenta la finalidad de la primera versión. *@
+<section class="p-4 p-md-5 mb-4 bg-body rounded-3 shadow-sm">
+    <h1 class="display-5 fw-bold">Preguntas de trivial</h1>
+    <p class="lead">
+        Administra las preguntas con Razor Pages y consúltalas también
+        mediante una API REST de solo lectura.
+    </p>
 
-    <a asp-page="/Categorias/Index" class="btn btn-primary">Ver categorías</a>
-    <a asp-page="/Preguntas/Index" class="btn btn-primary">Ver preguntas</a>
+    @* Los badges muestran los recuentos calculados por el PageModel. *@
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <span class="badge text-bg-primary fs-6">
+            @Model.TotalPreguntas preguntas
+        </span>
+        <span class="badge text-bg-secondary fs-6">
+            @Model.TotalCategorias categorías
+        </span>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary btn-lg" asp-page="/Preguntas/Index">
+            Consultar preguntas
+        </a>
+        <a class="btn btn-outline-secondary btn-lg"
+           asp-page="/Categorias/Index">
+            Consultar categorías
+        </a>
+    </div>
+</section>
+
+<section class="card shadow-sm">
+    <div class="card-body">
+        <h2 class="h4">Direcciones de la API</h2>
+        <p>
+            Cada enlace abre el resultado JSON en una pestaña nueva.
+        </p>
+
+        @* text-break evita que una dirección larga desborde la tarjeta. *@
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <a class="text-break"
+                   href="@($"{urlBase}/api/categorias")"
+                   target="_blank"
+                   rel="noopener">
+                    <code>@urlBase/api/categorias</code>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="text-break"
+                   href="@($"{urlBase}/api/categorias/1")"
+                   target="_blank"
+                   rel="noopener">
+                    <code>@urlBase/api/categorias/1</code>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="text-break"
+                   href="@($"{urlBase}/api/preguntas?cantidad=1000")"
+                   target="_blank"
+                   rel="noopener">
+                    <code>@urlBase/api/preguntas?cantidad=1000</code>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="text-break"
+                   href="@($"{urlBase}/api/preguntas?categoriaId=1&cantidad=100")"
+                   target="_blank"
+                   rel="noopener">
+                    <code>@urlBase/api/preguntas?categoriaId=1&amp;cantidad=100</code>
+                </a>
+            </li>
+            <li class="list-group-item">
+                <a class="text-break"
+                   href="@($"{urlBase}/api/preguntas/1")"
+                   target="_blank"
+                   rel="noopener">
+                    <code>@urlBase/api/preguntas/1</code>
+                </a>
+            </li>
+        </ul>
+    </div>
 </section>

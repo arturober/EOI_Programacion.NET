@@ -4,17 +4,26 @@
     ViewData["Title"] = "Nueva categoría";
 }
 
-<section class="card shadow-sm">
-    <div class="card-body text-center">
-        <h1 class="display-4">Crear nueva categoría</h1>
+<section class="card shadow-sm mx-auto">
+    <div class="card-body p-4">
+        <h1 class="h2 mb-4">Nueva categoría</h1>
 
-        <form method="post" class="mt-4">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @* method="post" hace que el envío ejecute OnPostAsync. *@
+        <form method="post">
+            @* ModelOnly reserva esta zona para errores generales del formulario. *@
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger"></div>
 
-            <partial name="_Formulario" for="Categoria" />
+            @* El parcial evita duplicar el campo Nombre en Crear y Editar. *@
+            <partial name="_Formulario" model="Model.Categoria" />
 
-            <button type="submit" class="btn btn-primary">Crear</button>
-            <a asp-page="/Categorias/Index" class="btn btn-secondary">Cancelar</a>
+            <button class="btn btn-primary" type="submit">
+                Guardar
+            </button>
+            <a class="btn btn-outline-secondary" asp-page="Index">
+                Cancelar
+            </a>
         </form>
     </div>
 </section>
+

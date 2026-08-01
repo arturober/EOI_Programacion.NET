@@ -1,7 +1,12 @@
 @model Categoria
 
+@* Este parcial contiene los campos compartidos por Crear y Editar. *@
 <div class="mb-3">
+    @* asp-for relaciona la etiqueta, el control y la validación con Nombre. *@
     <label asp-for="Nombre" class="form-label"></label>
     <input asp-for="Nombre" class="form-control" autofocus />
+
+    @* Si la validación falla, aquí aparecerá el mensaje correspondiente. *@
     <span asp-validation-for="Nombre" class="text-danger"></span>
 </div>
+

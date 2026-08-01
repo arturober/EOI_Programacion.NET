@@ -1,15 +1,46 @@
 @page
 @model IndexModel
 @{
+    // Este valor se incorpora al elemento title de la plantilla.
     ViewData["Title"] = "Inicio";
 }
 
-<section class="text-center">
-    <h1 class="display-4">Bienvenido a TrivialApi</h1>
-    <p>Este es un ejemplo de una aplicación web construida con Razor Pages y Entity Framework Core.</p>
-    <p>Total de preguntas: @Model.TotalPreguntas</p>
-    <p>Total de categorías: @Model.TotalCategorias</p>
+@* Esta cabecera presenta la finalidad de la primera versión. *@
+<section class="p-4 p-md-5 mb-4 bg-body rounded-3 shadow-sm">
+    <h1 class="display-5 fw-bold">Preguntas de trivial</h1>
+    <p class="lead">
+        Primera versión: consulta de categorías y preguntas mediante
+        Razor Pages, Entity Framework Core y SQLite.
+    </p>
 
-    <a asp-page="/Categorias/Index" class="btn btn-primary">Ver categorías</a>
-    <a asp-page="/Preguntas/Index" class="btn btn-primary">Ver preguntas</a>
+    @* Los badges muestran los recuentos calculados por el PageModel. *@
+    <div class="d-flex flex-wrap gap-2 mb-4">
+        <span class="badge text-bg-primary fs-6">
+            @Model.TotalPreguntas preguntas
+        </span>
+        <span class="badge text-bg-secondary fs-6">
+            @Model.TotalCategorias categorías
+        </span>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary btn-lg" asp-page="/Preguntas/Index">
+            Consultar preguntas
+        </a>
+        <a class="btn btn-outline-secondary btn-lg"
+           asp-page="/Categorias/Index">
+            Consultar categorías
+        </a>
+    </div>
 </section>
+
+<section class="card shadow-sm">
+    <div class="card-body">
+        <h2 class="h4">Objetivo de esta versión</h2>
+        <p class="mb-0">
+            Aprender cómo una consulta de Entity Framework obtiene datos de
+            SQLite, los entrega al PageModel y Razor los transforma en HTML.
+        </p>
+    </div>
+</section>
+

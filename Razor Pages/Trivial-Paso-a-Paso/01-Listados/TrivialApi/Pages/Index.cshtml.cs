@@ -4,14 +4,18 @@ using TrivialApi.Data;
 
 namespace TrivialApi.Pages;
 
-public class IndexModel(TrivialContext context) : PageModel
+// El PageModel contiene la lógica que prepara los datos de la página de inicio.
+public class IndexModel(TrivialContext contexto) : PageModel
 {
+    // Estas propiedades se muestran después desde el archivo Index.cshtml.
     public int TotalPreguntas { get; set; }
     public int TotalCategorias { get; set; }
 
     public async Task OnGetAsync()
     {
-        TotalPreguntas = await context.Preguntas.CountAsync();
-        TotalCategorias = await context.Categorias.CountAsync();
+        // CountAsync pide a SQLite que cuente las filas sin cargarlas en memoria.
+        TotalPreguntas = await contexto.Preguntas.CountAsync();
+        TotalCategorias = await contexto.Categorias.CountAsync();
     }
 }
+

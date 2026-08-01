@@ -4,41 +4,61 @@
     ViewData["Title"] = "Categorías";
 }
 
-<header>
-    <h1>Categorías</h1>
+<header class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Categorías</h1>
+        <p class="text-body-secondary mb-0">
+            Cada categoría agrupa un conjunto de preguntas.
+        </p>
+    </div>
 
-    <a class="btn btn-primary" asp-page="/Categorias/Crear">Crear nueva categoría</a>
+    @* asp-page genera el enlace a la página Crear de esta misma carpeta. *@
+    <a class="btn btn-primary" asp-page="Crear">
+        Nueva categoría
+    </a>
 </header>
 
-<div class="row">
-    <table class="table table-hover table-striped">
+@* table-responsive permite desplazar la tabla horizontalmente en móviles estrechos. *@
+<div class="table-responsive rounded shadow-sm border">
+    <table class="table table-hover align-middle mb-0">
         <thead>
             <tr>
                 <th>Nombre</th>
                 <th>Preguntas</th>
+                <th class="text-end">Acciones</th>
             </tr>
         </thead>
         <tbody>
+            @* Razor genera una fila por cada objeto recibido desde el PageModel. *@
             @foreach (Categoria categoria in Model.Categorias)
             {
                 <tr>
                     <td>@categoria.Nombre</td>
                     <td>
-                        <span class="badge bg-secondary">
+                        <span class="badge text-bg-secondary">
                             @categoria.Preguntas.Count
                         </span>
                     </td>
-                    <td>
-                        <a class="btn btn-primary" 
-                            asp-page="/Categorias/Editar" 
-                            asp-route-id="@categoria.Id">Editar</a>
+                    <td class="text-end text-nowrap">
+                        @* asp-route-id incorpora el identificador a la dirección. *@
+                        <a class="btn btn-sm btn-outline-primary"
+                           asp-page="Editar"
+                           asp-route-id="@categoria.Id">
+                            Editar
+                        </a>
 
-                        <form method="post" 
-                            asp-page-handler="Eliminar"
-                            class="d-inline" 
-                            onsubmit="return confirm('¿Está seguro de que desea eliminar la categoría?');">
-                            <input type="hidden" name="id" value="@categoria.Id" />
-                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        @* El formulario POST llama a OnPostEliminarAsync. En esta
+                           versión confirm() proporciona una confirmación básica. *@
+                        <form method="post"
+                              asp-page-handler="Eliminar"
+                              class="d-inline"
+                              onsubmit="return confirm('¿Quieres eliminar esta categoría y todas sus preguntas?');">
+                            <input type="hidden" name="id"
+                                   value="@categoria.Id" />
+                            <button class="btn btn-sm btn-outline-danger"
+                                    type="submit">
+                                Eliminar
+                            </button>
                         </form>
                     </td>
                 </tr>

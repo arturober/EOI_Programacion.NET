@@ -4,16 +4,20 @@
     ViewData["Title"] = "Preguntas";
 }
 
-<header>
-    <h1>Preguntas</h1>
+<header class="mb-4">
+    <h1 class="mb-1">Preguntas</h1>
+    <p class="text-body-secondary mb-0">
+        Esta primera versión muestra únicamente las 25 primeras preguntas.
+    </p>
 </header>
 
-<div class="row">
-    <table class="table table-striped">
+@* Bootstrap adapta la tabla y alinea verticalmente el contenido de sus filas. *@
+<div class="table-responsive rounded shadow-sm border">
+    <table class="table table-hover align-middle mb-0">
         <thead>
             <tr>
                 <th>Pregunta</th>
-                <th>Categoria</th>
+                <th>Categoría</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +26,7 @@
                 <tr>
                     <td>@pregunta.Enunciado</td>
                     <td>
-                        <span class="badge bg-secondary">
+                        <span class="badge text-bg-secondary">
                             @pregunta.Categoria?.Nombre
                         </span>
                     </td>
@@ -30,5 +34,4 @@
             }
         </tbody>
     </table>
-
 </div>

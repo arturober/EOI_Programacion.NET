@@ -111,6 +111,82 @@ La terminal mostrará una dirección local parecida a
 También se puede abrir `OpenWeather.sln` desde Visual Studio 2022 o una versión
 posterior compatible con .NET 10.
 
+## Publicación en MonsterASP.NET
+
+Open Weather no utiliza cuentas ni Identity, pero el servidor necesita la clave
+de OpenWeather para consultar la API. MonsterASP.NET permite ejecutar el
+proyecto con .NET 10.
+
+### Preparar y subir la aplicación
+
+Abre la carpeta del proyecto en Visual Studio Code y ejecuta desde su terminal
+integrada:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell, crea el archivo que se subirá:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+El comodín hace que los archivos queden en la raíz del ZIP. A continuación:
+
+1. Abre **Files** en el panel de MonsterASP.NET.
+2. Entra en `/wwwroot`.
+3. Sube `publicacion.zip` y extráelo allí.
+4. Permite sobrescribir los archivos anteriores sin borrar todo el directorio.
+5. Reinicia la aplicación o el AppPool.
+
+`OpenWeather.dll`, `web.config`, `appsettings.json` y la carpeta
+`wwwroot` deben quedar directamente dentro del `/wwwroot` del alojamiento.
+No subas el código fuente, el `.csproj`, `bin` ni `obj`.
+
+Consulta la
+[guía oficial para publicar mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+Si se utiliza Visual Studio completo, WebDeploy está disponible como
+[alternativa](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio).
+
+### Configurar la clave en el servidor
+
+Los valores de `dotnet user-secrets` solo existen en el ordenador de
+desarrollo. En MonsterASP.NET abre:
+
+```text
+Websites → Manage website → Scripting → Environment Variables
+```
+
+Añade:
+
+```text
+Nombre: OpenWeather__ApiKey
+Valor:  TU_CLAVE
+```
+
+Introduce únicamente la clave, sin comillas ni parámetros como `appid=`.
+`OpenWeather__ApiKey` equivale a `OpenWeather:ApiKey`. Guarda el cambio y
+reinicia la aplicación o el AppPool. MonsterASP.NET explica esta correspondencia
+en su [documentación de variables de entorno](https://help.monsterasp.net/books/development/page/environment-variables-as-configuration-store).
+
+No subas `appsettings.Local.json` ni escribas la clave real en
+`appsettings.json`.
+
+### Comprobar el despliegue
+
+1. Busca una localidad y selecciona uno de los resultados.
+2. Comprueba tiempo actual, previsión y calidad del aire.
+3. Abre `/api/lugares?texto=Alicante` para verificar la API JSON propia.
+4. Cambia entre unidades métricas e imperiales.
+
+Un error `401` suele significar que la clave es incorrecta o todavía no está
+activa; un `429`, que se ha superado la cuota. Si aparece un error HTTP 500,
+consulta `Control Panel → Websites → Manage → Logs` o habilita temporalmente
+los [logs de depuración de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging).
+Desactiva esos logs cuando termines.
+
 ## Estructura
 
 ```text

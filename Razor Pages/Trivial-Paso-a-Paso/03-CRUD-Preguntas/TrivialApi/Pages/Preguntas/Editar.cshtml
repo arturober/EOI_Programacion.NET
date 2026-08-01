@@ -5,17 +5,28 @@
 }
 
 <section class="card shadow-sm">
-    <div class="card-body">
-        <h1 class="card-title">Editar pregunta</h1>
+    <div class="card-body p-4">
+        <h1 class="h2 mb-4">Editar pregunta</h1>
+
         <form method="post">
+            @* El Id oculto identifica la pregunta que recibirá el UPDATE. *@
             <input asp-for="Pregunta.Id" type="hidden" />
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger"></div>
 
-            <partial name="_Formulario" for="Pregunta" />
+            <partial name="_Formulario"
+                     model="Model.Pregunta"
+                     view-data="ViewData" />
 
-            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-            <a asp-page="Index" class="btn btn-secondary">Cancelar</a>
+            <div class="mt-4">
+                <button class="btn btn-primary" type="submit">
+                    Guardar
+                </button>
+                <a class="btn btn-outline-secondary" asp-page="Index">
+                    Cancelar
+                </a>
+            </div>
         </form>
     </div>
 </section>

@@ -10,22 +10,34 @@ namespace TrivialApi.Controllers;
 [Route("api/preguntas")]
 public class PreguntasController(TrivialContext contexto) : ControllerBase
 {
+    // GET /api/preguntas?categoriaId=2&cantidad=10
+    // Los parámetros son opcionales: sin ellos se devuelven diez preguntas
+    // aleatorias pertenecientes a cualquier categoría.
     [HttpGet]
-    public async Task<List<PreguntaDto>> ObtenerTodas(
-        int? categoriaId, int cantidad = 10)
+    public async Task<List<PreguntaDto>> Obtener(
+        int? categoriaId,
+        int cantidad = 10)
     {
+        // Limitamos la cantidad para evitar respuestas vacías o excesivamente grandes.
         cantidad = Math.Clamp(cantidad, 1, 1000);
 
+        // Include carga la categoría porque su nombre forma parte de PreguntaDto.
         IQueryable<Pregunta> consulta = contexto.Preguntas
-            .Include(p => p.Categoria);
+            .Include(pregunta => pregunta.Categoria);
 
-        if (categoriaId.HasValue && categoriaId.Value > 0)
+        // Si el cliente no proporciona categoría, mantenemos todas las preguntas.
+        if (categoriaId.HasValue)
         {
-            consulta = consulta.Where(p => p.CategoriaId == categoriaId.Value);
+            consulta = consulta.Where(
+                pregunta => pregunta.CategoriaId == categoriaId);
         }
-        
+
+        // Ejecutamos la consulta antes de ordenar aleatoriamente.
+        // La base educativa solo contiene 1.000 filas, por lo que cargar esta
+        // colección completa mantiene el ejemplo fácil de comprender.
         List<Pregunta> preguntas = await consulta.ToListAsync();
 
+        // Mezclamos, recortamos y transformamos las entidades a DTO.
         return preguntas
             .OrderBy(_ => Random.Shared.Next())
             .Take(cantidad)
@@ -33,31 +45,41 @@ public class PreguntasController(TrivialContext contexto) : ControllerBase
             .ToList();
     }
 
+    // GET /api/preguntas/25
     [HttpGet("{id:int}")]
     public async Task<ActionResult<PreguntaDto>> ObtenerPorId(int id)
     {
         Pregunta? pregunta = await contexto.Preguntas
-            .Include(p => p.Categoria)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .Include(pregunta => pregunta.Categoria)
+            .FirstOrDefaultAsync(pregunta => pregunta.Id == id);
 
-        return pregunta is not null ? Ok(ConvertirDto(pregunta)) : NotFound();
+        return pregunta is null
+            ? NotFound()
+            : Ok(ConvertirDto(pregunta));
     }
 
     private static PreguntaDto ConvertirDto(Pregunta pregunta)
     {
-        string[] respuestas = [
+        // Reunimos las cuatro columnas de la entidad en el array de la API.
+        string[] respuestas =
+        [
             pregunta.Respuesta1,
             pregunta.Respuesta2,
             pregunta.Respuesta3,
-            pregunta.Respuesta4  
+            pregunta.Respuesta4
         ];
 
-        CategoriaDto categoria = new CategoriaDto(
-            pregunta.CategoriaId, pregunta.Categoria!.Nombre);
+        // Include garantiza que Categoria está cargada. El operador ! comunica
+        // esta garantía al análisis de valores nulos del compilador.
+        CategoriaDto categoria = new(
+            pregunta.CategoriaId,
+            pregunta.Categoria!.Nombre);
 
         return new PreguntaDto(
-            pregunta.Id, pregunta.Enunciado, pregunta.CategoriaId,
-            respuestas, pregunta.RespuestaCorrecta,
+            pregunta.Id,
+            pregunta.Enunciado,
+            respuestas,
+            pregunta.RespuestaCorrecta,
             categoria);
     }
 }

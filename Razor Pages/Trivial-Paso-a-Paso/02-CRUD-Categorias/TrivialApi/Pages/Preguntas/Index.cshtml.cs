@@ -5,18 +5,25 @@ using TrivialApi.Models;
 
 namespace TrivialApi.Pages.Preguntas;
 
+// Esta primera versión muestra una selección limitada de preguntas.
 public class IndexModel(TrivialContext contexto) : PageModel
 {
+    // La vista recorrerá esta lista para construir las filas de la tabla.
     public List<Pregunta> Preguntas { get; set; } = [];
 
     public async Task OnGetAsync()
     {
-        IQueryable<Pregunta> query = contexto.Preguntas
-            .Include(p => p.Categoria);
+        // IQueryable representa una consulta que todavía no se ha ejecutado.
+        // Include indica que también necesitaremos el nombre de la categoría.
+        IQueryable<Pregunta> consulta = contexto.Preguntas
+            .Include(pregunta => pregunta.Categoria);
 
-        Preguntas = await query
-            .OrderBy(p => p.Enunciado)
+        // OrderBy, Take y ToListAsync se traducen a SQL.
+        // Limitamos el resultado a 25 filas para no mostrar las 1.000 preguntas.
+        Preguntas = await consulta
+            .OrderBy(pregunta => pregunta.Enunciado)
             .Take(25)
             .ToListAsync();
     }
 }
+

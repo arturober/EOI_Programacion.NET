@@ -7,13 +7,15 @@ using TrivialApi.Models;
 
 namespace TrivialApi.Pages.Preguntas;
 
+// La edición tiene un GET para cargar datos y un POST para guardarlos.
 public class EditarModel(TrivialContext contexto) : PageModel
 {
-    [BindProperty]      
+    [BindProperty]
     public Pregunta Pregunta { get; set; } = new();
 
     public async Task<IActionResult> OnGetAsync(int id)
     {
+        // Recuperamos la pregunta indicada en el segmento de la dirección.
         Pregunta? pregunta = await contexto.Preguntas.FindAsync(id);
 
         if (pregunta is null)
@@ -23,20 +25,21 @@ public class EditarModel(TrivialContext contexto) : PageModel
 
         Pregunta = pregunta;
 
+        // El formulario necesita la lista incluso cuando ya hay una opción seleccionada.
         await CargarCategoriasAsync();
         return Page();
     }
 
     public async Task<IActionResult> OnPostAsync()
     {
-        bool categoriaValida = await contexto.Categorias
+        bool categoriaExiste = await contexto.Categorias
             .AnyAsync(categoria => categoria.Id == Pregunta.CategoriaId);
 
-        if (!categoriaValida)
+        if (!categoriaExiste)
         {
             ModelState.AddModelError(
-                "Pregunta.CategoriaId", 
-                "La categoría seleccionada no es válida.");
+                "Pregunta.CategoriaId",
+                "Selecciona una categoría válida.");
         }
 
         if (!ModelState.IsValid)
@@ -45,10 +48,12 @@ public class EditarModel(TrivialContext contexto) : PageModel
             return Page();
         }
 
+        // La entidad procede del formulario y el contexto todavía no la seguía.
+        // Attach la conecta y Modified solicita actualizar todas sus propiedades.
         contexto.Attach(Pregunta).State = EntityState.Modified;
         await contexto.SaveChangesAsync();
 
-        TempData["Mensaje"] = "Pregunta editada correctamente.";
+        TempData["Mensaje"] = "La pregunta se ha actualizado correctamente.";
         return RedirectToPage("Index");
     }
 
@@ -58,7 +63,8 @@ public class EditarModel(TrivialContext contexto) : PageModel
             .OrderBy(categoria => categoria.Nombre)
             .ToListAsync();
 
-        ViewData["Categorias"] = 
+        ViewData["Categorias"] =
             new SelectList(categorias, "Id", "Nombre");
     }
 }
+

@@ -10,7 +10,7 @@ campos.
 ## Objetivos
 
 - Reutilizar el patrón CRUD aprendido.
-- Trabajar con claves ajenas.
+- Trabajar con claves foráneas.
 - Construir desplegables mediante `SelectList`.
 - Validar que una entidad relacionada exista.
 - Recargar datos auxiliares tras una validación incorrecta.
@@ -94,7 +94,7 @@ El formulario muestra textos más comprensibles:
 
 El valor enviado sigue siendo un entero.
 
-## Clave ajena
+## Clave foránea
 
 `Pregunta` contiene:
 
@@ -239,7 +239,7 @@ Esto evita duplicar:
 | CRUD de entidad sencilla | CRUD de entidad relacionada |
 | Un único campo | Siete campos |
 | Sin lista auxiliar | `SelectList` de categorías |
-| Validación básica | Validación de clave ajena |
+| Validación básica | Validación de clave foránea |
 | Sin `Include` nuevo | Categoría visible en el listado |
 
 ## Pruebas manuales
@@ -255,7 +255,7 @@ Esto evita duplicar:
 9. Confirmar el borrado.
 10. Crear una categoría y utilizarla en una pregunta.
 
-## Preguntas para evaluar los conceptos aprendidos
+## Preguntas para el alumnado
 
 1. ¿Por qué se guarda `CategoriaId`?
 2. ¿Para qué sirve `Categoria`?

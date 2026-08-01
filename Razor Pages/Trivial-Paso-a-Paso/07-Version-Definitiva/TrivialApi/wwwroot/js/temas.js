@@ -1,27 +1,58 @@
-const tema = localStorage.getItem('tema') || 'bootstrap-light';
+// La clave es común para Razor Pages y para el cliente estático.
+const claveTema = "temaTrivial";
+
+// Si todavía no existe una elección, utilizamos Bootstrap claro.
+const temaGuardado =
+    localStorage.getItem(claveTema) ?? "bootstrap-light";
+
+// Esta lista permite que los componentes de Bootstrap adapten también sus
+// fondos, bordes y textos cuando la hoja elegida utiliza colores oscuros.
+const temasOscuros = [
+    "bootstrap-dark",
+    "bootswatch-cyborg",
+    "bootswatch-darkly",
+    "bootswatch-quartz",
+    "bootswatch-slate",
+    "bootswatch-solar",
+    "bootswatch-superhero",
+    "bootswatch-vapor"
+];
 
 function cambiarTema(tema) {
-    const esBootSwatch = tema.startsWith('bootswatch-');
-    const nombre = tema.replace('bootswatch-', '');
+    // Los valores de Bootswatch comienzan por un prefijo que no forma parte
+    // del nombre de la carpeta utilizada en su CDN.
+    const esBootswatch = tema.startsWith("bootswatch-");
+    const nombre = tema.replace("bootswatch-", "");
 
-    const link = document.getElementById('temaCSS');
+    // Tanto el layout como el cliente incluyen un enlace con este identificador.
+    const hojaTema = document.getElementById("temaCss");
 
-    link.href = esBootSwatch
+    hojaTema.href = esBootswatch
         ? `https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/${nombre}/bootstrap.min.css`
-        : `https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css`;
+        : "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css";
 
-    document.documentElement.setAttribute('data-bs-theme', 
-        tema == 'bootstrap-dark' ? 'dark' : 'light');
+    // dataset.bsTheme representa el atributo HTML data-bs-theme.
+    // Bootstrap consulta este atributo para elegir su paleta clara u oscura.
+    document.documentElement.dataset.bsTheme =
+        temasOscuros.includes(tema) ? "dark" : "light";
 
-    localStorage.setItem('tema', tema);
+    // localStorage conserva la elección incluso después de cerrar el navegador.
+    localStorage.setItem(claveTema, tema);
 }
 
-selectorTema = document.getElementById('selectorTema');
+// El selector solo existe en Razor Pages. El cliente reutiliza el archivo,
+// aplica el tema guardado y omite de forma segura este bloque.
+const selectorTema = document.getElementById("selectorTema");
 
-selectorTema.addEventListener('change', (event) => {
-    const temaSeleccionado = event.target.value;
-    cambiarTema(temaSeleccionado);
-});
+if (selectorTema) {
+    // Sincronizamos el control antes de escuchar nuevos cambios.
+    selectorTema.value = temaGuardado;
 
-// Inicializar el tema al cargar la página
-cambiarTema(tema);
+    selectorTema.addEventListener("change", () => {
+        cambiarTema(selectorTema.value);
+    });
+}
+
+// Aplicamos siempre el tema al terminar de cargar el documento.
+cambiarTema(temaGuardado);
+

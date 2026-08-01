@@ -1,7 +1,7 @@
 # Versión 2: CRUD de categorías
 
 Esta etapa parte de `01-Listados` y añade la primera funcionalidad de escritura.
-Se aprende el ciclo completo de un formulario Razor utilizando la
+El alumnado aprende el ciclo completo de un formulario Razor utilizando la
 entidad más sencilla del proyecto.
 
 No se elimina ningún listado ni se cambia la estructura de datos anterior.
@@ -274,7 +274,7 @@ await contexto.SaveChangesAsync();
 la configuración del contexto hace que también se eliminen las preguntas
 dependientes.
 
-Debe explicarse que no es un segundo bucle de borrado escrito en el
+Debe explicarse al alumnado que no es un segundo bucle de borrado escrito en el
 PageModel. Es una regla de la relación.
 
 ## Diferencias con la versión 1
@@ -305,7 +305,7 @@ PageModel. Es una regla de la relación.
 Borrar una categoría elimina sus preguntas. Cada versión tiene su propia base,
 pero conviene trabajar sobre una copia si se quieren conservar los 1.000 datos.
 
-## Preguntas para evaluar los conceptos aprendidos
+## Preguntas para el alumnado
 
 1. ¿Por qué Crear no necesita `OnGetAsync`?
 2. ¿Qué rellena la propiedad marcada con `[BindProperty]`?

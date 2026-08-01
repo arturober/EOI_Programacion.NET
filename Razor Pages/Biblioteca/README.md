@@ -96,6 +96,104 @@ También puedes copiar `appsettings.Local.example.json` como
 > El contacto no es una credencial. Se envía en el `User-Agent` para que Open
 > Library pueda identificar al responsable de la aplicación.
 
+## Publicación en MonsterASP.NET
+
+MonsterASP.NET permite ejecutar aplicaciones ASP.NET Core con .NET 10. Como el
+proyecto se trabaja principalmente desde Visual Studio Code, el procedimiento
+recomendado es publicar desde su terminal integrada y subir un ZIP.
+
+### Preparar la publicación desde VS Code
+
+Abre la carpeta `Biblioteca` en VS Code y ejecuta:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En Windows, crea el ZIP desde la misma terminal con PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+El uso de `publicacion\*` hace que el ZIP contenga directamente
+`Biblioteca.dll`, `web.config`, `appsettings.json`, `wwwroot` y los demás
+archivos publicados, sin añadir otra carpeta `publicacion`.
+
+### Subir el ZIP
+
+1. Entra en el sitio desde el panel de MonsterASP.NET.
+2. Abre **Files** y entra en `/wwwroot`.
+3. Sube `publicacion.zip`.
+4. Extrae el ZIP dentro de `/wwwroot`.
+5. Permite sustituir los archivos de la aplicación, pero no borres previamente
+   todo el contenido del alojamiento.
+6. Reinicia la aplicación o el AppPool.
+
+No subas el código fuente, el archivo `.csproj` ni las carpetas `bin` y
+`obj`. La
+[guía oficial de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file)
+muestra el uso del administrador de archivos.
+
+Si se utiliza Visual Studio completo, WebDeploy continúa disponible como
+[alternativa](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio),
+pero no es necesario para trabajar desde VS Code.
+
+### Identificar la aplicación en producción
+
+Los valores de `dotnet user-secrets` no se envían al servidor. Open Library no
+necesita una clave, pero conviene configurar un contacto real desde:
+
+```text
+Websites → Manage website → Scripting → Environment Variables
+```
+
+Añade:
+
+```text
+Nombre: OpenLibrary__Contacto
+Valor:  tu-correo@dominio.es
+```
+
+Los dos guiones bajos representan `OpenLibrary:Contacto`. Guarda el cambio y
+reinicia la aplicación o el AppPool. No publiques `appsettings.Local.json`.
+MonsterASP.NET documenta este mecanismo en
+[Environment variables as configuration store](https://help.monsterasp.net/books/development/page/environment-variables-as-configuration-store).
+
+### Identity y conservación de SQLite
+
+No hace falta configurar un proveedor externo de autenticación ni un servidor
+de correo. Las cuentas son locales, el correo no necesita confirmación y
+Identity guarda usuarios y contraseñas protegidas en
+`Data/biblioteca.db`.
+
+`EnsureCreatedAsync` crea la carpeta, la base y sus tablas en el primer
+arranque. En las publicaciones posteriores:
+
+- no sobrescribas ni elimines `Data/biblioteca.db`;
+- no actives una opción de WebDeploy que elimine archivos adicionales del
+  destino;
+- conserva una copia de seguridad antes de actualizar;
+- no subas la base local salvo que quieras sustituir deliberadamente la del
+  servidor;
+- recuerda que `EnsureCreatedAsync` crea una base nueva, pero no migra una
+  base existente cuando cambia el modelo.
+
+### Comprobar el despliegue
+
+1. Abre la aplicación mediante HTTPS.
+2. Registra una cuenta.
+3. Cierra la sesión y vuelve a iniciarla.
+4. Añade un libro a favoritos.
+5. Reinicia la aplicación y comprueba que la cuenta y el favorito continúan.
+
+Si aparece un error HTTP 500, revisa
+`Control Panel → Websites → Manage → Logs`. También puedes habilitar
+temporalmente los
+[logs de depuración de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging);
+desactívalos al terminar porque consumen espacio y recursos.
+
 ## Registro y autenticación
 
 La clase `Usuario` hereda de `IdentityUser`. Al registrarse una persona:

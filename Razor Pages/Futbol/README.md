@@ -111,6 +111,96 @@ dotnet run
 
 Los dos guiones bajos representan los dos puntos de la clave de configuración.
 
+## Publicación en MonsterASP.NET
+
+MonsterASP.NET admite aplicaciones ASP.NET Core con .NET 10. Para trabajar
+desde Visual Studio Code, la opción recomendada es generar una publicación,
+comprimirla y subirla desde el panel.
+
+### Preparar la publicación desde VS Code
+
+Abre la terminal integrada en la carpeta `Futbol`:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Después:
+
+1. Abre **Files** en el sitio de MonsterASP.NET.
+2. Entra en `/wwwroot`.
+3. Sube `publicacion.zip`.
+4. Extráelo dentro de `/wwwroot`.
+5. Sustituye los archivos anteriores de la aplicación sin borrar el resto del
+   directorio.
+6. Reinicia la aplicación o el AppPool.
+
+Dentro de `/wwwroot` deben quedar directamente `Futbol.dll`, `web.config`,
+`appsettings.json`, `wwwroot` y los demás archivos publicados. No subas el
+código fuente, el `.csproj`, `bin` ni `obj`.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+WebDeploy queda como
+[alternativa para Visual Studio](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio).
+
+### Configurar el token
+
+User Secrets solo se utiliza en el equipo de desarrollo y no acompaña a la
+aplicación publicada. En el panel abre:
+
+```text
+Websites → Manage website → Scripting → Environment Variables
+```
+
+Añade esta variable:
+
+```text
+Nombre: FootballData__ApiKey
+Valor:  TU_TOKEN
+```
+
+Introduce únicamente el token, sin comillas y sin escribir `X-Auth-Token`.
+La aplicación añade esa cabecera a las peticiones. Guarda los cambios y
+reinicia la aplicación o el AppPool. Los dos guiones bajos equivalen a
+`FootballData:ApiKey`, según la
+[documentación de MonsterASP.NET](https://help.monsterasp.net/books/development/page/environment-variables-as-configuration-store).
+
+### Identity y base de datos
+
+Las cuentas son locales y no requieren Google, Microsoft ni un servidor SMTP.
+El correo no tiene que confirmarse. Identity guarda las cuentas, los hashes de
+contraseña y los equipos favoritos en `Data/futbol.db`.
+
+La base y sus tablas se crean automáticamente en el primer arranque. Para no
+perder usuarios al actualizar:
+
+- conserva `Data/futbol.db`;
+- no habilites la eliminación de archivos adicionales del destino al publicar;
+- no sustituyas la base del servidor por una copia local vacía;
+- realiza una copia de seguridad antes de cambiar el modelo;
+- ten en cuenta que `EnsureCreatedAsync` no migra una base existente.
+
+### Comprobación posterior
+
+1. Comprueba que se muestran las competiciones y no aparece el aviso de token.
+2. Registra una cuenta, cierra la sesión y vuelve a entrar.
+3. Guarda un equipo favorito.
+4. Reinicia la aplicación y verifica que la cuenta y el favorito continúan.
+
+Un `401` suele indicar un token ausente o incorrecto; un `403`, una
+competición no permitida por el plan, y un `429`, exceso de peticiones. Para
+errores HTTP 500 consulta `Websites → Manage → Logs` o habilita
+temporalmente los
+[logs de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging).
+
 ## Registro e inicio de sesión
 
 Identity se configura en `Program.cs` con:

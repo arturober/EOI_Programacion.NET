@@ -288,7 +288,7 @@ El usuario puede seguir escribiendo al final del texto.
 11. Escribir `Pagina=999` manualmente.
 12. Borrar una pregunta manteniendo filtros.
 
-## Preguntas para evaluar los conceptos aprendidos
+## Preguntas para el alumnado
 
 1. ¿Por qué los filtros utilizan GET?
 2. ¿Cuándo se ejecuta `IQueryable`?

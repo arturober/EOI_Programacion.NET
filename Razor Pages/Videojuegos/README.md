@@ -107,6 +107,97 @@ Data/videojuegos.db
 
 El archivo contiene las cuentas y bibliotecas locales y está excluido de Git.
 
+## Publicación en MonsterASP.NET
+
+MonsterASP.NET admite aplicaciones ASP.NET Core con .NET 10. Desde Visual
+Studio Code se recomienda publicar con la terminal integrada y subir el
+resultado en un ZIP.
+
+### Preparar la publicación desde VS Code
+
+Desde la carpeta `Videojuegos`:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+El ZIP debe contener directamente los archivos publicados, no otra carpeta
+`publicacion`. Para desplegarlo:
+
+1. Abre **Files** en MonsterASP.NET.
+2. Entra en `/wwwroot`.
+3. Sube y extrae `publicacion.zip`.
+4. Permite sobrescribir los archivos anteriores sin borrar todo el directorio.
+5. Reinicia la aplicación o el AppPool.
+
+`Videojuegos.dll`, `web.config`, `appsettings.json` y la carpeta
+`wwwroot` deben quedar directamente dentro del `/wwwroot` del alojamiento.
+No subas el código fuente, el `.csproj`, `bin` ni `obj`.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+WebDeploy se mantiene como
+[alternativa para Visual Studio](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio).
+
+### Configurar la clave de RAWG
+
+Los valores de `dotnet user-secrets` no se transfieren al alojamiento. En
+MonsterASP.NET abre:
+
+```text
+Websites → Manage website → Scripting → Environment Variables
+```
+
+Añade:
+
+```text
+Nombre: Rawg__ApiKey
+Valor:  TU_CLAVE_DE_RAWG
+```
+
+Introduce únicamente la clave, sin comillas y sin añadir `key=`.
+`Rawg__ApiKey` equivale a `Rawg:ApiKey`. Guarda el cambio y reinicia la
+aplicación o el AppPool. Consulta la
+[guía de variables de entorno](https://help.monsterasp.net/books/development/page/environment-variables-as-configuration-store).
+
+No publiques `appsettings.Local.json` ni guardes la clave real en GitHub.
+
+### Identity y conservación de SQLite
+
+Las cuentas son locales y no requieren un proveedor externo de acceso ni un
+servidor de correo. El correo no necesita confirmación. Identity guarda
+usuarios, contraseñas protegidas y bibliotecas personales en
+`Data/videojuegos.db`.
+
+La base y sus tablas se crean en el primer arranque. En publicaciones
+posteriores:
+
+- conserva `Data/videojuegos.db`;
+- no actives la eliminación de archivos adicionales del destino en WebDeploy;
+- no reemplaces la base del servidor por una copia local vacía;
+- realiza una copia de seguridad antes de actualizar;
+- recuerda que `EnsureCreatedAsync` no migra una base existente.
+
+### Comprobar el despliegue
+
+1. Comprueba que la portada y los listados reciben datos de RAWG.
+2. Registra una cuenta, cierra la sesión y vuelve a entrar.
+3. Añade un juego a la biblioteca y cambia su estado.
+4. Reinicia la aplicación y verifica que cuenta y biblioteca permanecen.
+
+Un error `401` suele indicar una clave ausente o incorrecta; un `429`, que
+se ha superado la cuota. Para errores HTTP 500 consulta
+`Websites → Manage → Logs` o habilita temporalmente los
+[logs de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging);
+desactívalos al terminar.
+
 ## Cómo funciona Identity
 
 La clase `Usuario` hereda de `IdentityUser`. Cuando alguien se registra:

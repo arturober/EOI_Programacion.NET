@@ -93,6 +93,98 @@ La consola mostrará la dirección, normalmente `https://localhost:7077` o
 En el primer arranque se crea automáticamente `nasa-explorer.db` con las tablas
 de Identity y favoritos.
 
+## Publicación en MonsterASP.NET
+
+MonsterASP.NET permite alojar este proyecto con .NET 10. Para alumnos que
+utilizan Visual Studio Code, se recomienda publicar desde la terminal integrada
+y subir el resultado comprimido.
+
+### Preparar la publicación desde VS Code
+
+Desde la carpeta `NasaExplorer`:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell, genera un ZIP cuyo contenido quede en la raíz:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+En MonsterASP.NET:
+
+1. Abre **Files** y entra en `/wwwroot`.
+2. Sube `publicacion.zip`.
+3. Extrae el archivo dentro de `/wwwroot`.
+4. Permite sobrescribir los archivos de la aplicación, pero no elimines
+   previamente todo el directorio.
+5. Reinicia la aplicación o el AppPool.
+
+`NasaExplorer.dll`, `web.config`, `appsettings.json` y la carpeta
+`wwwroot` deben quedar directamente en el `/wwwroot` del alojamiento. No
+subas el código fuente, el `.csproj`, `bin` ni `obj`.
+
+MonsterASP.NET ofrece una
+[guía para publicar mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+WebDeploy puede utilizarse como
+[alternativa desde Visual Studio](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio).
+
+### Configurar la clave de NASA
+
+Los secretos guardados con `dotnet user-secrets` no se publican. Abre:
+
+```text
+Websites → Manage website → Scripting → Environment Variables
+```
+
+Y añade:
+
+```text
+Nombre: Nasa__ApiKey
+Valor:  TU_CLAVE_DE_NASA
+```
+
+Escribe solamente la clave, sin comillas y sin añadir `api_key=`. Guarda los
+cambios y reinicia la aplicación o el AppPool. `Nasa__ApiKey` representa
+`Nasa:ApiKey`; este formato se explica en la
+[documentación de variables de entorno](https://help.monsterasp.net/books/development/page/environment-variables-as-configuration-store).
+
+No publiques `appsettings.Local.json`. La clave es necesaria para APOD y
+NeoWs; los demás módulos utilizados tienen acceso público.
+
+### Identity y conservación de la base
+
+Las cuentas se crean localmente con Identity. No se necesita autenticación con
+terceros ni confirmación por correo. Usuarios y favoritos se almacenan en
+`nasa-explorer.db`, situado en la raíz publicada de la aplicación.
+
+`EnsureCreatedAsync` crea el archivo y todas las tablas si todavía no existen.
+En despliegues posteriores:
+
+- conserva `nasa-explorer.db`;
+- no actives la eliminación de archivos adicionales en WebDeploy;
+- no subas encima una base de desarrollo vacía;
+- realiza copias de seguridad antes de actualizar;
+- recuerda que `EnsureCreatedAsync` no actualiza el esquema de una base ya
+  creada.
+
+### Comprobar el despliegue
+
+1. Comprueba que APOD y Asteroides funcionan con la clave.
+2. Registra una cuenta y vuelve a iniciar sesión después de cerrarla.
+3. Añade un elemento a favoritos.
+4. Reinicia la aplicación y comprueba que usuario y favorito permanecen.
+5. Abre también un módulo público, como EONET o Exoplanetas.
+
+Si el sitio devuelve un error HTTP 500, revisa
+`Control Panel → Websites → Manage → Logs`. Los
+[logs de depuración](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging)
+pueden activarse temporalmente y deben desactivarse después de diagnosticar el
+problema.
+
 ## Registro y acceso
 
 1. Pulsa **Registrarse**.

@@ -81,6 +81,97 @@ dotnet user-secrets list
 
 No escribas claves privadas en `appsettings.json` ni las subas a GitHub.
 
+## Publicación en MonsterASP.NET
+
+MonsterASP.NET permite alojar aplicaciones ASP.NET Core con .NET 10. Para
+trabajar desde Visual Studio Code, publica el proyecto desde la terminal
+integrada y sube el resultado mediante ZIP.
+
+### Preparar la publicación desde VS Code
+
+Desde la carpeta `Recetas`:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Después:
+
+1. Abre **Files** en MonsterASP.NET.
+2. Entra en `/wwwroot`.
+3. Sube y extrae `publicacion.zip`.
+4. Permite reemplazar los archivos anteriores sin borrar todo `/wwwroot`.
+5. Reinicia la aplicación o el AppPool.
+
+`Recetas.dll`, `web.config`, `appsettings.json` y la carpeta `wwwroot`
+deben quedar directamente dentro de `/wwwroot`. No subas el código fuente, el
+`.csproj`, `bin` ni `obj`.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+WebDeploy puede utilizarse como
+[alternativa desde Visual Studio](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio).
+
+### Clave de TheMealDB en producción
+
+La aplicación funciona con la clave educativa `1` incluida en
+`appsettings.json`, por lo que normalmente no es necesario añadir ninguna
+variable de entorno.
+
+Si dispones de una clave de supporter, no uses User Secrets en el servidor.
+Abre:
+
+```text
+Websites → Manage website → Scripting → Environment Variables
+```
+
+Y añade:
+
+```text
+Nombre: TheMealDb__ApiKey
+Valor:  TU_CLAVE_DE_SUPPORTER
+```
+
+`TheMealDb__ApiKey` representa `TheMealDb:ApiKey`. Guarda el cambio y
+reinicia la aplicación o el AppPool. Consulta la
+[documentación de variables de entorno](https://help.monsterasp.net/books/development/page/environment-variables-as-configuration-store).
+No publiques `appsettings.Local.json`.
+
+### Identity y SQLite
+
+No hace falta configurar un proveedor de acceso externo ni un servicio de
+correo. Las cuentas son locales y el correo no necesita confirmación. Identity
+guarda usuarios, contraseñas protegidas, favoritos y menús en
+`Data/recetas.db`.
+
+La base se crea automáticamente en el primer arranque. Para conservar los datos:
+
+- no elimines ni sobrescribas `Data/recetas.db` al volver a publicar;
+- no actives la eliminación de archivos adicionales del destino;
+- no reemplaces la base del servidor por una base de desarrollo vacía;
+- realiza una copia de seguridad antes de modificar las entidades;
+- recuerda que `EnsureCreatedAsync` no migra una base existente.
+
+### Comprobar el despliegue
+
+1. Abre una receta y comprueba sus ingredientes.
+2. Registra una cuenta, cierra la sesión y vuelve a entrar.
+3. Guarda una favorita y añade una receta al menú.
+4. Reinicia la aplicación y comprueba que la cuenta y los datos permanecen.
+
+Si aparece un error HTTP 500, revisa
+`Control Panel → Websites → Manage → Logs`. También puedes habilitar
+temporalmente los
+[logs de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging)
+y desactivarlos después del diagnóstico.
+
 ## Registro e inicio de sesión
 
 La autenticación utiliza **ASP.NET Core Identity**. Al registrarse, el usuario

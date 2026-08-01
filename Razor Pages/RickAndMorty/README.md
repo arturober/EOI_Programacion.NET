@@ -56,6 +56,82 @@ o:
 http://localhost:5193
 ```
 
+## Publicación en MonsterASP.NET
+
+MonsterASP.NET es compatible con aplicaciones ASP.NET Core creadas con .NET 10.
+El procedimiento recomendado desde Visual Studio Code es publicar mediante la
+terminal integrada y subir un ZIP.
+
+### Preparar la publicación desde VS Code
+
+Desde la carpeta `RickAndMorty`:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Para desplegarlo:
+
+1. Abre **Files** en el panel de MonsterASP.NET.
+2. Entra en `/wwwroot`.
+3. Sube y extrae `publicacion.zip`.
+4. Sustituye los archivos anteriores, pero no borres previamente todo el
+   directorio.
+5. Reinicia la aplicación o el AppPool.
+
+En `/wwwroot` deben quedar directamente `RickAndMorty.dll`, `web.config`,
+`appsettings.json` y la carpeta `wwwroot`. No subas el código fuente, el
+`.csproj`, `bin` ni `obj`.
+
+Consulta la
+[guía oficial de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+WebDeploy queda como
+[alternativa para Visual Studio](https://help.monsterasp.net/books/deploy/page/how-to-deploy-net-core-web-application-using-visual-studio).
+
+### Configuración externa
+
+The Rick and Morty API es pública. No necesita una clave, un token ni una
+variable de entorno. Tampoco debes crear una credencial ficticia en
+`appsettings.json`.
+
+La autenticación de los usuarios pertenece exclusivamente a la aplicación y se
+realiza con ASP.NET Core Identity.
+
+### Identity y conservación de SQLite
+
+No hay que configurar Google, Microsoft ni un servidor SMTP. El correo no
+necesita confirmación. Identity almacena cuentas, contraseñas protegidas y
+personajes favoritos en `Data/rickandmorty.db`.
+
+`EnsureCreatedAsync` crea la carpeta, el archivo y todas las tablas en el
+primer arranque. En las actualizaciones:
+
+- conserva `Data/rickandmorty.db`;
+- no habilites una opción que elimine archivos adicionales del destino;
+- no subas encima una base local vacía;
+- realiza una copia de seguridad antes de cambiar el modelo;
+- recuerda que `EnsureCreatedAsync` no migra una base ya existente.
+
+### Comprobación posterior
+
+1. Abre personajes, episodios y localizaciones.
+2. Registra una cuenta.
+3. Cierra la sesión y vuelve a iniciarla.
+4. Guarda un personaje favorito.
+5. Reinicia la aplicación y comprueba que cuenta y favorito continúan.
+
+Si aparece un error HTTP 500, consulta
+`Control Panel → Websites → Manage → Logs`. Los
+[logs de depuración de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging)
+pueden habilitarse temporalmente y deben desactivarse después.
+
 ## Registro e inicio de sesión
 
 Identity se configura en `Program.cs` con:
