@@ -95,6 +95,34 @@ También puede utilizarse HTTPS:
 dotnet run -- https://localhost:7001
 ```
 
+## Consumir una API publicada
+
+El cliente de consola no se sube a `/wwwroot` ni se ejecuta dentro de
+MonsterASP.NET. Se ejecuta localmente y consume la aplicación web que se ha
+publicado por separado.
+
+Por ejemplo, después de desplegar la versión 5, 6 o 7:
+
+```bash
+dotnet run -- https://tu-sitio.runasp.net
+```
+
+Antes de iniciar el cliente, comprueba en el navegador:
+
+```text
+https://tu-sitio.runasp.net/api/categorias
+```
+
+No añadas `/api` al argumento: el programa lo incorpora al construir la
+dirección base. El cliente de consola no está sujeto a CORS.
+
+Para distribuirlo como aplicación independiente puede generarse su propia
+publicación, pero esos archivos se entregan al usuario y no sustituyen a la API:
+
+```bash
+dotnet publish -c Release -o publicacion-cliente
+```
+
 ## Dirección base
 
 El programa prepara:

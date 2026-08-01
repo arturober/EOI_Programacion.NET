@@ -826,13 +826,47 @@ Antes de publicar:
 6. Prueba la interfaz con distintos anchos y temas.
 7. Revisa logs y respuestas HTTP sin mostrar secretos al usuario.
 
-Publicación básica:
+### Publicar desde Visual Studio Code
+
+Cada proyecto web debe publicarse por separado. Abre en VS Code la carpeta que
+contiene su archivo `.csproj` y ejecuta:
 
 ```bash
-dotnet publish -c Release -o publish
+dotnet restore
+dotnet publish -c Release -o publicacion
 ```
 
-En alojamientos como MonsterASP.NET, las variables pueden configurarse desde:
+En Windows, crea desde PowerShell un ZIP con el contenido publicado:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+El comodín hace que el ZIP contenga directamente `web.config`, el DLL
+principal, `appsettings.json`, `wwwroot` y los demás archivos, sin una
+carpeta `publicacion` intermedia.
+
+En MonsterASP.NET:
+
+1. Abre **Files** en el panel del sitio.
+2. Entra en `/wwwroot`.
+3. Sube `publicacion.zip`.
+4. Extrae el ZIP dentro de `/wwwroot`.
+5. Permite sobrescribir los archivos de la aplicación sin borrar previamente
+   todo el directorio.
+6. Reinicia la aplicación o el AppPool.
+
+No deben subirse el código fuente, el `.csproj`, `bin` ni `obj`. Cada
+alojamiento ejecuta una aplicación web; no debe intentarse publicar toda la
+carpeta `Razor Pages` como un único sitio.
+
+Consulta la
+[guía de MonsterASP.NET para publicar mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+WebDeploy queda como alternativa para quien utilice Visual Studio completo.
+
+### Variables de entorno
+
+En MonsterASP.NET pueden configurarse desde:
 
 ```text
 Websites → Manage website → Scripting → Environment Variables
@@ -854,9 +888,14 @@ de secretos del proveedor.
 - El proceso necesita permiso de escritura sobre la carpeta de la base.
 - No sobrescribas la base del servidor al desplegar una nueva versión si deseas
   conservar usuarios y favoritos.
+- Descarga una copia de seguridad antes de extraer una actualización.
+- No borres todo `/wwwroot` antes de copiar los archivos nuevos.
 - Realiza copias de seguridad antes de modificar entidades o esquema.
 - `EnsureCreatedAsync` crea una base nueva, pero no migra automáticamente una
   base existente.
+- En Trivial, `Data/trivial.db` se incluye en la publicación. Desde la versión
+  2 debe retirarse del ZIP de las actualizaciones si se quieren conservar los
+  cambios realizados en el servidor.
 - En despliegues con varias instancias del servidor, un archivo SQLite local no
   es una base compartida adecuada.
 

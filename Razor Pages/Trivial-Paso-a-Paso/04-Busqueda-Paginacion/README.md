@@ -39,6 +39,29 @@ dotnet restore
 dotnet run
 ```
 
+## Publicación en MonsterASP.NET
+
+Publica solo el `TrivialApi` de esta versión:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+Incluye `Data/trivial.db` en el primer despliegue. Para una actualización que
+deba conservar las modificaciones del servidor:
+
+```powershell
+Remove-Item .\publicacion\Data\trivial.db
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Descarga antes la base del servidor, sube el ZIP a `/wwwroot` y no borres el
+directorio completo. Comprueba después búsqueda, filtro, paginación y
+persistencia de una pregunta modificada.
+
+La administración no tiene autenticación. Consulta el procedimiento detallado
+en el [README general](../README.md).
+
 ## Archivo añadido
 
 ```text
@@ -288,7 +311,7 @@ El usuario puede seguir escribiendo al final del texto.
 11. Escribir `Pagina=999` manualmente.
 12. Borrar una pregunta manteniendo filtros.
 
-## Preguntas para el alumnado
+## Preguntas para evaluar los conceptos aprendidos
 
 1. ¿Por qué los filtros utilizan GET?
 2. ¿Cuándo se ejecuta `IQueryable`?

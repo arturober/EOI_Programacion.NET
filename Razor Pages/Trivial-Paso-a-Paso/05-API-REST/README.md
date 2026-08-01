@@ -46,6 +46,39 @@ dotnet run
 
 La página principal construye los enlaces con el servidor y puerto actuales.
 
+## Publicación en MonsterASP.NET
+
+Desde `05-API-REST/TrivialApi`:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+El primer despliegue debe incluir `Data/trivial.db`. Para actualizar sin
+sobrescribir cambios del servidor:
+
+```powershell
+Remove-Item .\publicacion\Data\trivial.db
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Haz antes una copia de seguridad. Sube y extrae el ZIP en `/wwwroot` sin
+borrar todo el sitio.
+
+Después comprueba:
+
+```text
+https://tu-sitio.runasp.net/api/categorias
+https://tu-sitio.runasp.net/api/preguntas?cantidad=10
+```
+
+La API JSON es de solo lectura, pero la administración Razor mantiene el CRUD
+público. CORS permite clientes web externos durante las prácticas; en una
+aplicación real debería limitarse a orígenes conocidos.
+
+Consulta el procedimiento completo en el
+[README general](../README.md).
+
 ## Archivos añadidos
 
 ```text
@@ -328,7 +361,7 @@ conviene especificar orígenes permitidos.
 11. Pedir cantidad cero.
 12. Pedir cantidad superior a 1.000.
 
-## Preguntas para el alumnado
+## Preguntas para evaluar los conceptos aprendidos
 
 1. ¿Qué diferencia hay entre entidad y DTO?
 2. ¿Por qué no se devuelve `Categoria` directamente?
@@ -354,4 +387,3 @@ conviene especificar orígenes permitidos.
 
 La versión 6 añadirá un cliente HTML y JavaScript que usa exclusivamente esta
 API. No accederá al contexto ni a SQLite.
-

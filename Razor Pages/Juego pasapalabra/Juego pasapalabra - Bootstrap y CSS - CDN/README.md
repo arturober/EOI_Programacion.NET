@@ -21,22 +21,15 @@ Versión web del juego de Pasapalabra. El proyecto prioriza un código claro par
 
 ## Librerías del lado del cliente
 
-Las librerías se descargan con LibMan y se guardan dentro de `wwwroot/lib`:
+Las bibliotecas se cargan desde jsDelivr:
 
 - Bootstrap 5.3.8.
 - Bootstrap Icons 1.13.1.
 - SweetAlert2 11.26.25.
 
-El archivo `libman.json` contiene la configuración. Para restaurar las
-librerías desde la terminal se puede usar:
-
-```bash
-dotnet tool install -g Microsoft.Web.LibraryManager.Cli
-libman restore
-```
-
-Las librerías también están incluidas en este proyecto, por lo que se puede
-ejecutar directamente sin restaurarlas.
+No es necesario utilizar LibMan ni guardar esas bibliotecas en
+`wwwroot/lib`. El navegador necesita conexión a Internet. El CSS propio de la
+aplicación sí permanece en `wwwroot/css/site.css`.
 
 ## Crear y ejecutar el proyecto desde Visual Studio Code
 
@@ -116,6 +109,40 @@ coloca después de la N.
 `TextoUtil.NormalizarParaComparar` elimina las tildes de las vocales para las
 búsquedas y las respuestas, pero conserva la Ñ porque es una letra diferente.
 
+## Publicación en MonsterASP.NET
+
+Desde la terminal integrada de VS Code:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae `publicacion.zip` en `/wwwroot`. Esta variante carga Bootstrap,
+Bootstrap Icons y SweetAlert2 desde jsDelivr, por lo que el navegador necesita
+conexión a Internet. La publicación sí debe incluir
+`wwwroot/css/site.css`.
+
+La base `pasapalabra.db` se crea con tablas y preguntas iniciales si no existe.
+Para conservar las preguntas y temas añadidos, no sobrescribas la base en las
+actualizaciones y descarga antes una copia de seguridad.
+
+Las partidas activas se almacenan en sesión y se pierden al reiniciar. El CRUD
+no tiene autenticación y cualquier visitante podría modificarlo. Utiliza datos
+de práctica o protege la administración antes de exponer el sitio.
+
+Después de publicar, comprueba que cargan los recursos de jsDelivr, juega una
+partida y verifica la persistencia de una pregunta tras reiniciar.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+
 ## ¿Qué puedo aprender?
 
 - Clases, objetos, constructores y propiedades.
@@ -127,7 +154,7 @@ búsquedas y las respuestas, pero conserva la Ñ porque es una letra diferente.
 - CRUD con `INSERT`, `SELECT`, `UPDATE` y `DELETE`.
 - Consultas SQL parametrizadas.
 - Diseño responsive con Bootstrap.
-- Uso de LibMan para gestionar librerías web.
+- Uso de bibliotecas web mediante CDN.
 
 > La administración no tiene autenticación porque el objetivo es mantener el
 > ejemplo fácil de entender. Antes de publicarlo en Internet habría que proteger

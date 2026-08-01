@@ -22,6 +22,26 @@ dotnet restore
 dotnet run
 ```
 
+## Publicación en MonsterASP.NET
+
+La aplicación no necesita secretos, usuarios ni SQLite. Desde la terminal
+integrada de VS Code:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae el ZIP dentro de `/wwwroot`. Solo debe desplegarse esta etapa del
+itinerario. El servidor necesita acceder a PokeAPI y los sprites se descargan
+desde Internet.
+
+Después de publicar, abre el listado y varias fichas de detalle. No existe base
+de datos ni información que deba preservarse entre despliegues.
+
 ## Endpoints utilizados
 
 ```text

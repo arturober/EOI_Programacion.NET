@@ -1,7 +1,7 @@
 # Versión 2: CRUD de categorías
 
 Esta etapa parte de `01-Listados` y añade la primera funcionalidad de escritura.
-El alumnado aprende el ciclo completo de un formulario Razor utilizando la
+Se aprende el ciclo completo de un formulario Razor utilizando la
 entidad más sencilla del proyecto.
 
 No se elimina ningún listado ni se cambia la estructura de datos anterior.
@@ -38,6 +38,30 @@ cd 02-CRUD-Categorias/TrivialApi
 dotnet restore
 dotnet run
 ```
+
+## Publicación en MonsterASP.NET
+
+Publica solo el proyecto `TrivialApi` de esta etapa:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+En el primer despliegue, el ZIP debe incluir `Data/trivial.db`. En
+actualizaciones posteriores, esa copia local puede sobrescribir las categorías
+y preguntas modificadas en el servidor. Para conservarlas:
+
+```powershell
+Remove-Item .\publicacion\Data\trivial.db
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Descarga antes una copia de seguridad de la base del servidor. Sube y extrae el
+ZIP en `/wwwroot` sin borrar todo el directorio.
+
+El CRUD no tiene autenticación y cualquier visitante podría alterar las
+categorías. Consulta el procedimiento completo en el
+[README general](../README.md).
 
 ## Archivos añadidos
 
@@ -274,7 +298,7 @@ await contexto.SaveChangesAsync();
 la configuración del contexto hace que también se eliminen las preguntas
 dependientes.
 
-Debe explicarse al alumnado que no es un segundo bucle de borrado escrito en el
+Debe explicarse que no es un segundo bucle de borrado escrito en el
 PageModel. Es una regla de la relación.
 
 ## Diferencias con la versión 1
@@ -305,7 +329,7 @@ PageModel. Es una regla de la relación.
 Borrar una categoría elimina sus preguntas. Cada versión tiene su propia base,
 pero conviene trabajar sobre una copia si se quieren conservar los 1.000 datos.
 
-## Preguntas para el alumnado
+## Preguntas para evaluar los conceptos aprendidos
 
 1. ¿Por qué Crear no necesita `OnGetAsync`?
 2. ¿Qué rellena la propiedad marcada con `[BindProperty]`?
@@ -331,4 +355,3 @@ pero conviene trabajar sobre una copia si se quieren conservar los 1.000 datos.
 
 La versión 3 aplica el mismo ciclo CRUD a `Pregunta`. La dificultad adicional
 será manejar más campos y seleccionar una categoría relacionada.
-

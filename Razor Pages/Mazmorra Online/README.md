@@ -286,27 +286,63 @@ carpeta `Mapas`.
 
 ## Publicación para MonsterASP.NET
 
-Genera los archivos publicados:
+MonsterASP.NET admite .NET 10, SignalR y WebSockets. Desde Visual Studio Code,
+abre la terminal integrada en la carpeta `Mazmorra Online` y ejecuta:
 
-```powershell
-dotnet publish .\MazmorraOnline\MazmorraOnline.csproj -c Release -o .\publish
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
 ```
 
-Después se debe subir el contenido de `publish`, no la carpeta con el código
-fuente.
+En PowerShell, crea el ZIP:
 
-Configuración necesaria:
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
 
-- .NET 10.
-- WebSockets habilitados.
-- Acceso HTTPS.
-- Sin base de datos.
+Después:
 
-## Limitaciones didácticas
+1. Abre **Files** en el panel de MonsterASP.NET.
+2. Entra en `/wwwroot`.
+3. Sube y extrae `publicacion.zip`.
+4. Permite sobrescribir los archivos anteriores sin borrar todo el directorio.
+5. Activa HTTPS para el sitio.
+6. Reinicia la aplicación o el AppPool.
 
-Los jugadores, las estadísticas y las rondas se almacenan en memoria.
-Desaparecerán al reiniciar o volver a publicar la aplicación.
+`MazmorraOnline.dll`, `web.config`, `appsettings.json`, `Mapas` y
+`wwwroot` deben quedar directamente dentro de `/wwwroot`. No subas el código
+fuente, el `.csproj`, `bin` ni `obj`.
 
-Los identificadores no sustituyen un sistema real de autenticación. El
-proyecto está pensado para aprender Razor Pages, APIs y SignalR, no para
-publicar cuentas de usuario reales.
+MonsterASP.NET ofrece soporte para SignalR y WebSockets. No obstante, después
+de publicar conviene comprobar en las herramientas del navegador que la
+conexión a `/hubs/juego` se establece correctamente.
+
+### Comprobar el despliegue
+
+1. Abre el sitio en dos navegadores o dispositivos.
+2. Entra con dos nombres diferentes.
+3. Comprueba movimiento, disparos, cambio de ronda y clasificación.
+4. Cierra momentáneamente una conexión y verifica la reconexión.
+5. Reinicia la aplicación y comprueba que comienza un estado nuevo.
+
+Si SignalR o el servidor devuelven un error, revisa
+`Control Panel → Websites → Manage → Logs` y habilita temporalmente los
+[logs de ASP.NET Core](https://help.monsterasp.net/books/debugging/page/aspnet-core-debug-logging).
+
+### Estado en memoria y límites
+
+No existe base de datos. Todos los jugadores, estadísticas, mapas elegidos e
+historial de rondas se almacenan en la memoria del proceso:
+
+- se pierden cuando se reinicia o se vuelve a publicar la aplicación;
+- pueden perderse si el alojamiento recicla el proceso por mantenimiento o
+  inactividad;
+- no pueden compartirse entre varias instancias del servidor;
+- no deben considerarse datos permanentes.
+
+Los identificadores del juego no sustituyen un sistema de autenticación.
+Cualquier visitante puede entrar con un nombre, por lo que el proyecto está
+pensado para prácticas controladas y no para cuentas reales.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).

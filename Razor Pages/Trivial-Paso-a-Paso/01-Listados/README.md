@@ -9,7 +9,7 @@ edición o borrado, ni API ni cliente JavaScript.
 
 ## Objetivos
 
-Al terminar esta versión, el alumnado debería poder explicar:
+Al terminar esta versión, se debería poder explicar:
 
 - Qué responsabilidad tiene `Program.cs`.
 - Qué representa una entidad.
@@ -55,6 +55,26 @@ dotnet run
 ```
 
 Abra la dirección indicada en la terminal.
+
+## Publicación en MonsterASP.NET
+
+Publica únicamente `01-Listados/TrivialApi`:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae el ZIP en `/wwwroot`. El primer despliegue debe incluir
+`publicacion/Data/trivial.db`, que contiene las 1.000 preguntas. Esta etapa es
+de solo lectura, por lo que una actualización no pierde modificaciones hechas
+desde la interfaz.
+
+No publiques las siete versiones a la vez. Consulta las instrucciones completas
+en el [README general](../README.md).
 
 ## Estructura
 
@@ -177,7 +197,7 @@ La entidad contiene:
 - Enunciado.
 - Cuatro respuestas.
 - Número de respuesta correcta.
-- Clave foránea de categoría.
+- Clave ajena de categoría.
 - Propiedad de navegación.
 
 `CategoriaId` es el valor almacenado en la tabla. `Categoria` permite acceder
@@ -202,7 +222,7 @@ public DbSet<Pregunta> Preguntas => Set<Pregunta>();
 
 - Índice único para el nombre de la categoría.
 - Relación uno a muchos.
-- Clave foránea.
+- Clave ajena.
 - Borrado en cascada.
 
 Aunque todavía no se borra nada, la relación se define desde el principio para
@@ -325,10 +345,10 @@ Al abrir `/Preguntas`:
 9. Comprobar el menú hamburguesa.
 10. Comprobar el desplazamiento de la tabla.
 
-## Preguntas para el alumnado
+## Preguntas para evaluar los conceptos aprendidos
 
 1. ¿Por qué `Categoria` tiene una lista de preguntas?
-2. ¿Dónde se encuentra realmente la clave foránea?
+2. ¿Dónde se encuentra realmente la clave ajena?
 3. ¿Qué diferencia hay entre `CategoriaId` y `Categoria`?
 4. ¿Qué método ejecuta la consulta?
 5. ¿Qué ocurriría si se quitara `Include`?

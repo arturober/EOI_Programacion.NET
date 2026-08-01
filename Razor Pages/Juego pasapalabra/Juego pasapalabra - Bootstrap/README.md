@@ -117,6 +117,42 @@ coloca después de la N.
 `TextoUtil.NormalizarParaComparar` elimina las tildes de las vocales para las
 búsquedas y las respuestas, pero conserva la Ñ porque es una letra diferente.
 
+## Publicación en MonsterASP.NET
+
+Desde la terminal integrada de VS Code:
+
+```bash
+dotnet restore
+libman restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae `publicacion.zip` dentro de `/wwwroot` mediante **Files**. La
+carpeta `wwwroot/lib` debe quedar incluida porque esta variante utiliza las
+bibliotecas locales. No subas el código fuente, `bin` ni `obj`.
+
+La base se guarda como `pasapalabra.db` en la raíz. Si no existe, la aplicación
+crea las tablas e inserta las preguntas iniciales. Para conservar preguntas y
+temas añadidos:
+
+- no elimines ni sobrescribas la base en las actualizaciones;
+- descarga una copia de seguridad antes de publicar;
+- comprueba que los cambios permanecen después de reiniciar.
+
+Las partidas activas se guardan en la sesión y se pierden al reiniciar el
+proceso. Además, el CRUD de preguntas y temas no tiene autenticación: cualquier
+visitante puede modificarlo. La aplicación solo debe publicarse con datos de
+práctica o después de proteger la administración.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+
 ## ¿Qué se puede aprender con este proyecto?
 
 - Clases, objetos, constructores y propiedades.

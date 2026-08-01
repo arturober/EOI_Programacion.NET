@@ -26,6 +26,26 @@ dotnet restore
 dotnet run
 ```
 
+## Publicación en MonsterASP.NET
+
+No hay claves, cuentas ni base de datos. Desde la terminal integrada de VS Code:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae `publicacion.zip` en `/wwwroot`. El servidor debe poder
+consultar PokeAPI y el navegador necesita acceder a jsDelivr para cargar
+Bootstrap y Bootswatch.
+
+Comprueba el listado, los detalles y varios temas claros y oscuros. La elección
+del tema se conserva en `localStorage` del navegador, no en el servidor. No
+hay datos permanentes que proteger al volver a publicar.
+
 ## Endpoints utilizados
 
 ```text

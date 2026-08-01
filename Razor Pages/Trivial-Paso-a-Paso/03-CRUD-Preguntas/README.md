@@ -10,7 +10,7 @@ campos.
 ## Objetivos
 
 - Reutilizar el patrón CRUD aprendido.
-- Trabajar con claves foráneas.
+- Trabajar con claves ajenas.
 - Construir desplegables mediante `SelectList`.
 - Validar que una entidad relacionada exista.
 - Recargar datos auxiliares tras una validación incorrecta.
@@ -38,6 +38,30 @@ cd 03-CRUD-Preguntas/TrivialApi
 dotnet restore
 dotnet run
 ```
+
+## Publicación en MonsterASP.NET
+
+Desde la carpeta `TrivialApi`:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+La primera publicación debe conservar `publicacion/Data/trivial.db`. En las
+actualizaciones, retírala antes de crear el ZIP si quieres mantener las
+preguntas creadas o editadas en el servidor:
+
+```powershell
+Remove-Item .\publicacion\Data\trivial.db
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Haz primero una copia de seguridad y extrae el ZIP en `/wwwroot` sin eliminar
+todo el sitio. El CRUD de categorías y preguntas es público y debe protegerse
+antes de usar datos que no sean de práctica.
+
+Consulta las instrucciones completas en el
+[README general](../README.md).
 
 ## Archivos añadidos
 
@@ -94,7 +118,7 @@ El formulario muestra textos más comprensibles:
 
 El valor enviado sigue siendo un entero.
 
-## Clave foránea
+## Clave ajena
 
 `Pregunta` contiene:
 
@@ -239,7 +263,7 @@ Esto evita duplicar:
 | CRUD de entidad sencilla | CRUD de entidad relacionada |
 | Un único campo | Siete campos |
 | Sin lista auxiliar | `SelectList` de categorías |
-| Validación básica | Validación de clave foránea |
+| Validación básica | Validación de clave ajena |
 | Sin `Include` nuevo | Categoría visible en el listado |
 
 ## Pruebas manuales
@@ -255,7 +279,7 @@ Esto evita duplicar:
 9. Confirmar el borrado.
 10. Crear una categoría y utilizarla en una pregunta.
 
-## Preguntas para el alumnado
+## Preguntas para evaluar los conceptos aprendidos
 
 1. ¿Por qué se guarda `CategoriaId`?
 2. ¿Para qué sirve `Categoria`?
@@ -282,4 +306,3 @@ Esto evita duplicar:
 
 La versión 4 mantiene este CRUD y amplía únicamente el listado con búsqueda,
 filtro por categoría, paginación y un pequeño JavaScript.
-

@@ -77,6 +77,44 @@ puedes prepararlo con:
 dotnet dev-certs https --trust
 ```
 
+## Publicación en MonsterASP.NET
+
+La versión final no necesita una clave de PokeAPI, cuentas de usuario ni base de
+datos. Desde la terminal integrada de VS Code:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae `publicacion.zip` dentro de `/wwwroot` mediante **Files**. En
+la raíz deben quedar `Pokemon.dll`, `web.config`, `appsettings.json` y
+`wwwroot`. No subas todo el itinerario ni el código fuente.
+
+El servidor necesita acceso a PokeAPI y GitHub Raw. El navegador necesita
+acceso a los CDN de Bootstrap, Bootswatch y Bootstrap Icons. La caché de treinta
+minutos está en memoria y se vacía al reiniciar la aplicación.
+
+### Comprobar el despliegue
+
+1. Abre la portada y el listado.
+2. Busca por una parte del nombre.
+3. Abre un detalle y comprueba evolución, movimientos y encuentros.
+4. Prueba el carrusel y los sonidos.
+5. Cambia entre temas claros y oscuros.
+6. Reinicia la aplicación y comprueba que vuelve a consultar la lista.
+
+Un primer acceso lento puede deberse a que la caché todavía está vacía. Si
+PokeAPI devuelve errores, revisa los logs y evita recargar masivamente el sitio.
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+
 ## Estructura
 
 ```text

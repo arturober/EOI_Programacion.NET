@@ -50,6 +50,39 @@ Después abra:
 No abra el HTML haciendo doble clic. Debe servirse desde la aplicación para que
 la ruta `/api` apunte al servidor correcto.
 
+## Publicación en MonsterASP.NET
+
+Desde `06-Cliente-Juego/TrivialApi`:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+En el primer despliegue conserva `Data/trivial.db`. Para actualizaciones que
+deban mantener el banco del servidor:
+
+```powershell
+Remove-Item .\publicacion\Data\trivial.db
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Descarga antes una copia de seguridad y extrae el ZIP en `/wwwroot`. El
+cliente ya forma parte de la publicación y debe abrirse mediante:
+
+```text
+https://tu-sitio.runasp.net/cliente/index.html
+```
+
+Como cliente y API comparten origen, las rutas relativas funcionan sin cambiar
+`localhost` y no necesitan CORS. Comprueba también:
+
+```text
+https://tu-sitio.runasp.net/api/categorias
+```
+
+El CRUD administrativo no tiene autenticación. Consulta las instrucciones
+completas en el [README general](../README.md).
+
 ## Archivos añadidos
 
 ```text
@@ -297,7 +330,7 @@ La misma función se utiliza al cargar categorías y al empezar.
 10. Crear una categoría vacía y seleccionarla.
 11. Detener el servidor y comprobar el error.
 
-## Preguntas para el alumnado
+## Preguntas para evaluar los conceptos aprendidos
 
 1. ¿De dónde proceden las categorías?
 2. ¿Qué representa una promesa?
@@ -323,4 +356,3 @@ La misma función se utiliza al cargar categorías y al empezar.
 
 La versión 7 mantiene intacta la lógica del juego y añade temas, iconos,
 mensajes SweetAlert en Razor Pages y confirmaciones de borrado reutilizables.
-

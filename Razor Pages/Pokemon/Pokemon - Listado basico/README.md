@@ -22,6 +22,26 @@ dotnet restore
 dotnet run
 ```
 
+## Publicación en MonsterASP.NET
+
+Esta etapa no necesita claves, usuarios ni base de datos. Desde la terminal
+integrada de VS Code:
+
+```bash
+dotnet publish -c Release -o publicacion
+```
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae el ZIP en `/wwwroot` desde **Files**. Solo debe publicarse esta
+etapa en el sitio, no toda la carpeta `Pokemon`. El servidor necesita conexión
+saliente a PokeAPI.
+
+Después del despliegue, abre el listado y comprueba que aparecen los 151
+Pokémon. La aplicación no conserva datos entre reinicios.
+
 La aplicación consulta:
 
 ```text

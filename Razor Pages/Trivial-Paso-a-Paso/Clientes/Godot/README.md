@@ -104,6 +104,31 @@ http://localhost:5000
 7. Elige una categoría.
 8. Pulsa **Comenzar partida**.
 
+## Conectar con MonsterASP.NET
+
+El cliente Godot no se publica dentro de `/wwwroot`. Primero se despliega
+`TrivialApi` de la versión 5, 6 o 7 y después Godot se ejecuta en el equipo
+del usuario.
+
+En el campo de dirección escribe, por ejemplo:
+
+```text
+https://tu-sitio.runasp.net
+```
+
+No añadas `/api`: el cliente completa internamente las rutas
+`/api/categorias` y `/api/preguntas`.
+
+Comprueba previamente:
+
+```text
+https://tu-sitio.runasp.net/api/categorias
+```
+
+La aplicación Godot nativa no está sometida a CORS. Este proyecto utiliza C# y
+Godot .NET 4.7.1, por lo que no puede exportarse para web; está pensado para
+escritorio o plataformas compatibles con Godot .NET.
+
 ## Funcionalidad
 
 - Dirección del servidor modificable.

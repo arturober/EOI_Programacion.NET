@@ -30,23 +30,11 @@ consultas SQL usan parámetros y los métodos tienen nombres descriptivos.
 - `lista_tareas.db`: base de datos SQLite con datos de ejemplo.
 - `libman.json`: define las librerías web y sus versiones.
 
-## Librerías con LibMan
+## Librerías mediante CDN
 
-Las librerías están guardadas dentro de `wwwroot/lib`, por lo que la aplicación
-no depende de una CDN para funcionar. LibMan permite restaurarlas mediante el
-archivo `libman.json`.
-
-Si no tienes instalada su herramienta de línea de comandos:
-
-```bash
-dotnet tool install -g Microsoft.Web.LibraryManager.Cli
-```
-
-Para restaurar las librerías:
-
-```bash
-libman restore
-```
+Bootstrap, Bootstrap Icons y SweetAlert2 se cargan desde jsDelivr. Esta variante
+no necesita restaurar las bibliotecas con LibMan, pero sí requiere conexión a
+Internet en el navegador.
 
 ## Ejecución
 
@@ -58,6 +46,40 @@ dotnet run
 ```
 
 Abre en el navegador la dirección que aparezca en la terminal.
+
+## Publicación en MonsterASP.NET
+
+Desde la terminal integrada de VS Code:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae `publicacion.zip` dentro de `/wwwroot` desde **Files**. Los
+archivos publicados deben quedar directamente en la raíz del sitio. No subas el
+código fuente, el `.csproj`, `bin` ni `obj`.
+
+La base se guarda como `lista_tareas.db`. Si no existe, la aplicación crea una
+base vacía. En las actualizaciones:
+
+- conserva la base del servidor;
+- realiza una copia de seguridad antes de publicar;
+- no borres todo `/wwwroot`;
+- comprueba que jsDelivr, Bootstrap Icons y SweetAlert2 cargan correctamente.
+
+No existe autenticación. Cualquier visitante puede modificar las tareas y
+categorías, por lo que solo deben utilizarse datos de práctica o añadirse
+control de acceso antes de exponer la aplicación.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
 
 ## Ideas importantes que se practican
 

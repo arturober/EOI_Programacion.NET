@@ -20,6 +20,10 @@ Trivial-Paso-a-Paso
 ├── 05-API-REST
 ├── 06-Cliente-Juego
 ├── 07-Version-Definitiva
+├── Clientes
+│   ├── Consola
+│   └── Godot
+├── Pruebas
 ├── .gitignore
 └── README.md
 ```
@@ -105,6 +109,105 @@ Categoria 1 ─────────── N Pregunta
 
 Una categoría puede contener muchas preguntas y cada pregunta pertenece a una
 sola categoría.
+
+## Publicación en MonsterASP.NET
+
+Cada versión es una aplicación independiente. Debe publicarse solamente el
+proyecto `TrivialApi` de la etapa elegida, nunca toda la carpeta
+`Trivial-Paso-a-Paso`.
+
+### Preparar la publicación desde VS Code
+
+Entra en la carpeta `TrivialApi` de la versión que quieras desplegar. Por
+ejemplo:
+
+```bash
+cd 07-Version-Definitiva/TrivialApi
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+En MonsterASP.NET:
+
+1. Abre **Files** y entra en `/wwwroot`.
+2. Sube `publicacion.zip`.
+3. Extrae su contenido dentro de `/wwwroot`.
+4. Permite sobrescribir los archivos de la aplicación sin borrar todo el
+   directorio.
+5. Reinicia la aplicación o el AppPool.
+
+En la raíz deben quedar `TrivialApi.dll`, `web.config`,
+`appsettings.json`, `Data`, `wwwroot` y los demás archivos publicados. No
+subas el código fuente, el `.csproj`, `bin` ni `obj`.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+
+### Primera publicación de la base de datos
+
+El proyecto copia automáticamente `Data/trivial.db` a la carpeta de
+publicación. El primer despliegue debe incluirla porque contiene las 10
+categorías y las 1.000 preguntas.
+
+Comprueba antes de crear el ZIP:
+
+```text
+publicacion/Data/trivial.db
+```
+
+### Actualizaciones sin perder datos
+
+Desde la versión 2, la administración puede modificar la base del servidor. Una
+nueva publicación vuelve a incluir la copia local de `trivial.db`. Si se
+extrae sobre el sitio, puede sustituir los cambios realizados en línea.
+
+Para conservar la base del servidor en una actualización:
+
+1. Descarga una copia de seguridad de `/wwwroot/Data/trivial.db`.
+2. Genera de nuevo `publicacion`.
+3. Retira la copia local antes de comprimir:
+
+```powershell
+Remove-Item .\publicacion\Data\trivial.db
+```
+
+4. Crea y sube el ZIP normalmente.
+5. Comprueba que las categorías y preguntas del servidor continúan.
+
+No retires la base del primer despliegue: el proyecto espera que exista y no
+inserta automáticamente las 1.000 preguntas.
+
+### API, cliente y CORS
+
+Desde la versión 5 pueden comprobarse direcciones públicas como:
+
+```text
+https://tu-sitio.runasp.net/api/categorias
+https://tu-sitio.runasp.net/api/preguntas?cantidad=10
+```
+
+En las versiones 6 y 7, el cliente situado en `wwwroot/cliente` se sirve desde
+el mismo origen que la API y utiliza rutas relativas. No necesita modificar
+`localhost` ni abrir el archivo HTML mediante doble clic.
+
+CORS solo interviene cuando un cliente web de otro origen consulta la API. La
+configuración abierta es útil para prácticas, pero en una aplicación real
+convendría permitir únicamente los orígenes necesarios.
+
+### Seguridad
+
+El CRUD de categorías y preguntas no tiene autenticación. Cualquier visitante
+podría modificar o borrar el banco de preguntas. Publica datos de práctica o
+protege la administración antes de abrir el sitio a terceros.
+
+El cliente de consola, el cliente Godot y el proyecto de pruebas no se publican
+dentro de `/wwwroot`: consumen o prueban una API que se despliega por separado.
 
 ## Estrategia de crecimiento
 
@@ -434,4 +537,3 @@ Cada carpeta contiene un README más detallado con:
 - Diferencias con la etapa anterior.
 - Pruebas manuales.
 - Ejercicios sugeridos.
-

@@ -59,6 +59,43 @@ dotnet run
 
 Abre en el navegador la dirección que aparezca en la terminal.
 
+## Publicación en MonsterASP.NET
+
+Desde la terminal integrada de VS Code:
+
+```bash
+dotnet restore
+libman restore
+dotnet publish -c Release -o publicacion
+```
+
+En PowerShell:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+Sube y extrae `publicacion.zip` dentro de `/wwwroot` desde **Files**. Los
+archivos publicados y la carpeta `wwwroot/lib` deben quedar directamente en
+la raíz del sitio. No subas el código fuente, `bin` ni `obj`.
+
+La base se guarda como `lista_tareas.db` en la raíz de la aplicación. Si no
+existe, el primer arranque crea una base vacía con sus tablas. Para utilizar los
+datos de ejemplo hay que copiar deliberadamente el archivo local.
+
+En posteriores despliegues:
+
+- no borres ni sobrescribas `lista_tareas.db` si quieres conservar los datos;
+- descarga una copia de seguridad antes de actualizar;
+- comprueba que una tarea nueva permanece después de reiniciar.
+
+Esta aplicación no tiene autenticación. Si se publica en Internet, cualquier
+visitante podrá crear, editar, completar y eliminar tareas o categorías. Debe
+utilizarse con datos de práctica o protegerse antes de un uso público.
+
+Consulta la
+[guía de publicación mediante ZIP](https://help.monsterasp.net/books/deploy/page/how-to-deploy-website-content-from-zip-file).
+
 ## Ideas importantes que se practican
 
 - Mapeo de tablas de SQLite a objetos de C#.

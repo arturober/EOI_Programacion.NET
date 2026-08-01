@@ -3,6 +3,11 @@
 Este proyecto utiliza **xUnit** y `WebApplicationFactory` para probar la API
 del trivial sin abrir un navegador y sin ejecutar previamente `dotnet run`.
 
+> Este proyecto no debe publicarse en MonsterASP.NET. Las pruebas se ejecutan
+> localmente o desde un sistema de integración continua mediante
+> `dotnet test`. La aplicación web que se quiera mostrar debe publicarse desde
+> una de las versiones 5, 6 o 7 del itinerario principal.
+
 ## Proyectos
 
 ```text

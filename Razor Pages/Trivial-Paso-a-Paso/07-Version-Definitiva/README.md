@@ -51,6 +51,68 @@ Cliente:
 /cliente/index.html
 ```
 
+## Publicación en MonsterASP.NET
+
+Esta es la versión recomendada para una demostración completa. Desde
+`07-Version-Definitiva/TrivialApi`:
+
+```bash
+dotnet restore
+dotnet publish -c Release -o publicacion
+```
+
+### Primera publicación
+
+Comprueba que existe:
+
+```text
+publicacion/Data/trivial.db
+```
+
+La base contiene las 10 categorías y las 1.000 preguntas y debe incluirse en el
+primer ZIP:
+
+```powershell
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+### Actualizaciones
+
+La publicación genera de nuevo la base local. Para no sustituir las preguntas y
+categorías modificadas en MonsterASP.NET:
+
+1. Descarga `/wwwroot/Data/trivial.db` como copia de seguridad.
+2. Retira la base de la carpeta publicada.
+3. Crea el ZIP:
+
+```powershell
+Remove-Item .\publicacion\Data\trivial.db
+Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
+```
+
+4. Sube y extrae el ZIP en `/wwwroot` sin borrar todo el directorio.
+5. Reinicia la aplicación.
+
+### Comprobación
+
+```text
+https://tu-sitio.runasp.net/
+https://tu-sitio.runasp.net/cliente/index.html
+https://tu-sitio.runasp.net/api/categorias
+https://tu-sitio.runasp.net/api/preguntas?cantidad=10
+```
+
+Prueba además una búsqueda, una operación CRUD, el juego, SweetAlert y varios
+temas. El cliente está en el mismo origen y utiliza rutas relativas, por lo que
+no debe cambiarse ninguna URL.
+
+El CRUD no tiene autenticación y cualquier visitante puede modificar el banco.
+CORS abierto es apropiado para prácticas con clientes externos, pero debería
+restringirse en una publicación real.
+
+Consulta el procedimiento general y las precauciones completas en el
+[README del itinerario](../README.md).
+
 ## Archivos añadidos
 
 ```text
@@ -402,7 +464,7 @@ Botones y SweetAlert
 5. Abrir el cliente.
 6. Cerrar y volver a abrir el navegador.
 
-## Preguntas para el alumnado
+## Preguntas para evaluar los conceptos aprendidos
 
 1. ¿Por qué TempData sigue siendo útil con SweetAlert?
 2. ¿Qué diferencia hay entre `dataset` y `localStorage`?
