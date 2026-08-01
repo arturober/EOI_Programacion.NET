@@ -4,12 +4,12 @@ using Xunit.Abstractions;
 
 namespace TrivialApi.Tests;
 
+[Collection(ApiTestCollection.Nombre)]
 // Comprueba comportamientos generales del enrutamiento de la aplicación.
 public class RutasApiTests(
-    CustomWebApplicationFactory aplicacion,
+    ApiServerFixture servidor,
     ITestOutputHelper salida)
-    : ApiTestBase(aplicacion, salida),
-      IClassFixture<CustomWebApplicationFactory>
+    : ApiTestBase(servidor, salida)
 {
     [Fact(DisplayName =
         "Una ruta de API inexistente devuelve 404 Not Found")]

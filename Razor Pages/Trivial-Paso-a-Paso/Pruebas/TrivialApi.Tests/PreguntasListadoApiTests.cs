@@ -6,12 +6,12 @@ using Xunit.Abstractions;
 
 namespace TrivialApi.Tests;
 
+[Collection(ApiTestCollection.Nombre)]
 // Comprueba el listado de preguntas, sus filtros y sus límites.
 public class PreguntasListadoApiTests(
-    CustomWebApplicationFactory aplicacion,
+    ApiServerFixture servidor,
     ITestOutputHelper salida)
-    : ApiTestBase(aplicacion, salida),
-      IClassFixture<CustomWebApplicationFactory>
+    : ApiTestBase(servidor, salida)
 {
     private const string RutaPreguntas = "/api/preguntas";
 
@@ -154,10 +154,10 @@ public class PreguntasListadoApiTests(
     }
 
     [Theory(DisplayName =
-        "GET /api/preguntas ignora categoriaId cuando no es positivo")]
+        "GET /api/preguntas devuelve una lista vacía para categoriaId no positivo")]
     [InlineData(0)]
     [InlineData(-1)]
-    public async Task ObtenerTodas_CategoriaNoPositiva_NoAplicaFiltro(
+    public async Task ObtenerTodas_CategoriaNoPositiva_DevuelveListaVacia(
         int categoriaId)
     {
         MostrarInicio(
@@ -169,8 +169,8 @@ public class PreguntasListadoApiTests(
             await LeerJsonAsync<List<PreguntaDto>>(respuesta);
 
         MostrarComprobacion(
-            "No se aplica el filtro y se mantiene la cantidad predeterminada");
-        Assert.Equal(10, preguntas.Count);
+            "El filtro se aplica y no encuentra preguntas con esa categoría");
+        Assert.Empty(preguntas);
 
         MostrarFin();
     }

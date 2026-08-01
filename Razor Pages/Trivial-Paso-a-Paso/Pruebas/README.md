@@ -1,162 +1,151 @@
-# Pruebas de integración de TrivialApi
+# Pruebas de TrivialApi: xUnit y Playwright
 
-Este proyecto utiliza **xUnit**, `WebApplicationFactory` y SQLite en memoria
-para comprobar la API del trivial sin abrir un navegador y sin ejecutar antes
-`dotnet run`.
+Esta carpeta está preparada para colocarse directamente dentro de
+`Razor Pages/Trivial-Paso-a-Paso`. Las pruebas apuntan a la aplicación real de:
 
-> El proyecto de pruebas se ejecuta localmente o desde un sistema de
-> integración continua mediante `dotnet test`. No debe publicarse como parte
-> de la aplicación web.
+```text
+07-Version-Definitiva/TrivialApi
+```
+
+No contienen una copia de la API. De esta forma, al modificar la versión
+7, las pruebas comprueban exactamente ese código.
+
+## Tecnologías
+
+- xUnit para organizar y ejecutar todas las pruebas.
+- `HttpClient` para las pruebas de integración de la API.
+- Playwright para abrir Chromium y comprobar Razor Pages y el cliente JavaScript.
+- Kestrel en un puerto libre para que el navegador acceda a una dirección HTTP real.
+- SQLite temporal con datos conocidos. Nunca se modifica `Data/trivial.db`.
 
 ## Estructura
 
 ```text
 Pruebas
-├── TrivialApi
-│   └── Aplicación ASP.NET Core, Razor Pages y API REST
+├── TrivialApi.Testing
+│   ├── TrivialTestServer.cs
+│   └── InformeConsola.cs
 ├── TrivialApi.Tests
-│   ├── CustomWebApplicationFactory.cs
-│   ├── ApiTestBase.cs
-│   ├── CategoriasApiTests.cs
-│   ├── PreguntasListadoApiTests.cs
-│   ├── PreguntasDetalleApiTests.cs
-│   ├── RutasApiTests.cs
-│   └── xunit.runner.json
+│   └── 37 casos de integración HTTP
+├── TrivialApi.PlaywrightTests
+│   └── 27 casos de navegador
 └── TrivialApiConPruebas.slnx
 ```
 
-## Nombres utilizados
+Los casos parametrizados de xUnit cuentan como ejecuciones independientes.
+El total es de **64 casos ejecutables**.
 
-La clase de infraestructura se llama `CustomWebApplicationFactory`, un nombre
-muy habitual en proyectos ASP.NET Core y utilizado también en los ejemplos de
-pruebas de integración de Microsoft.
+## Correcciones incluidas
 
-Las pruebas se han separado por responsabilidad:
+- los enlaces de navegación se buscan únicamente dentro del menú principal;
+- los botones de edición se identifican por su `aria-label` exacto;
+- el filtro de categoría espera la nueva URL antes de comprobar la tabla;
+- la salida en directo se desactiva para evitar líneas duplicadas;
+- los colores ANSI quedan desactivados por defecto.
 
-- `CategoriasApiTests`: endpoints de categorías.
-- `PreguntasListadoApiTests`: listado, límites, filtros y formato.
-- `PreguntasDetalleApiTests`: consulta de una pregunta concreta.
-- `RutasApiTests`: enrutamiento y funcionamiento general.
-- `ApiTestBase`: código común para realizar peticiones y mostrar mensajes.
+Estas pruebas esperan que los cuatro formularios corregidos de la aplicación
+utilicen `for="Categoria"` y `for="Pregunta"` al cargar `_Formulario`.
 
-## Ejecutar las pruebas
+## Ejecución
 
-Abre una terminal en esta carpeta y ejecuta:
+Desde esta carpeta:
 
 ```console
 dotnet test --logger "console;verbosity=detailed"
 ```
 
-El resultado se muestra únicamente en la consola y no se necesita ningún script adicional.
+No se genera un informe TRX, no hay un script de PowerShell propio y no es
+necesario ejecutar antes `dotnet run`.
 
-## Salida durante la ejecución
+La primera ejecución instala automáticamente solo Chromium mediante la API
+oficial de Playwright. Las siguientes ejecuciones reutilizan el navegador ya
+instalado.
 
-Cada prueba escribe información mediante `ITestOutputHelper`. La configuración
-`showLiveOutput` de `xunit.runner.json` permite mostrarla mientras se ejecutan
-las pruebas.
+## Salida por consola
 
-Ejemplo:
+`xunit.runner.json` desactiva `showLiveOutput` para evitar que el logger
+detallado repita cada línea. Los pasos aparecen dentro del resultado de cada
+prueba. Los colores ANSI están desactivados por defecto porque algunos runners
+muestran sus códigos como texto:
 
-```text
-======================================================================
-INICIO: Filtrar las preguntas por la categoría Ciencia
-PETICIÓN: GET /api/categorias
-RESPUESTA: 200 OK
-CONTENIDO: application/json
-PETICIÓN: GET /api/preguntas?categoriaId=2&cantidad=100
-RESPUESTA: 200 OK
-CONTENIDO: application/json
-COMPROBACIÓN: Se reciben las cuatro preguntas de Ciencia
-RESULTADO: prueba superada
+- azul: inicio de la prueba;
+- amarillo: petición HTTP;
+- cian: acción o comprobación;
+- verde: prueba superada.
+
+Para activar expresamente los colores en una terminal compatible, desde
+PowerShell:
+
+```console
+$env:TRIVIAL_TEST_COLORS = "1"
 ```
 
-La ejecución paralela está desactivada para que los mensajes de diferentes
-pruebas no se mezclen en la consola.
+La variable estándar `NO_COLOR` continúa teniendo prioridad y permite
+desactivarlos.
 
-## Qué hace CustomWebApplicationFactory
+## Qué se prueba con xUnit y HttpClient
 
-`CustomWebApplicationFactory`:
+Se mantienen las 37 pruebas de la API:
 
-1. Inicia internamente la aplicación definida en `Program.cs`.
-2. Crea un servidor HTTP de pruebas.
-3. Proporciona instancias de `HttpClient` conectadas con ese servidor.
-4. Sustituye la base de datos real por una base SQLite en memoria.
-5. Crea el esquema e inserta datos conocidos antes de las peticiones.
-6. Elimina la base en memoria al terminar la ejecución.
+- categorías, orden e identificadores;
+- preguntas, cantidades, límites y filtros;
+- códigos 400, 404 y 405;
+- contrato JSON y DTO;
+- ausencia de propiedades internas;
+- rutas generales y disponibilidad de Razor Pages.
 
-Las peticiones recorren realmente:
+## Qué se prueba con Playwright
 
-```text
-HttpClient → enrutamiento → controlador → Entity Framework Core → SQLite → JSON
-```
+### Navegación y diseño
 
-## Base de datos de pruebas
-
-Las pruebas no utilizan ni modifican `Data/trivial.db`.
-
-La base en memoria contiene:
-
-- 3 categorías: Arte, Ciencia y Cultura.
-- 12 preguntas: 4 por categoría.
-
-Los doce registros permiten comprobar correctamente que el endpoint devuelve
-diez preguntas cuando no se especifica el parámetro `cantidad`.
-
-## Casos cubiertos
-
-La suite contiene **37 casos de prueba ejecutables**.
-
+- carga de la página principal;
+- enlaces de categorías, preguntas y juego;
+- barra de navegación sticky;
+- menú hamburguesa;
+- ausencia de desbordamiento horizontal en móvil.
 
 ### Categorías
 
-- Listado completo y orden alfabético.
-- Identificadores positivos y sin duplicados.
-- Consulta de una categoría existente.
-- Identificadores inexistentes, cero y negativos.
-- Identificador no numérico.
-- Tipo de contenido JSON.
-- Rechazo de peticiones POST con código 405.
+- creación;
+- validación de nombres duplicados;
+- edición;
+- cancelación y confirmación del borrado con SweetAlert.
 
-### Listado de preguntas
+### Preguntas
 
-- Cantidad predeterminada de diez elementos.
-- Cantidades válidas de 1, 2, 5 y 12.
-- Cantidades iguales o inferiores a cero.
-- Cantidad superior al máximo de 1000.
-- Cantidad no numérica.
-- Filtrado por categoría existente.
-- Categoría inexistente.
-- Categorías con identificador cero o negativo.
-- Categoría no numérica.
-- Estructura completa de los DTO.
-- Ausencia de preguntas duplicadas.
-- Tipo de contenido JSON.
-- Rechazo de peticiones POST con código 405.
+- creación completa;
+- validaciones;
+- edición;
+- búsqueda sin distinguir mayúsculas ni tildes;
+- conservación del foco del buscador;
+- filtro por categoría;
+- cancelación y confirmación del borrado.
 
-### Detalle de preguntas
+### Temas
 
-- Consulta de una pregunta existente y comprobación de sus datos.
-- Identificadores inexistentes, cero y negativos.
-- Identificador no numérico.
-- Contrato JSON público.
-- Ausencia de propiedades internas como `respuesta1` o `categoriaId`.
-- Tipo de contenido JSON.
+- Bootstrap oscuro;
+- persistencia en `localStorage`;
+- cambio de hoja Bootswatch;
+- tema compartido con el cliente del juego.
 
-### Comportamiento general
+### Juego
 
-- Una ruta de API inexistente devuelve 404.
-- La página principal de Razor Pages continúa disponible.
+- carga de categorías desde la API real;
+- ocultación de la zona inicial al comenzar;
+- cuatro respuestas por pregunta;
+- respuesta correcta;
+- respuesta incorrecta con explicación;
+- resultado final y vuelta al inicio.
 
-## Cambio necesario en Program.cs
+Las pruebas del flujo del juego interceptan las respuestas de la API para que
+las preguntas y respuestas sean conocidas. Así no dependen del orden aleatorio
+del endpoint.
 
-Al final de `Program.cs` se mantiene esta declaración:
+## Base de datos y servidor
 
-```csharp
-public partial class Program
-{
-}
-```
+Cada proyecto de pruebas inicia su propio servidor y crea una base SQLite en
+la carpeta temporal del sistema. Contiene tres categorías y doce preguntas.
+El servidor se detiene y la base temporal se elimina al finalizar.
 
-Las aplicaciones con instrucciones de nivel superior generan internamente la
-clase `Program`. Esta declaración permite que el proyecto de pruebas la utilice
-como parámetro de `WebApplicationFactory<Program>`.
+La aplicación se inicia mediante `dotnet run --no-build`, porque la referencia
+de proyecto hace que la versión 7 se compile antes de ejecutar las pruebas.

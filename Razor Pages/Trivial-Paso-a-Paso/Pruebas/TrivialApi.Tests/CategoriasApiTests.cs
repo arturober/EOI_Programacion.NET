@@ -6,12 +6,12 @@ using Xunit.Abstractions;
 
 namespace TrivialApi.Tests;
 
+[Collection(ApiTestCollection.Nombre)]
 // Comprueba los endpoints de lectura de categorías.
 public class CategoriasApiTests(
-    CustomWebApplicationFactory aplicacion,
+    ApiServerFixture servidor,
     ITestOutputHelper salida)
-    : ApiTestBase(aplicacion, salida),
-      IClassFixture<CustomWebApplicationFactory>
+    : ApiTestBase(servidor, salida)
 {
     private const string RutaCategorias = "/api/categorias";
 

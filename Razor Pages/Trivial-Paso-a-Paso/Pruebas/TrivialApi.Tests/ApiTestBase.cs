@@ -1,69 +1,49 @@
 using System.Net.Http.Json;
+using TrivialApi.Testing;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace TrivialApi.Tests;
 
-// Contiene la infraestructura común de las clases de pruebas de la API.
+// Contiene las operaciones comunes de las pruebas HTTP.
 public abstract class ApiTestBase
 {
-    private readonly ITestOutputHelper _salida;
+    private readonly InformeConsola _informe;
 
-    protected ApiTestBase(
-        CustomWebApplicationFactory aplicacion,
-        ITestOutputHelper salida)
+    protected ApiTestBase(ApiServerFixture servidor, ITestOutputHelper salida)
     {
-        Cliente = aplicacion.CreateClient();
-        _salida = salida;
+        Cliente = servidor.Server.Client;
+        _informe = new InformeConsola(salida.WriteLine);
     }
 
     protected HttpClient Cliente { get; }
 
-    // Muestra el objetivo de la prueba antes de realizar la petición.
-    protected void MostrarInicio(string descripcion)
-    {
-        _salida.WriteLine("");
-        _salida.WriteLine(new string('=', 70));
-        _salida.WriteLine($"INICIO: {descripcion}");
-    }
+    protected void MostrarInicio(string descripcion) =>
+        _informe.Inicio(descripcion);
 
-    // Realiza una petición GET y muestra la ruta y el código HTTP recibido.
     protected async Task<HttpResponseMessage> EnviarGetAsync(string ruta)
     {
-        _salida.WriteLine($"PETICIÓN: GET {ruta}");
-
+        _informe.Peticion("GET", ruta);
         HttpResponseMessage respuesta = await Cliente.GetAsync(ruta);
+        _informe.Respuesta((int)respuesta.StatusCode, respuesta.StatusCode.ToString());
 
-        _salida.WriteLine(
-            $"RESPUESTA: {(int)respuesta.StatusCode} {respuesta.StatusCode}");
-
-        if (respuesta.Content.Headers.ContentType is not null)
+        if (respuesta.Content.Headers.ContentType?.MediaType is string tipo)
         {
-            _salida.WriteLine(
-                $"CONTENIDO: {respuesta.Content.Headers.ContentType.MediaType}");
+            _informe.Paso($"Contenido recibido: {tipo}");
         }
 
         return respuesta;
     }
 
-    // Deserializa el JSON después de comprobar que la petición ha sido correcta.
-    protected async Task<T> LeerJsonAsync<T>(HttpResponseMessage respuesta)
+    protected static async Task<T> LeerJsonAsync<T>(HttpResponseMessage respuesta)
     {
         respuesta.EnsureSuccessStatusCode();
-
         T? contenido = await respuesta.Content.ReadFromJsonAsync<T>();
         return Assert.IsType<T>(contenido);
     }
 
-    // Muestra una comprobación relevante realizada por la prueba.
-    protected void MostrarComprobacion(string descripcion)
-    {
-        _salida.WriteLine($"COMPROBACIÓN: {descripcion}");
-    }
+    protected void MostrarComprobacion(string descripcion) =>
+        _informe.Comprobacion(descripcion);
 
-    // Indica que todas las aserciones de la prueba han finalizado correctamente.
-    protected void MostrarFin()
-    {
-        _salida.WriteLine("RESULTADO: prueba superada");
-    }
+    protected void MostrarFin() => _informe.Exito();
 }

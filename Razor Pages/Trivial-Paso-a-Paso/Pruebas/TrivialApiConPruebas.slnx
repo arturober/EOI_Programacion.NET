@@ -1,4 +1,6 @@
 <Solution>
-  <Project Path="TrivialApi/TrivialApi.csproj" />
+  <Project Path="../07-Version-Definitiva/TrivialApi/TrivialApi.csproj" />
+  <Project Path="TrivialApi.Testing/TrivialApi.Testing.csproj" />
   <Project Path="TrivialApi.Tests/TrivialApi.Tests.csproj" />
+  <Project Path="TrivialApi.PlaywrightTests/TrivialApi.PlaywrightTests.csproj" />
 </Solution>

@@ -6,12 +6,12 @@ using Xunit.Abstractions;
 
 namespace TrivialApi.Tests;
 
+[Collection(ApiTestCollection.Nombre)]
 // Comprueba la consulta de una pregunta concreta mediante su identificador.
 public class PreguntasDetalleApiTests(
-    CustomWebApplicationFactory aplicacion,
+    ApiServerFixture servidor,
     ITestOutputHelper salida)
-    : ApiTestBase(aplicacion, salida),
-      IClassFixture<CustomWebApplicationFactory>
+    : ApiTestBase(servidor, salida)
 {
     private const string RutaPreguntas = "/api/preguntas";
 
