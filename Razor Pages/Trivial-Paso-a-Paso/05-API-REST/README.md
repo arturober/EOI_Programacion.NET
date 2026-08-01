@@ -20,7 +20,6 @@ Controladores → JSON para programas
 - Utilizar parámetros de ruta y consulta.
 - Devolver códigos HTTP.
 - Separar entidades y DTO.
-- Configurar CORS.
 - Consumir los endpoints desde el navegador.
 
 ## Funcionalidad nueva
@@ -73,8 +72,8 @@ https://tu-sitio.runasp.net/api/preguntas?cantidad=10
 ```
 
 La API JSON es de solo lectura, pero la administración Razor mantiene el CRUD
-público. CORS permite clientes web externos durante las prácticas; en una
-aplicación real debería limitarse a orígenes conocidos.
+público. Esta etapa permite abrir las direcciones directamente en el navegador,
+pero todavía no registra una política CORS para páginas web de otro origen.
 
 Consulta el procedimiento completo en el
 [README general](../README.md).
@@ -280,21 +279,32 @@ su claridad didáctica. Para millones de filas sería necesaria otra estrategia.
 La conversión está centralizada y se reutiliza en el listado y en la consulta
 por Id.
 
-## CORS
+## CORS y clientes externos
 
 CORS controla si un navegador permite que una página de otro origen consulte
 la API.
 
-Se define la política:
+En esta etapa los controladores REST ya existen, pero `Program.cs` todavía no
+registra ni aplica una política CORS. Esto no afecta al navegador cuando se abre
+directamente un endpoint, ni a clientes nativos como los de consola y Godot.
 
-```csharp
-AllowAnyOrigin()
-AllowAnyHeader()
-AllowAnyMethod()
+Sí afecta a un cliente HTML servido desde otra dirección o desde otro puerto.
+Para probar el cliente web independiente incluido en:
+
+```text
+Clientes/JavaScript
 ```
 
-Esta configuración es apropiada para el ejercicio, pero en una aplicación real
-conviene especificar orígenes permitidos.
+utilice `07-Version-Definitiva`, donde se define la política didáctica:
+
+```csharp
+politica.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+```
+
+Esta configuración abierta es apropiada para el ejercicio. En una aplicación
+real conviene especificar únicamente los orígenes permitidos.
 
 ## Direcciones disponibles
 

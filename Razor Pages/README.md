@@ -92,13 +92,16 @@ interfaz responsive.
 
 1. [Trivial, versiones 5 a 7](Trivial-Paso-a-Paso/) para crear una API REST y
    consumirla desde JavaScript.
-2. [Cliente de consola](Trivial-Paso-a-Paso/Clientes/Consola/) para consumir la
+2. [Cliente JavaScript independiente](Trivial-Paso-a-Paso/Clientes/JavaScript/)
+   para separar por completo el sitio estático y la API, configurar el servidor
+   y estudiar CORS.
+3. [Cliente de consola](Trivial-Paso-a-Paso/Clientes/Consola/) para consumir la
    misma API desde C#.
-3. [Cliente Godot](Trivial-Paso-a-Paso/Clientes/Godot/) para comprobar que una
+4. [Cliente Godot](Trivial-Paso-a-Paso/Clientes/Godot/) para comprobar que una
    API no depende de la tecnología del cliente.
-4. [Pruebas de integración](Trivial-Paso-a-Paso/Pruebas/) con xUnit,
+5. [Pruebas de integración](Trivial-Paso-a-Paso/Pruebas/) con xUnit,
    `WebApplicationFactory` y SQLite en memoria.
-5. [Mazmorra Online](<Mazmorra Online/>) para estudiar SignalR, bucles de juego,
+6. [Mazmorra Online](<Mazmorra Online/>) para estudiar SignalR, bucles de juego,
    sincronización, reconexión e interfaces táctiles.
 
 ## Requisitos generales
@@ -215,7 +218,7 @@ la separación jerárquica de la configuración. Por ejemplo,
 - CORS en el trivial para clientes externos.
 - SignalR para comunicación bidireccional en tiempo real.
 - xUnit y `WebApplicationFactory` para pruebas de integración.
-- Clientes de consola y Godot desacoplados de la base de datos.
+- Clientes de consola, Godot y JavaScript desacoplados de la base de datos.
 
 ## Patrones comunes de los proyectos
 
@@ -613,9 +616,9 @@ La base de cada etapa contiene 10 categorías y 1.000 preguntas.
 | 2 | [CRUD de categorías](Trivial-Paso-a-Paso/02-CRUD-Categorias/) | Formularios, validación, PRG, `TempData` y borrado en cascada |
 | 3 | [CRUD de preguntas](Trivial-Paso-a-Paso/03-CRUD-Preguntas/) | Claves ajenas, `SelectList`, formulario parcial y respuesta correcta |
 | 4 | [Búsqueda y paginación](Trivial-Paso-a-Paso/04-Busqueda-Paginacion/) | Filtros, búsqueda sin tildes, estado en URL, debounce y recuperación del foco |
-| 5 | [API REST](Trivial-Paso-a-Paso/05-API-REST/) | Controladores, DTO, CORS y API JSON de solo lectura |
+| 5 | [API REST](Trivial-Paso-a-Paso/05-API-REST/) | Controladores, DTO, rutas y API JSON de solo lectura |
 | 6 | [Cliente del juego](Trivial-Paso-a-Paso/06-Cliente-Juego/) | HTML, JavaScript, Fetch API, marcador y estado de partida |
-| 7 | [Versión definitiva](Trivial-Paso-a-Paso/07-Version-Definitiva/) | Temas, SweetAlert2, iconos, enlaces JSON y acabado responsive |
+| 7 | [Versión definitiva](Trivial-Paso-a-Paso/07-Version-Definitiva/) | Temas, SweetAlert2, CORS, iconos y acabado responsive |
 
 ### Clientes adicionales
 
@@ -623,6 +626,9 @@ La base de cada etapa contiene 10 categorías y 1.000 preguntas.
   `net10.0` que usa `HttpClient` y `GetFromJsonAsync`; no abre SQLite.
 - [Cliente Godot](Trivial-Paso-a-Paso/Clientes/Godot/): interfaz gráfica creada
   mediante C# en Godot 4.7.1; utiliza `net8.0` y consume la versión 5 o posterior.
+- [Cliente JavaScript](Trivial-Paso-a-Paso/Clientes/JavaScript/): sitio estático
+  independiente con servidor configurable, temas, iconos y SweetAlert2; para
+  ejecutarlo desde otro origen se conecta con la versión 7, que habilita CORS.
 
 ### Pruebas
 
@@ -771,7 +777,7 @@ de esquema conviene utilizar migraciones de Entity Framework Core.
 
 - Open Weather y Pokémon dependen de la API y de la caché en memoria.
 - Mazmorra Online guarda la partida en memoria.
-- El cliente de consola y Godot no acceden a una base de datos.
+- Los clientes de consola, Godot y JavaScript no acceden a una base de datos.
 - Las pruebas del trivial utilizan SQLite en memoria y lo destruyen al terminar.
 
 ## Autenticación e Identity
@@ -994,7 +1000,7 @@ dotnet run --urls http://localhost:5500
 | Entity Framework Core | Trivial 1-4 |
 | Búsqueda, filtros y paginación | Trivial 4, Pokémon final u Open Food Facts |
 | Crear una API REST | Trivial 5, Biblioteca, Open Weather o Películas |
-| Consumir una API desde JavaScript | Trivial 6 |
+| Consumir una API desde JavaScript | Trivial 6 o cliente JavaScript independiente |
 | Consumir una API desde C# | Cliente de consola del trivial |
 | Cliente gráfico desacoplado | Cliente Godot del trivial |
 | Pruebas de integración | Pruebas del trivial |

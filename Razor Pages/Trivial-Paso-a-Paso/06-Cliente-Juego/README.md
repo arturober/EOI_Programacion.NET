@@ -47,8 +47,9 @@ Después abra:
 /cliente/index.html
 ```
 
-No abra el HTML haciendo doble clic. Debe servirse desde la aplicación para que
-la ruta `/api` apunte al servidor correcto.
+No abra el HTML haciendo doble clic. El archivo de esta etapa contiene la
+dirección didáctica `http://localhost:5000/api`, por lo que la API debe escuchar
+en ese puerto o debe ajustarse la constante `api`.
 
 ## Publicación en MonsterASP.NET
 
@@ -73,8 +74,20 @@ cliente ya forma parte de la publicación y debe abrirse mediante:
 https://tu-sitio.runasp.net/cliente/index.html
 ```
 
-Como cliente y API comparten origen, las rutas relativas funcionan sin cambiar
-`localhost` y no necesitan CORS. Comprueba también:
+Antes de publicar, cambia en `wwwroot/cliente/trivial.js`:
+
+```javascript
+const api = "http://localhost:5000/api";
+```
+
+por:
+
+```javascript
+const api = "/api";
+```
+
+Así el cliente y la API compartirán origen, no dependerán de `localhost` y no
+necesitarán CORS. Comprueba también:
 
 ```text
 https://tu-sitio.runasp.net/api/categorias
@@ -82,6 +95,12 @@ https://tu-sitio.runasp.net/api/categorias
 
 El CRUD administrativo no tiene autenticación. Consulta las instrucciones
 completas en el [README general](../README.md).
+
+El cliente de esta etapa está integrado en `wwwroot`. No debe confundirse con
+el [cliente JavaScript independiente](../Clientes/JavaScript/), que se sirve
+por separado, permite escribir la dirección de la API e incluye selector de
+temas. Para ese cliente externo se recomienda la versión 7 porque es la etapa
+que habilita CORS.
 
 ## Archivos añadidos
 
@@ -119,6 +138,10 @@ TrivialContext
 El HTML no contiene preguntas escritas manualmente.
 
 ## Ruta de la API
+
+El ejemplo descargado comienza con una dirección local fija. Para servir el
+cliente desde la propia aplicación, especialmente al publicarlo, se recomienda
+el cambio explicado anteriormente:
 
 ```javascript
 const api = "/api";

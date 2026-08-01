@@ -22,7 +22,9 @@ Trivial-Paso-a-Paso
 ├── 07-Version-Definitiva
 ├── Clientes
 │   ├── Consola
-│   └── Godot
+│   ├── Godot
+│   ├── HTML y JS
+│   └── JavaScript
 ├── Pruebas
 ├── .gitignore
 └── README.md
@@ -183,7 +185,7 @@ Remove-Item .\publicacion\Data\trivial.db
 No retires la base del primer despliegue: el proyecto espera que exista y no
 inserta automáticamente las 1.000 preguntas.
 
-### API, cliente y CORS
+### API, clientes y CORS
 
 Desde la versión 5 pueden comprobarse direcciones públicas como:
 
@@ -193,12 +195,15 @@ https://tu-sitio.runasp.net/api/preguntas?cantidad=10
 ```
 
 En las versiones 6 y 7, el cliente situado en `wwwroot/cliente` se sirve desde
-el mismo origen que la API y utiliza rutas relativas. No necesita modificar
-`localhost` ni abrir el archivo HTML mediante doble clic.
+la propia aplicación. Su archivo `trivial.js` contiene inicialmente
+`http://localhost:5000/api`; antes de publicarlo debe sustituirse esa dirección
+por `/api` para que utilice el mismo dominio y puerto que Razor Pages.
 
-CORS solo interviene cuando un cliente web de otro origen consulta la API. La
-configuración abierta es útil para prácticas, pero en una aplicación real
-convendría permitir únicamente los orígenes necesarios.
+CORS solo interviene cuando un cliente web de otro origen consulta la API. En
+el código actual, `07-Version-Definitiva` habilita la política necesaria para
+el cliente independiente de `Clientes/JavaScript`. La configuración abierta
+es útil para prácticas, pero en una aplicación real convendría permitir
+únicamente los orígenes necesarios.
 
 ### Seguridad
 
@@ -206,8 +211,10 @@ El CRUD de categorías y preguntas no tiene autenticación. Cualquier visitante
 podría modificar o borrar el banco de preguntas. Publica datos de práctica o
 protege la administración antes de abrir el sitio a terceros.
 
-El cliente de consola, el cliente Godot y el proyecto de pruebas no se publican
-dentro de `/wwwroot`: consumen o prueban una API que se despliega por separado.
+Los clientes de consola, Godot y JavaScript, así como el proyecto de pruebas,
+no se publican dentro de `/wwwroot`: consumen o prueban una API que se ejecuta
+por separado. El cliente JavaScript debe servirse como sitio estático y
+conectarse a la dirección HTTPS de la versión 7.
 
 ## Estrategia de crecimiento
 
@@ -385,6 +392,22 @@ La última etapa añade:
 
 `temas.js` se comparte entre Razor Pages y el cliente. El cliente no duplica la
 lista de temas oscuros ni la construcción de direcciones Bootswatch.
+
+## Clientes independientes
+
+La carpeta `Clientes` demuestra que una misma API puede utilizarse sin acceder
+a Entity Framework ni a SQLite:
+
+- [Consola](Clientes/Consola/) utiliza C# y `HttpClient`.
+- [Godot](Clientes/Godot/) ofrece una interfaz gráfica de escritorio con C#.
+- [HTML y JS](<Clientes/HTML y JS/>) conserva el ejemplo web mínimo original.
+- [JavaScript](Clientes/JavaScript/) es el cliente web independiente completo,
+  con dirección de servidor configurable, Bootstrap Icons, SweetAlert2 y
+  selector de temas.
+
+El nuevo cliente JavaScript no se integra en `TrivialApi/wwwroot` ni contiene
+enlaces hacia las Razor Pages. Para las prácticas se recomienda conectarlo con
+`07-Version-Definitiva`, que permite peticiones CORS desde otro origen.
 
 ## Archivos que permanecen estables
 

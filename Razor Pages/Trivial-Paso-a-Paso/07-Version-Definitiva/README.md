@@ -51,6 +51,12 @@ Cliente:
 /cliente/index.html
 ```
 
+Además, la carpeta [Clientes/JavaScript](../Clientes/JavaScript/) contiene un
+cliente web completamente independiente. No forma parte de `TrivialApi`, no
+enlaza con la administración y permite escribir la dirección de este servidor.
+La política CORS de esta versión permite utilizarlo desde otro origen durante
+las prácticas.
+
 ## Publicación en MonsterASP.NET
 
 Esta es la versión recomendada para una demostración completa. Desde
@@ -102,9 +108,33 @@ https://tu-sitio.runasp.net/api/categorias
 https://tu-sitio.runasp.net/api/preguntas?cantidad=10
 ```
 
-Prueba además una búsqueda, una operación CRUD, el juego, SweetAlert y varios
-temas. El cliente está en el mismo origen y utiliza rutas relativas, por lo que
-no debe cambiarse ninguna URL.
+Antes de publicar el cliente integrado, cambia en
+`wwwroot/cliente/trivial.js` la dirección local:
+
+```javascript
+const api = "http://localhost:5000/api";
+```
+
+por la ruta relativa:
+
+```javascript
+const api = "/api";
+```
+
+Después prueba una búsqueda, una operación CRUD, el juego, SweetAlert y varios
+temas. La ruta relativa hará que el cliente integrado utilice el mismo dominio
+y puerto que la aplicación publicada.
+
+El cliente independiente no se incluye al ejecutar `dotnet publish` porque se
+encuentra fuera de `TrivialApi`. Puede abrirse localmente con un servidor web
+desde Visual Studio Code y conectarse a:
+
+```text
+https://tu-sitio.runasp.net
+```
+
+No lo copies dentro de `/wwwroot` si quieres mantener la separación didáctica
+entre cliente y aplicación.
 
 El CRUD no tiene autenticación y cualquier visitante puede modificar el banco.
 CORS abierto es apropiado para prácticas con clientes externos, pero debería
