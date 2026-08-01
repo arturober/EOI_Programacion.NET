@@ -128,10 +128,11 @@ async function responder(numero) {
         icon: esCorrecta ? "success" : "error",
         title: esCorrecta
             ? "¡Correcto!"
-            : "¡No es correcto!",
-        text: esCorrecta
+            : "¡Has fallado!",
+        html: esCorrecta
             ? undefined
-            : `${pregunta.enunciado}: ${respuestaCorrecta}`,
+            : `<p><strong>Pregunta:</strong> ${pregunta.enunciado}<br>
+                  <strong>Respuesta correcta:</strong> ${respuestaCorrecta}</p>`,
         confirmButtonText: "Continuar"
     });
 
