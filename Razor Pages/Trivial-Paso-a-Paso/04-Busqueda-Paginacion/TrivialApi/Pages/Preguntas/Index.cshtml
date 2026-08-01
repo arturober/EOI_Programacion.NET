@@ -43,7 +43,8 @@
             </label>
             <select asp-for="CategoriaId"
                     asp-items="Model.Categorias"
-                    class="form-select">
+                    class="form-select"
+                    onchange="this.form.requestSubmit()">
                 <option value="">Todas las categorías</option>
             </select>
         </div>
