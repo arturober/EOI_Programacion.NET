@@ -5,17 +5,6 @@ const claveTema = "temaOpenWeather";
 const temaGuardado =
     localStorage.getItem(claveTema) ?? "bootstrap-light";
 
-// Bootswatch no indica automáticamente a Bootstrap que su paleta es oscura.
-const temasOscuros = [
-    "bootswatch-cyborg",
-    "bootswatch-darkly",
-    "bootswatch-quartz",
-    "bootswatch-slate",
-    "bootswatch-solar",
-    "bootswatch-superhero",
-    "bootswatch-vapor"
-];
-
 function cambiarTema(tema) {
     // El prefijo propio distingue Bootswatch de los dos temas base.
     const esBootswatch = tema.startsWith("bootswatch-");
@@ -28,10 +17,8 @@ function cambiarTema(tema) {
         : "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css";
 
     // data-bs-theme adapta fondos, textos, tablas y controles a la paleta.
-    const esOscuro =
-        tema === "bootstrap-dark" || temasOscuros.includes(tema);
     document.documentElement.dataset.bsTheme =
-        esOscuro ? "dark" : "light";
+        tema === "bootstrap-dark" ? "dark" : "light";
 
     // La elección se conserva aunque se cierre el navegador.
     localStorage.setItem(claveTema, tema);
