@@ -36,7 +36,7 @@
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.min.css"
           rel="stylesheet" />
 </head>
-<body class="bg-body-tertiary min-vh-100 d-flex flex-column"
+<body class="min-vh-100 d-flex flex-column"
       data-mensaje="@(error ?? mensaje)"
       data-icono="@(error is null ? "success" : "error")"
       data-titulo="@(error is null ? "Operación completada" : "Ha ocurrido un problema")">
@@ -97,7 +97,7 @@
                     </label>
 
                     <select id="selectorTema"
-                            class="form-select form-select-sm"
+                            class="form-select"
                             aria-label="Seleccionar el tema">
                         <optgroup label="Bootstrap">
                             <option value="bootstrap-light">
