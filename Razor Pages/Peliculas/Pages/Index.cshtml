@@ -84,13 +84,97 @@
 
 @if (Model.EstaConfigurado)
 {
+    var peliculasCarrusel = Model.Tendencias.Resultados
+        .Where(pelicula => pelicula.UrlFondo is not null)
+        .Take(5)
+        .ToList();
+
+    @if (peliculasCarrusel.Count > 0)
+    {
+        <section class="mb-5">
+            <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+                <h2 class="h3 mb-0">Tendencias de la semana</h2>
+                <a class="btn btn-outline-primary btn-sm"
+                   asp-page="/Peliculas/Index"
+                   asp-route-tipo="@TipoListado.Tendencias.ParaUrl()">
+                    Ver todas
+                </a>
+            </div>
+
+            @* El carrusel reutiliza las tendencias que ya ha cargado la página. *@
+            <div id="carruselTendencias"
+                 class="carousel slide rounded-4 overflow-hidden shadow">
+                <div class="carousel-indicators">
+                    @for (int i = 0; i < peliculasCarrusel.Count; i++)
+                    {
+                        <button type="button"
+                                data-bs-target="#carruselTendencias"
+                                data-bs-slide-to="@i"
+                                class="bg-white @(i == 0 ? "active" : "")"
+                                aria-current="@(i == 0 ? "true" : null)"
+                                aria-label="Mostrar película @(i + 1)">
+                        </button>
+                    }
+                </div>
+
+                <div class="carousel-inner">
+                    @for (int i = 0; i < peliculasCarrusel.Count; i++)
+                    {
+                        PeliculaResumen pelicula = peliculasCarrusel[i];
+
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <div class="ratio ratio-16x9 bg-dark">
+                                <img src="@pelicula.UrlFondo"
+                                     class="d-block w-100 object-fit-cover opacity-100"
+                                     alt="Fondo de @pelicula.Titulo"
+                                     loading="@(i == 0 ? "eager" : "lazy")" />
+                            </div>
+
+                            <div class="carousel-caption text-white bg-black bg-opacity-50 rounded p-2 p-md-3">
+                                <h3 class="h4 fw-bold">@pelicula.Titulo</h3>
+                                <p class="d-none d-md-block mb-2">
+                                    @pelicula.Anio ·
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    @pelicula.Puntuacion.ToString("0.0")
+                                </p>
+                                <a class="btn btn-primary btn-sm"
+                                   asp-page="/Peliculas/Detalles"
+                                   asp-route-id="@pelicula.Id">
+                                    Ver detalles
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <button class="carousel-control-prev opacity-100"
+                        type="button"
+                        data-bs-target="#carruselTendencias"
+                        data-bs-slide="prev">
+                    <span class="d-inline-flex align-items-center justify-content-center
+                                 bg-white text-dark border border-dark rounded-circle shadow p-2 lh-1">
+                        <i class="bi bi-chevron-left fs-3"
+                           aria-hidden="true"></i>
+                    </span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next opacity-100"
+                        type="button"
+                        data-bs-target="#carruselTendencias"
+                        data-bs-slide="next">
+                    <span class="d-inline-flex align-items-center justify-content-center
+                                 bg-white text-dark border border-dark rounded-circle shadow p-2 lh-1">
+                        <i class="bi bi-chevron-right fs-3"
+                           aria-hidden="true"></i>
+                    </span>
+                    <span class="visually-hidden">Siguiente</span>
+                </button>
+            </div>
+        </section>
+    }
+
     @foreach (var seccion in new[]
     {
-        new
-        {
-            Tipo = TipoListado.Tendencias,
-            Peliculas = Model.Tendencias.Resultados.Take(6)
-        },
         new
         {
             Tipo = TipoListado.EnCartelera,

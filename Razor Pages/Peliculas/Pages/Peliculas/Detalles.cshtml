@@ -20,10 +20,10 @@
 else
 {
     <article>
-        @* La imagen de fondo solo se muestra cuando TMDB la proporciona. *@
+        @* El fondo panorámico se oculta en móvil para no repetir dos imágenes. *@
         @if (Model.Pelicula.UrlFondo is not null)
         {
-            <div class="ratio ratio-21x9 rounded-4 overflow-hidden shadow mb-4">
+            <div class="ratio ratio-21x9 d-none d-md-block rounded-4 overflow-hidden shadow mb-4">
                 <img src="@Model.Pelicula.UrlFondo"
                      class="object-fit-cover"
                      alt=""
@@ -32,7 +32,7 @@ else
         }
 
         <div class="row g-4">
-            <div class="col-md-4 col-lg-3">
+            <div class="col-8 col-sm-6 col-md-4 col-lg-3 mx-auto mx-md-0">
                 @if (Model.Pelicula.UrlPoster is not null)
                 {
                     <img src="@Model.Pelicula.UrlPoster"
@@ -161,9 +161,7 @@ else
                     @if (Model.Pelicula.Trailer is not null)
                     {
                         <a class="btn btn-danger"
-                           href="@Model.Pelicula.Trailer.UrlYoutube"
-                           target="_blank"
-                           rel="noopener">
+                           href="#trailer">
                             <i class="bi bi-youtube me-1"></i>Ver tráiler
                         </a>
                     }
@@ -197,6 +195,38 @@ else
                 </div>
             </div>
         </div>
+
+        @if (Model.Pelicula.Trailer is not null)
+        {
+            <section id="trailer" class="mt-5">
+                <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-3">
+                    <div>
+                        <h2 class="h3 mb-1">Tráiler</h2>
+                        <p class="text-body-secondary mb-0">
+                            @Model.Pelicula.Trailer.Nombre
+                        </p>
+                    </div>
+                    <a class="btn btn-sm btn-outline-danger"
+                       href="@Model.Pelicula.Trailer.UrlYoutube"
+                       target="_blank"
+                       rel="noopener">
+                        <i class="bi bi-box-arrow-up-right me-1"></i>
+                        Abrir en YouTube
+                    </a>
+                </div>
+
+                @* La clase ratio mantiene el reproductor adaptable sin CSS propio. *@
+                <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow">
+                    <iframe src="@Model.Pelicula.Trailer.UrlYoutubeIncrustado"
+                            title="Tráiler de @Model.Pelicula.Titulo"
+                            loading="lazy"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            </section>
+        }
 
         @if (Model.Pelicula.Disponibilidad?.TieneDatos == true)
         {

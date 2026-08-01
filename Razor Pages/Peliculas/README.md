@@ -10,12 +10,14 @@ privada de favoritas.
 
 ## Funciones principales
 
-- Portada con tendencias, cartelera y películas mejor valoradas.
+- Portada con carrusel de tendencias, cartelera y películas mejor valoradas.
 - Listados de tendencias, cartelera, populares, mejor valoradas y próximos
   estrenos.
 - Buscador con paginación.
-- Ficha detallada con sinopsis, géneros, reparto, dirección, tráiler,
-  recomendaciones y proveedores disponibles en España.
+- Ficha detallada con sinopsis, géneros, reparto, dirección, tráiler
+  incrustado, recomendaciones y proveedores disponibles en España.
+- Búsqueda alternativa del tráiler en inglés cuando no está disponible en
+  el idioma configurado.
 - Registro e inicio de sesión locales mediante ASP.NET Core Identity.
 - Acceso inmediato después del registro, sin confirmar el correo.
 - Contraseñas almacenadas por Identity mediante hash, nunca como texto.
@@ -25,6 +27,7 @@ privada de favoritas.
 - Selector de Bootstrap y temas Bootswatch servido desde CDN.
 - Confirmaciones y avisos con SweetAlert2 servido desde CDN.
 - Pequeña API JSON de ejemplo que reutiliza los mismos servicios.
+- Página de ayuda con los endpoints completos, explicados y enlazados.
 - Caché en memoria para reducir llamadas repetidas a TMDB.
 - Código organizado por responsabilidades y comentado en español.
 
@@ -197,6 +200,10 @@ El archivo `Peliculas.http` contiene ejemplos listos para Visual Studio,
 Rider o la extensión REST Client de Visual Studio Code. La ruta de favoritas
 necesita la cookie de una sesión iniciada.
 
+La página `/Ayuda` muestra estas mismas direcciones utilizando el dominio y
+el puerto actuales. Los enlaces se pueden abrir directamente para consultar
+la respuesta JSON.
+
 ## Estructura
 
 ```text
@@ -210,7 +217,8 @@ Peliculas/
 │   ├── Cuenta/          Registro, acceso y cierre de sesión
 │   ├── Favoritos/       Lista privada y altas o bajas
 │   ├── Peliculas/       Listados, búsqueda y ficha
-│   └── Shared/          Diseño y tarjeta reutilizable
+│   ├── Shared/          Diseño y tarjeta reutilizable
+│   └── Ayuda.cshtml     Uso de la aplicación y endpoints JSON
 ├── Servicios/           Acceso a TMDB y lógica de favoritos
 ├── wwwroot/js/          Temas y avisos de SweetAlert
 ├── Program.cs           Configuración y canal de peticiones

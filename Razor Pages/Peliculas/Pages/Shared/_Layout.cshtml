@@ -2,8 +2,16 @@
     // La ruta actual permite destacar la sección activa.
     string pagina = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
     bool inicio = pagina == "/Index";
+    bool explorar = pagina.StartsWith(
+        "/Peliculas", StringComparison.OrdinalIgnoreCase);
     bool favoritas = pagina.StartsWith("/Favoritos");
-    bool acerca = pagina == "/Acerca";
+    bool ayuda = pagina == "/Ayuda";
+
+    // En los listados también se destaca la opción concreta del desplegable.
+    TipoListado? listadoActivo = pagina == "/Peliculas/Index"
+        ? TipoListadoExtensiones.DesdeTexto(
+            Context.Request.Query["tipo"].ToString())
+        : null;
 
     // Las páginas pueden enviar avisos mediante TempData.
     string? mensaje = ViewData["Mensaje"] as string ?? TempData["Mensaje"] as string;
@@ -35,10 +43,10 @@
       data-mensaje="@(error ?? mensaje)"
       data-icono="@(error is null ? "success" : "error")"
       data-titulo="@(error is null ? "Operación completada" : "Ha ocurrido un problema")">
-    @* La barra permanece visible y se convierte en menú hamburguesa en móvil. *@
-    <nav class="navbar navbar-expand-xl bg-primary sticky-top shadow-sm"
+    @* La barra se convierte pronto en menú hamburguesa para evitar solapamientos. *@
+    <nav class="navbar navbar-expand-xxl bg-primary sticky-top shadow-sm"
          data-bs-theme="dark">
-        <div class="container">
+        <div class="container-fluid px-3 px-xxl-4">
             <a class="navbar-brand fw-bold" asp-page="/Index">
                 <i class="bi bi-film me-2"></i>Películas
             </a>
@@ -54,7 +62,7 @@
             </button>
 
             <div class="collapse navbar-collapse" id="menuPrincipal">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav me-auto text-nowrap">
                     <li class="nav-item">
                         <a class="nav-link rounded-pill px-3 @(inicio ? "bg-white text-primary fw-semibold" : "text-white")"
                            asp-page="/Index">
@@ -63,7 +71,7 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <button class="nav-link dropdown-toggle text-white"
+                        <button class="nav-link dropdown-toggle rounded-pill px-3 @(explorar ? "bg-white text-primary fw-semibold" : "text-white")"
                                 type="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false">
@@ -73,7 +81,7 @@
                             @foreach (TipoListado tipo in Enum.GetValues<TipoListado>())
                             {
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item @(listadoActivo == tipo ? "active" : "")"
                                        asp-page="/Peliculas/Index"
                                        asp-route-tipo="@tipo.ParaUrl()">
                                         @tipo.Titulo()
@@ -94,14 +102,14 @@
                     }
 
                     <li class="nav-item">
-                        <a class="nav-link rounded-pill px-3 @(acerca ? "bg-white text-primary fw-semibold" : "text-white")"
-                           asp-page="/Acerca">
-                            <i class="bi bi-info-circle me-1"></i>Acerca de
+                        <a class="nav-link rounded-pill px-3 @(ayuda ? "bg-white text-primary fw-semibold" : "text-white")"
+                           asp-page="/Ayuda">
+                            <i class="bi bi-question-circle me-1"></i>Ayuda
                         </a>
                     </li>
                 </ul>
 
-                <form class="d-flex my-2 my-xl-0 me-xl-3"
+                <form class="d-flex my-2 my-xxl-0 me-xxl-3"
                       method="get"
                       asp-page="/Peliculas/Buscar"
                       role="search">
@@ -121,8 +129,8 @@
 
                 @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <div class="dropdown me-xl-3">
-                        <button class="btn btn-outline-light btn-sm dropdown-toggle"
+                    <div class="dropdown me-xxl-3">
+                        <button class="btn btn-outline-light btn-sm dropdown-toggle text-nowrap"
                                 type="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false">
@@ -152,7 +160,7 @@
                 }
                 else
                 {
-                    <div class="d-flex gap-2 my-2 my-xl-0 me-xl-3">
+                    <div class="d-flex gap-2 my-2 my-xxl-0 me-xxl-3">
                         <a class="btn btn-outline-light btn-sm"
                            asp-page="/Cuenta/Login">
                             Entrar
@@ -164,7 +172,7 @@
                     </div>
                 }
 
-                <div class="d-flex align-items-center gap-2 py-2 py-xl-0">
+                <div class="d-flex align-items-center gap-2 py-2 py-xxl-0">
                     <label for="selectorTema"
                            class="text-white fs-5"
                            title="Seleccionar el tema">
@@ -228,6 +236,10 @@
                class="link-secondary">
                 Datos e imágenes proporcionados por TMDB
             </a>
+            <span class="mx-1">·</span>
+            <a asp-page="/Ayuda" class="link-secondary">Ayuda</a>
+            <span class="mx-1">·</span>
+            <a asp-page="/Acerca" class="link-secondary">Acerca de</a>
         </div>
     </footer>
 

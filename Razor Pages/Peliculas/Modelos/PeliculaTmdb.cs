@@ -89,6 +89,9 @@ public class VideoTmdb
 
     public string UrlYoutube =>
         $"https://www.youtube.com/watch?v={ClaveYoutube}";
+
+    public string UrlYoutubeIncrustado =>
+        $"https://www.youtube-nocookie.com/embed/{ClaveYoutube}";
 }
 
 public class DisponibilidadTmdb

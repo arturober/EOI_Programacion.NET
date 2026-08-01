@@ -1,0 +1,182 @@
+@page
+@model AyudaModel
+@{
+    ViewData["Title"] = "Ayuda";
+
+    var endpoints = new[]
+    {
+        new
+        {
+            Ruta = "/api/peliculas/populares?pagina=1",
+            Descripcion = "Devuelve una página de películas populares.",
+            Autenticacion = "No"
+        },
+        new
+        {
+            Ruta = "/api/peliculas/buscar?texto=matrix&pagina=1",
+            Descripcion = "Busca películas cuyo título contenga el texto indicado.",
+            Autenticacion = "No"
+        },
+        new
+        {
+            Ruta = "/api/peliculas/603",
+            Descripcion = "Devuelve la ficha de una película mediante su identificador de TMDB.",
+            Autenticacion = "No"
+        },
+        new
+        {
+            Ruta = "/api/favoritos",
+            Descripcion = "Devuelve las películas favoritas del usuario conectado.",
+            Autenticacion = "Sí"
+        }
+    };
+}
+
+<header class="mb-4">
+    <h1 class="display-6 fw-bold">
+        <i class="bi bi-question-circle text-primary me-2"></i>Ayuda
+    </h1>
+    <p class="lead mb-0">
+        Aprende a utilizar la aplicación y prueba su pequeña API JSON.
+    </p>
+</header>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <section class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 card-title">
+                    <i class="bi bi-compass text-primary me-2"></i>
+                    Cómo utilizarla
+                </h2>
+                <ol class="mb-0">
+                    <li class="mb-2">
+                        Utiliza <strong>Explorar</strong> para consultar las
+                        tendencias, la cartelera y otros listados de TMDB.
+                    </li>
+                    <li class="mb-2">
+                        Busca una película por su título desde la barra superior
+                        o desde el formulario de la página de inicio.
+                    </li>
+                    <li class="mb-2">
+                        Abre una ficha para consultar su sinopsis, tráiler,
+                        reparto, recomendaciones y plataformas disponibles.
+                    </li>
+                    <li>
+                        Regístrate o inicia sesión para conservar una lista
+                        personal de películas favoritas.
+                    </li>
+                </ol>
+            </div>
+        </section>
+    </div>
+
+    <div class="col-lg-7">
+        <section class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 card-title">
+                    <i class="bi bi-arrow-left-right text-primary me-2"></i>
+                    Dos API diferentes
+                </h2>
+                <p>
+                    La aplicación <strong>consume la API externa de TMDB</strong>
+                    desde el servidor para obtener películas, imágenes y vídeos.
+                    El token de acceso nunca se envía al navegador.
+                </p>
+                <p class="mb-0">
+                    Además, la propia aplicación <strong>expone una API JSON</strong>
+                    pequeña bajo la ruta <code>/api</code>. Esta API reutiliza los
+                    mismos servicios que emplean las páginas Razor.
+                </p>
+            </div>
+        </section>
+    </div>
+</div>
+
+<section class="mt-5">
+    <h2 class="h3">Endpoints de la aplicación</h2>
+    <p class="text-body-secondary">
+        Todos utilizan el método <span class="badge text-bg-success">GET</span>.
+        Pulsa una dirección para abrir su respuesta JSON en otra pestaña.
+    </p>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-striped table-hover align-middle mb-0">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Método</th>
+                    <th scope="col">Dirección</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Requiere iniciar sesión</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var endpoint in endpoints)
+                {
+                    string url = $"{Model.UrlBase}{endpoint.Ruta}";
+
+                    <tr>
+                        <td><span class="badge text-bg-success">GET</span></td>
+                        <td>
+                            <a href="@url"
+                               target="_blank"
+                               rel="noopener"
+                               class="text-break">
+                                @url
+                            </a>
+                        </td>
+                        <td>@endpoint.Descripcion</td>
+                        <td>@endpoint.Autenticacion</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="mt-5">
+    <h2 class="h3">Parámetros disponibles</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-3">
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="h5"><code>pagina</code></h3>
+                    <p class="mb-0">
+                        Número de página que se desea consultar. TMDB permite
+                        acceder como máximo a las primeras 500 páginas.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="h5"><code>texto</code></h3>
+                    <p class="mb-0">
+                        Título que se quiere buscar. Debe contener al menos dos
+                        caracteres.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h3 class="h5"><code>id</code></h3>
+                    <p class="mb-0">
+                        Identificador numérico de la película dentro de TMDB.
+                        Por ejemplo, <code>603</code> corresponde a Matrix.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info mt-4 mb-0">
+        <i class="bi bi-info-circle-fill me-1"></i>
+        El endpoint <code>/api/favoritos</code> utiliza la cookie de la sesión
+        actual. Si no has iniciado sesión, responderá indicando que no tienes
+        autorización.
+    </div>
+</section>

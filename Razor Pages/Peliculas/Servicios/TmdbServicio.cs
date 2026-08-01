@@ -157,7 +157,35 @@ public class TmdbServicio : ITmdbServicio
                     await ObtenerJsonAsync<PeliculaDetalleDto>(
                         ruta, cancellationToken);
 
-                return ConvertirDetalle(dto);
+                VideoDto? trailer = SeleccionarTrailer(
+                    dto.Videos.Resultados);
+
+                // Si no existe en el idioma configurado, se intenta en inglés.
+                if (trailer is null
+                    && !_opciones.Idioma.StartsWith(
+                        "en", StringComparison.OrdinalIgnoreCase))
+                {
+                    try
+                    {
+                        string rutaVideos = CrearRuta($"movie/{id}/videos",
+                            new Dictionary<string, string?>
+                            {
+                                ["language"] = "en-US"
+                            });
+
+                        VideosRespuestaDto videos =
+                            await ObtenerJsonAsync<VideosRespuestaDto>(
+                                rutaVideos, cancellationToken);
+
+                        trailer = SeleccionarTrailer(videos.Resultados);
+                    }
+                    catch (TmdbExcepcion)
+                    {
+                        // La ficha sigue siendo útil aunque falle este dato opcional.
+                    }
+                }
+
+                return ConvertirDetalle(dto, trailer);
             });
 
         return resultado
@@ -261,20 +289,13 @@ public class TmdbServicio : ITmdbServicio
         };
     }
 
-    private PeliculaDetalle ConvertirDetalle(PeliculaDetalleDto dto)
+    private PeliculaDetalle ConvertirDetalle(
+        PeliculaDetalleDto dto,
+        VideoDto? trailer)
     {
         EquipoDto? director = dto.Creditos.Equipo.FirstOrDefault(
             persona => persona.Trabajo.Equals(
                 "Director", StringComparison.OrdinalIgnoreCase));
-
-        VideoDto? trailer = dto.Videos.Resultados
-            .Where(video =>
-                video.Sitio.Equals(
-                    "YouTube", StringComparison.OrdinalIgnoreCase)
-                && video.Tipo.Equals(
-                    "Trailer", StringComparison.OrdinalIgnoreCase))
-            .OrderByDescending(video => video.Oficial)
-            .FirstOrDefault();
 
         dto.Proveedores.Regiones.TryGetValue(
             _opciones.Region, out ProveedoresRegionDto? proveedores);
@@ -332,6 +353,20 @@ public class TmdbServicio : ITmdbServicio
                 .AsReadOnly(),
             Disponibilidad = ConvertirProveedores(proveedores)
         };
+    }
+
+    private static VideoDto? SeleccionarTrailer(
+        IEnumerable<VideoDto> videos)
+    {
+        return videos
+            .Where(video =>
+                video.Sitio.Equals(
+                    "YouTube", StringComparison.OrdinalIgnoreCase)
+                && video.Tipo.Equals(
+                    "Trailer", StringComparison.OrdinalIgnoreCase)
+                && !string.IsNullOrWhiteSpace(video.Clave))
+            .OrderByDescending(video => video.Oficial)
+            .FirstOrDefault();
     }
 
     private static PeliculaResumen ConvertirResumen(PeliculaDto dto)
