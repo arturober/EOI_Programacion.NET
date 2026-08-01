@@ -224,10 +224,12 @@ async function responder(numeroRespuesta) {
     ];
 
     await mostrarAlerta({
-        title: esCorrecta ? "¡Correcto!" : "Respuesta incorrecta",
-        text: esCorrecta
+        title: esCorrecta ? "¡Correcto!" : "¡Has fallado!",
+        html: esCorrecta
             ? "Has sumado un acierto."
-            : `La respuesta correcta era: ${respuestaCorrecta}`,
+            : `<p><strong>Pregunta:</strong> ${pregunta.enunciado}<br>
+               <strong>Respuesta correcta:</strong> ${respuestaCorrecta}</p>`,
+
         icon: esCorrecta ? "success" : "error"
     });
 
