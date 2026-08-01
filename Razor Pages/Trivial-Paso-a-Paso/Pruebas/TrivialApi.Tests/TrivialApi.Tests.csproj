@@ -30,6 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Copia la configuración de xUnit junto al ensamblado de pruebas. -->
+    <None Update="xunit.runner.json"
+          CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- El proyecto de pruebas puede utilizar Program, los DTO y el contexto. -->
     <ProjectReference Include="..\TrivialApi\TrivialApi.csproj" />
   </ItemGroup>
