@@ -20,6 +20,7 @@ MonsterASP.NET u otra instalación compatible sin modificar el código.
 - Guardar preferencias sencillas con `localStorage`.
 - Aplicar temas de Bootstrap y Bootswatch.
 - Mostrar avisos con SweetAlert2.
+- Representar por separado los estados de conexión, preparación y partida.
 
 ## Tecnologías
 
@@ -51,6 +52,10 @@ JavaScript
 
 No hay CSS personalizado. La presentación se construye exclusivamente con
 clases de Bootstrap y los temas seleccionados.
+
+La barra de navegación utiliza `sticky-top`, por lo que permanece visible al
+desplazarse. En pantallas pequeñas se acortan la marca y los controles mediante
+las utilidades responsive de Bootstrap.
 
 ## API compatible
 
@@ -112,6 +117,12 @@ local, como Live Server:
 3. En **Dirección del servidor**, escriba la URL mostrada por `dotnet run`.
 4. Pulse **Conectar**.
 5. Elija una categoría y comience la partida.
+
+Después de conectar, la presentación y el formulario de conexión se ocultan
+para dejar espacio a la selección de categoría. Durante la partida solamente
+se muestra la tarjeta del juego. El botón de la barra superior permite volver
+a **Cambiar API**; si hay una partida activa, solicita confirmación antes de
+interrumpirla.
 
 También se puede abrir `index.html` directamente mediante doble clic. Sin
 embargo, un servidor web local evita las restricciones que algunos navegadores
@@ -308,6 +319,8 @@ añada preguntas desde la administración de la API.
 10. Probar la API publicada mediante HTTPS.
 11. Reducir el ancho del navegador y comprobar la adaptación móvil.
 12. Verificar que la interfaz no contiene enlaces hacia Razor Pages.
+13. Comprobar que la barra superior continúa visible al desplazarse.
+14. Cambiar de API desde la barra y cancelar el cambio durante una partida.
 
 ## Posibles ejercicios
 

@@ -13,10 +13,13 @@ const campoUrlServidor = document.getElementById("urlServidor");
 const botonConectar = document.getElementById("conectar");
 const iconoConectar = document.getElementById("iconoConectar");
 const textoConectar = document.getElementById("textoConectar");
-const estadoConexion = document.getElementById("estadoConexion");
+const presentacion = document.getElementById("presentacion");
+const seccionConexion = document.getElementById("conexion");
+const botonCambiarServidor = document.getElementById("cambiarServidor");
 const inicio = document.getElementById("inicio");
 const formularioPartida = document.getElementById("formularioPartida");
 const selectorCategorias = document.getElementById("categoria");
+const servidorActivo = document.getElementById("servidorActivo");
 const botonEmpezar = document.getElementById("empezar");
 const juego = document.getElementById("juego");
 const progreso = document.getElementById("progreso");
@@ -100,7 +103,6 @@ function mostrarCategorias(categorias) {
 async function conectar(evento) {
     evento.preventDefault();
     cambiarEstadoConexion(true);
-    estadoConexion.classList.add("d-none");
     inicio.classList.add("d-none");
     juego.classList.add("d-none");
 
@@ -111,20 +113,55 @@ async function conectar(evento) {
         mostrarCategorias(categorias);
         localStorage.setItem(CLAVE_URL_SERVIDOR, urlServidor);
 
-        estadoConexion.textContent = `Conectado con ${urlServidor}`;
-        estadoConexion.classList.remove("d-none");
+        // La configuración deja paso a la partida y no ocupa espacio arriba.
+        servidorActivo.textContent = urlServidor;
+        botonCambiarServidor.title = `Servidor conectado: ${urlServidor}`;
+        presentacion.classList.add("d-none");
+        seccionConexion.classList.add("d-none");
+        botonCambiarServidor.classList.remove("d-none");
         inicio.classList.remove("d-none");
+        selectorCategorias.focus();
     }
     catch (error) {
         await mostrarAlerta({
             title: "No se ha podido conectar",
-            text: `${error.message} Comprueba la dirección, la API y la configuración de CORS.`,
+            html: `(${error.message})<br>Comprueba la dirección, la API y la configuración de CORS.`,
             icon: "error"
         });
     }
     finally {
         cambiarEstadoConexion(false);
     }
+}
+
+// Recupera la pantalla inicial para elegir otra API.
+function mostrarConexion() {
+    inicio.classList.add("d-none");
+    juego.classList.add("d-none");
+    botonCambiarServidor.classList.add("d-none");
+    presentacion.classList.remove("d-none");
+    seccionConexion.classList.remove("d-none");
+    campoUrlServidor.focus();
+}
+
+// Si hay una partida activa, confirma antes de descartarla.
+async function cambiarServidor() {
+    if (!juego.classList.contains("d-none")) {
+        const resultado = await mostrarAlerta({
+            title: "¿Cambiar de API?",
+            text: "La partida actual se interrumpirá.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Cambiar API",
+            cancelButtonText: "Continuar jugando"
+        });
+
+        if (!resultado.isConfirmed) {
+            return;
+        }
+    }
+
+    mostrarConexion();
 }
 
 // Solicita diez preguntas, con filtro solo si se ha elegido una categoría.
@@ -160,7 +197,7 @@ async function empezarPartida(evento) {
     catch (error) {
         await mostrarAlerta({
             title: "No se han podido cargar las preguntas",
-            text: error.message,
+            html: `(${error.message})<br>Comprueba la dirección, la API y la configuración de CORS.`,
             icon: "error"
         });
     }
@@ -228,8 +265,7 @@ async function responder(numeroRespuesta) {
         html: esCorrecta
             ? "Has sumado un acierto."
             : `<p><strong>Pregunta:</strong> ${pregunta.enunciado}<br>
-               <strong>Respuesta correcta:</strong> ${respuestaCorrecta}</p>`,
-
+                  <strong>Respuesta correcta:</strong> ${respuestaCorrecta}</p>`,
         icon: esCorrecta ? "success" : "error"
     });
 
@@ -253,3 +289,4 @@ async function responder(numeroRespuesta) {
 
 formularioConexion.addEventListener("submit", conectar);
 formularioPartida.addEventListener("submit", empezarPartida);
+botonCambiarServidor.addEventListener("click", cambiarServidor);
