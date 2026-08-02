@@ -1,14 +1,3 @@
-// Estos temas utilizan una paleta oscura.
-const temasOscuros = [
-    "bootstrap-dark",
-    "bootswatch-cyborg",
-    "bootswatch-darkly",
-    "bootswatch-quartz",
-    "bootswatch-slate",
-    "bootswatch-superhero",
-    "bootswatch-vapor"
-];
-
 const claveTema = "tema-rick-and-morty";
 const selectorTema = document.getElementById("selectorTema");
 const enlaceBootstrap = document.getElementById("temaCss");
@@ -31,7 +20,7 @@ function aplicarTema(tema) {
     // Bootstrap ajusta componentes y textos al modo claro u oscuro.
     document.documentElement.setAttribute(
         "data-bs-theme",
-        temasOscuros.includes(tema) ? "dark" : "light");
+        tema === "bootstrap-dark" ? "dark" : "light");
 }
 
 // Recupera la elección anterior o utiliza Bootstrap claro.

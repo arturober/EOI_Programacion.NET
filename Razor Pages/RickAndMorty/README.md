@@ -14,7 +14,7 @@ La API es pública y no requiere token, clave ni registro.
 - Ficha completa con origen, última localización y apariciones.
 - Guía de episodios con búsqueda por título o código.
 - Detalle de cada episodio y todos sus personajes.
-- Catálogo de localizaciones con nombre, tipo y dimensión.
+- Catálogo de ubicaciones con nombre, tipo y dimensión.
 - Detalle de localización y selección de residentes.
 - Navegación entre recursos relacionados.
 - Registro e inicio de sesión con ASP.NET Core Identity.
@@ -195,8 +195,8 @@ RickAndMorty/
 | Episodios | `GET /api/episode` |
 | Episodio individual | `GET /api/episode/{id}` |
 | Varios episodios | `GET /api/episode/{id1,id2,...}` |
-| Localizaciones | `GET /api/location` |
-| Localización individual | `GET /api/location/{id}` |
+| Ubicaciones | `GET /api/location` |
+| Ubicación individual | `GET /api/location/{id}` |
 
 Todos los listados aceptan los filtros documentados por la API. Cada página
 contiene hasta 20 resultados.
@@ -230,7 +230,7 @@ La API no devuelve objetos completos dentro de las relaciones, sino URL:
 servicio utiliza los endpoints de múltiples identificadores para reducir el
 número de peticiones.
 
-Las localizaciones con más de 40 residentes muestran los primeros 40 para
+Las ubicaciones con más de 40 residentes muestran los primeros 40 para
 evitar direcciones excesivamente largas y respuestas innecesariamente
 pesadas. La interfaz lo indica expresamente.
 

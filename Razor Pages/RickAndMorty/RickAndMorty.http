@@ -9,5 +9,5 @@ GET https://rickandmortyapi.com/api/character/1
 ### Consultar directamente los episodios de la API externa
 GET https://rickandmortyapi.com/api/episode
 
-### Consultar directamente las localizaciones de la API externa
+### Consultar directamente las ubicaciones de la API externa
 GET https://rickandmortyapi.com/api/location
