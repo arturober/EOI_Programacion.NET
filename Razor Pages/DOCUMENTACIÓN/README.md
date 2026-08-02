@@ -19,20 +19,20 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con sei
 
 | Documento | Extensión | Nivel | Finalidad |
 | --- | ---: | --- | --- |
-| [Razor Pages en .NET 10: introducción](razor_pages_introduccion.pdf) | 17 diapositivas | Inicial | Presentar la relación entre URL, `.cshtml` y `PageModel`. |
-| [Razor Pages en ASP.NET Core](Razor%20Pages%20en%20ASP.NET.pdf) | 50 diapositivas | Inicial-intermedio | Curso paso a paso con Agenda de teléfonos y Lista de tareas. |
-| [Identity en .NET 10](Identity_NET10.pdf) | 35 diapositivas | Intermedio | Explicar cuentas, cookies, roles, claims, políticas y seguridad. |
+| [Razor Pages en .NET 10: introducción](presentaciones/razor_pages_introduccion.pdf) | 17 diapositivas | Inicial | Presentar la relación entre URL, `.cshtml` y `PageModel`. |
+| [Razor Pages en ASP.NET Core](presentaciones/Razor%20Pages%20en%20ASP.NET.pdf) | 50 diapositivas | Inicial-intermedio | Curso paso a paso con Agenda de teléfonos y Lista de tareas. |
+| [Identity en .NET 10](presentaciones/Identity_NET10.pdf) | 35 diapositivas | Intermedio | Explicar cuentas, cookies, roles, claims, políticas y seguridad. |
 
 ### Manuales
 
 | Documento | Páginas | Finalidad |
 | --- | ---: | --- |
-| [ASP.NET Core con .NET 10](Manual_ASPNET_Core_NET_10.pdf) | 49 | APIs con Minimal APIs y Controllers, REST, validación, errores, EF Core, OpenAPI, seguridad y alternativas no REST. |
-| [Razor Pages con .NET 10](Manual_Razor_Pages_NET_10.pdf) | 41 | Manual general de arquitectura, datos, API, seguridad y publicación. |
-| [Bootstrap y Bootstrap Icons](Manual_Bootstrap_Bootstrap_Icons.pdf) | 26 | Diseño responsive, componentes, formularios, iconos y temas. |
-| [SweetAlert2 con Razor Pages](Manual_SweetAlert2_Razor_Pages.pdf) | 29 | Confirmaciones, toasts, formularios POST, seguridad y pruebas. |
-| [Pruebas con xUnit y .NET 10](Manual_xUnit_NET_10.pdf) | 22 | Pruebas unitarias y de integración para C#, EF Core y ASP.NET Core. |
-| [Playwright para .NET 10](Manual_Playwright_NET_10.pdf) | 24 | Pruebas de navegador, responsive, SweetAlert2, temas y flujos completos. |
+| [ASP.NET Core con .NET 10](manuales/Manual_ASPNET_Core_NET_10.pdf) | 49 | APIs con Minimal APIs y Controllers, REST, validación, errores, EF Core, OpenAPI, seguridad y alternativas no REST. |
+| [Razor Pages con .NET 10](manuales/Manual_Razor_Pages_NET_10.pdf) | 41 | Manual general de arquitectura, datos, API, seguridad y publicación. |
+| [Bootstrap y Bootstrap Icons](manuales/Manual_Bootstrap_Bootstrap_Icons.pdf) | 26 | Diseño responsive, componentes, formularios, iconos y temas. |
+| [SweetAlert2 con Razor Pages](manuales/Manual_SweetAlert2_Razor_Pages.pdf) | 29 | Confirmaciones, toasts, formularios POST, seguridad y pruebas. |
+| [Pruebas con xUnit y .NET 10](manuales/Manual_xUnit_NET_10.pdf) | 22 | Pruebas unitarias y de integración para C#, EF Core y ASP.NET Core. |
+| [Playwright para .NET 10](manuales/Manual_Playwright_NET_10.pdf) | 24 | Pruebas de navegador, responsive, SweetAlert2, temas y flujos completos. |
 
 ## Cómo se complementan los materiales
 
@@ -180,23 +180,7 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con sei
 - Navegador web moderno.
 - PowerShell 7 o entorno equivalente para instalar los navegadores de Playwright.
 
-## Estructura recomendada de la carpeta
-
-```text
-materiales-razor-pages-net10/
-├── README.md
-├── razor_pages_introduccion.pdf
-├── Razor Pages en ASP.NET.pdf
-├── Identity_NET10.pdf
-├── Manual_ASPNET_Core_NET_10.pdf
-├── Manual_Razor_Pages_NET_10.pdf
-├── Manual_Bootstrap_Bootstrap_Icons.pdf
-├── Manual_SweetAlert2_Razor_Pages.pdf
-├── Manual_xUnit_NET_10.pdf
-└── Manual_Playwright_NET_10.pdf
-```
-
-## Organización alternativa del repositorio
+## Organización del repositorio
 
 Si se prefiere separar los materiales por formato:
 
@@ -217,9 +201,3 @@ materiales-razor-pages-net10/
     ├── Manual_xUnit_NET_10.pdf
     └── Manual_Playwright_NET_10.pdf
 ```
-
-En esta segunda estructura deberán ajustarse los enlaces relativos del README principal para incluir `presentaciones/` o `manuales/` delante de cada nombre de archivo.
-
-## Uso de los materiales
-
-Los documentos pueden utilizarse como apoyo para explicaciones, prácticas guiadas, proyectos y consulta. Antes de iniciar una nueva edición del curso, conviene revisar las versiones de .NET, EF Core, Bootstrap, SweetAlert2, xUnit y Playwright, además de los avisos de seguridad de sus dependencias.
