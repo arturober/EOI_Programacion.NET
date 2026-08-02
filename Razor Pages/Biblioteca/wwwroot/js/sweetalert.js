@@ -1,5 +1,3 @@
-"use strict";
-
 // Muestra con SweetAlert2 los mensajes enviados desde TempData o ViewData.
 document.addEventListener("DOMContentLoaded", () => {
     const cuerpo = document.body;

@@ -1,5 +1,3 @@
-"use strict";
-
 // Muestra con SweetAlert2 los mensajes enviados desde el servidor.
 document.addEventListener("DOMContentLoaded", () => {
     const cuerpo = document.body;

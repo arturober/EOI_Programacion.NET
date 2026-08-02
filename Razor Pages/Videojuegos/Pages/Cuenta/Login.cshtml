@@ -19,9 +19,12 @@
                 <form method="post">
                     <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
 
-                    <div asp-validation-summary="ModelOnly"
-                         class="alert alert-danger"
-                         role="alert"></div>
+                    @if (ViewData.ModelState[string.Empty]?.Errors.Count > 0)
+                    {
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"
+                             role="alert"></div>
+                    }
 
                     <div class="mb-3">
                         <label asp-for="Entrada.Email" class="form-label"></label>

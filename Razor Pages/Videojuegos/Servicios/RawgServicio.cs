@@ -138,25 +138,17 @@ public class RawgServicio : IRawgServicio
                     TiempoJuego = resumen.TiempoJuego,
                     Generos = resumen.Generos,
                     Plataformas = resumen.Plataformas,
-                    Descripcion = dto.Descripcion,
+                    Descripcion = dto.Descripcion ?? "",
                     SitioWeb = NormalizarUrl(dto.SitioWeb),
                     ClasificacionEdad =
                         dto.ClasificacionEdad?.Nombre ?? "Sin clasificar",
-                    Desarrolladores = dto.Desarrolladores
-                        .Select(elemento => elemento.Nombre)
-                        .ToList()
-                        .AsReadOnly(),
-                    Editores = dto.Editores
-                        .Select(elemento => elemento.Nombre)
-                        .ToList()
-                        .AsReadOnly(),
-                    Tiendas = dto.Tiendas
-                        .Select(elemento => elemento.Tienda.Nombre)
-                        .ToList()
-                        .AsReadOnly(),
-                    Capturas = capturas.Resultados
+                    Desarrolladores = ObtenerNombres(dto.Desarrolladores),
+                    Editores = ObtenerNombres(dto.Editores),
+                    Tiendas = ObtenerNombresTiendas(dto.Tiendas),
+                    Capturas = (capturas.Resultados ?? [])
                         .Select(elemento => elemento.Imagen)
                         .Where(url => !string.IsNullOrWhiteSpace(url))
+                        .Select(url => url!)
                         .Take(12)
                         .ToList()
                         .AsReadOnly()
@@ -206,7 +198,7 @@ public class RawgServicio : IRawgServicio
                     Pagina = pagina,
                     TotalPaginas = totalPaginas,
                     TotalResultados = dto.Total,
-                    Resultados = dto.Resultados
+                    Resultados = (dto.Resultados ?? [])
                         .Where(videojuego => videojuego.Id > 0)
                         .Select(ConvertirResumen)
                         .ToList()
@@ -281,34 +273,66 @@ public class RawgServicio : IRawgServicio
     private static VideojuegoResumen ConvertirResumen(
         VideojuegoRawgDto dto)
     {
-        IReadOnlyList<string> plataformas = dto.PlataformasPadre.Count > 0
-            ? dto.PlataformasPadre
-                .Select(elemento => elemento.Plataforma.Nombre)
-                .ToList()
-                .AsReadOnly()
-            : dto.Plataformas
-                .Select(elemento => elemento.Plataforma.Nombre)
-                .Distinct()
-                .ToList()
-                .AsReadOnly();
+        IReadOnlyList<string> plataformas =
+            ObtenerNombresPlataformas(dto.PlataformasPadre);
+
+        // Algunos resultados, sobre todo lanzamientos recientes, no incluyen
+        // parent_platforms. En ese caso utilizamos la lista de plataformas.
+        if (plataformas.Count == 0)
+        {
+            plataformas = ObtenerNombresPlataformas(dto.Plataformas);
+        }
 
         return new VideojuegoResumen
         {
             Id = dto.Id,
-            Slug = dto.Slug,
-            Nombre = dto.Nombre,
+            Slug = dto.Slug ?? "",
+            Nombre = dto.Nombre ?? "Videojuego sin nombre",
             FechaLanzamiento = dto.FechaLanzamiento,
             ImagenUrl = dto.ImagenUrl,
             Puntuacion = dto.Puntuacion,
             NumeroValoraciones = dto.NumeroValoraciones,
             Metacritic = dto.Metacritic,
             TiempoJuego = dto.TiempoJuego,
-            Generos = dto.Generos
-                .Select(elemento => elemento.Nombre)
-                .ToList()
-                .AsReadOnly(),
+            Generos = ObtenerNombres(dto.Generos),
             Plataformas = plataformas
         };
+    }
+
+    private static IReadOnlyList<string> ObtenerNombres(
+        IEnumerable<NombreRawgDto>? elementos)
+    {
+        return (elementos ?? [])
+            .Select(elemento => elemento.Nombre)
+            .Where(nombre => !string.IsNullOrWhiteSpace(nombre))
+            .Select(nombre => nombre!)
+            .Distinct(StringComparer.CurrentCultureIgnoreCase)
+            .ToList()
+            .AsReadOnly();
+    }
+
+    private static IReadOnlyList<string> ObtenerNombresPlataformas(
+        IEnumerable<PlataformaRawgDto>? elementos)
+    {
+        return (elementos ?? [])
+            .Select(elemento => elemento.Plataforma?.Nombre)
+            .Where(nombre => !string.IsNullOrWhiteSpace(nombre))
+            .Select(nombre => nombre!)
+            .Distinct(StringComparer.CurrentCultureIgnoreCase)
+            .ToList()
+            .AsReadOnly();
+    }
+
+    private static IReadOnlyList<string> ObtenerNombresTiendas(
+        IEnumerable<TiendaRawgDto>? elementos)
+    {
+        return (elementos ?? [])
+            .Select(elemento => elemento.Tienda?.Nombre)
+            .Where(nombre => !string.IsNullOrWhiteSpace(nombre))
+            .Select(nombre => nombre!)
+            .Distinct(StringComparer.CurrentCultureIgnoreCase)
+            .ToList()
+            .AsReadOnly();
     }
 
     private static string NormalizarUrl(string? url)

@@ -2,8 +2,15 @@
     // La ruta actual permite destacar la sección activa.
     string pagina = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
     bool inicio = pagina == "/Index";
+    bool explorar = pagina.StartsWith("/Videojuegos");
     bool biblioteca = pagina.StartsWith("/Biblioteca");
     bool acerca = pagina == "/Acerca";
+
+    // Solo las páginas de listados se corresponden con una opción concreta.
+    TipoListado? listadoActual = pagina == "/Videojuegos/Index"
+        ? TipoListadoExtensiones.DesdeTexto(
+            ViewContext.RouteData.Values["tipo"]?.ToString())
+        : null;
 
     // Las páginas envían avisos mediante ViewData o TempData.
     string? mensaje = ViewData["Mensaje"] as string
@@ -64,19 +71,24 @@
                     </li>
 
                     <li class="nav-item dropdown">
-                        <button class="nav-link dropdown-toggle text-white"
+                        <button class="nav-link dropdown-toggle rounded-pill px-3
+                                       @(explorar ? "bg-white text-primary fw-semibold" : "text-white")"
                                 type="button"
                                 data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                                aria-expanded="false"
+                                aria-current="@(explorar ? "page" : null)">
                             <i class="bi bi-grid me-1"></i>Explorar
                         </button>
                         <ul class="dropdown-menu">
                             @foreach (TipoListado tipo in Enum.GetValues<TipoListado>())
                             {
+                                bool activo = listadoActual == tipo;
+
                                 <li>
-                                    <a class="dropdown-item"
+                                    <a class="dropdown-item @(activo ? "active" : "")"
                                        asp-page="/Videojuegos/Index"
-                                       asp-route-tipo="@tipo.ParaUrl()">
+                                       asp-route-tipo="@tipo.ParaUrl()"
+                                       aria-current="@(activo ? "page" : null)">
                                         @tipo.Titulo()
                                     </a>
                                 </li>

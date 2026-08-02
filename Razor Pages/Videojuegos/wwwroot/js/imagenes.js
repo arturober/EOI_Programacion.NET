@@ -1,5 +1,3 @@
-"use strict";
-
 // Sustituye las imágenes inexistentes por una ilustración local.
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("img[data-imagen]").forEach((imagen) => {

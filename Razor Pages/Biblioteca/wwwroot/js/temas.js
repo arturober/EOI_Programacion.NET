@@ -1,5 +1,3 @@
-"use strict";
-
 // Cambia entre Bootstrap y Bootswatch y recuerda la elección en el navegador.
 document.addEventListener("DOMContentLoaded", () => {
     const selector = document.getElementById("selectorTema");

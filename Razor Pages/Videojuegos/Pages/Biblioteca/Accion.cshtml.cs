@@ -33,7 +33,7 @@ public class AccionModel : PageModel
 
     public async Task<IActionResult> OnPostAsync(
         int videojuegoId,
-        string accion,
+        string? accion,
         EstadoVideojuego estado = EstadoVideojuego.Pendiente,
         int? puntuacion = null,
         string? comentario = null,
@@ -53,7 +53,7 @@ public class AccionModel : PageModel
 
         try
         {
-            switch (accion.Trim().ToLowerInvariant())
+            switch (accion?.Trim().ToLowerInvariant())
             {
                 case "quitar":
                     await _biblioteca.QuitarAsync(
@@ -79,6 +79,13 @@ public class AccionModel : PageModel
                         break;
                     }
 
+                    if (puntuacion is < 1 or > 10)
+                    {
+                        TempData["Error"] =
+                            "La puntuación debe estar entre 1 y 10.";
+                        break;
+                    }
+
                     await _biblioteca.ActualizarAsync(
                         usuarioId,
                         videojuegoId,
@@ -91,7 +98,7 @@ public class AccionModel : PageModel
                         "Los datos personales se han actualizado.";
                     break;
 
-                default:
+                case "agregar":
                     // La ficha permite guardar una copia útil en SQLite.
                     VideojuegoDetalle videojuego =
                         await _rawg.ObtenerDetalleAsync(
@@ -106,6 +113,11 @@ public class AccionModel : PageModel
 
                     TempData["Mensaje"] =
                         "El videojuego se ha añadido a tu biblioteca.";
+                    break;
+
+                default:
+                    TempData["Error"] =
+                        "No se ha indicado una acción válida.";
                     break;
             }
         }

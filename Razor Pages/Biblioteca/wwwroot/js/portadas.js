@@ -1,5 +1,3 @@
-"use strict";
-
 // Sustituye las portadas inexistentes por una imagen local legible.
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("img[data-portada]").forEach((imagen) => {
