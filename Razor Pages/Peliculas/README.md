@@ -129,8 +129,7 @@ tablas de Identity, películas y favoritas.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET admite aplicaciones ASP.NET Core con .NET 10. Como el proyecto
 se trabaja principalmente desde Visual Studio Code, el método recomendado es

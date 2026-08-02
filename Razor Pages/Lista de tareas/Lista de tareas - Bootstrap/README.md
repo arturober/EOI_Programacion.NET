@@ -61,8 +61,7 @@ Abre en el navegador la dirección que aparezca en la terminal.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Desde la terminal integrada de VS Code:
 

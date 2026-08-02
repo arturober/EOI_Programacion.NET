@@ -24,8 +24,7 @@ dotnet run
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 La aplicación no necesita claves, usuarios ni SQLite. Desde la terminal
 integrada de VS Code:

@@ -47,8 +47,7 @@ La página principal construye los enlaces con el servidor y puerto actuales.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Desde `05-API-REST/TrivialApi`:
 

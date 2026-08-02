@@ -95,8 +95,7 @@ de Identity y favoritos.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET permite alojar este proyecto con .NET 10. Desde Visual Studio
 Code se recomienda generar la publicación mediante la terminal integrada y

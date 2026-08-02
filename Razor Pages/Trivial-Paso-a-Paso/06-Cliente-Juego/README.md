@@ -52,8 +52,7 @@ utiliza la ruta relativa `/api`, que apunta al mismo servidor y puerto.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Desde `06-Cliente-Juego/TrivialApi`:
 

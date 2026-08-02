@@ -59,8 +59,7 @@ las prácticas.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Esta es la versión recomendada para una demostración completa. Desde
 `07-Version-Definitiva/TrivialApi`:

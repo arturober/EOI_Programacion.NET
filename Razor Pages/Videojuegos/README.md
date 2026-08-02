@@ -109,8 +109,7 @@ El archivo contiene las cuentas y bibliotecas locales y está excluido de Git.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET admite aplicaciones ASP.NET Core con .NET 10. Desde Visual
 Studio Code se recomienda publicar con la terminal integrada y subir el

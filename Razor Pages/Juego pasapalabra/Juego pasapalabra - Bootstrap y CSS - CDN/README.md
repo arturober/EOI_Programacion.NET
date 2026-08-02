@@ -111,8 +111,7 @@ búsquedas y las respuestas, pero conserva la Ñ porque es una letra diferente.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Desde la terminal integrada de VS Code:
 

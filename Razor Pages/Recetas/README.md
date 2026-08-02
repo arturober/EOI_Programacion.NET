@@ -83,8 +83,7 @@ No escribas claves privadas en `appsettings.json` ni las subas a GitHub.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET permite alojar aplicaciones ASP.NET Core con .NET 10. Para
 trabajar desde Visual Studio Code, publica el proyecto desde la terminal

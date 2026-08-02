@@ -115,8 +115,7 @@ sola categoría.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Cada versión es una aplicación independiente. Debe publicarse solamente el
 proyecto `TrivialApi` de la etapa elegida, nunca toda la carpeta

@@ -58,8 +58,7 @@ Abra la dirección indicada en la terminal.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Publica únicamente `01-Listados/TrivialApi`:
 

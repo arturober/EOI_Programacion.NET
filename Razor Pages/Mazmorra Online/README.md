@@ -286,8 +286,7 @@ carpeta `Mapas`.
 
 ## Publicación para MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET admite .NET 10, SignalR y WebSockets. Desde Visual Studio Code,
 abre la terminal integrada en la carpeta `Mazmorra Online` y ejecuta:

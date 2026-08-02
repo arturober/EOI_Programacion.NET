@@ -41,8 +41,7 @@ dotnet run
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Publica solo el proyecto `TrivialApi` de esta etapa:
 

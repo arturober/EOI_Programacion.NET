@@ -59,8 +59,7 @@ http://localhost:5193
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET es compatible con aplicaciones ASP.NET Core creadas con .NET 10.
 El procedimiento recomendado desde Visual Studio Code es publicar mediante la

@@ -23,8 +23,7 @@ dotnet run
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 No se necesita ninguna clave, cuenta o base de datos. Desde VS Code:
 

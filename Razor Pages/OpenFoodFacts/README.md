@@ -86,8 +86,7 @@ excluido de Git.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET es compatible con aplicaciones ASP.NET Core creadas con .NET 10.
 Desde Visual Studio Code, el método recomendado consiste en publicar desde la

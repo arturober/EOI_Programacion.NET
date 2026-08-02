@@ -79,8 +79,7 @@ dotnet dev-certs https --trust
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 La versión final no necesita una clave de PokeAPI, cuentas de usuario ni base de
 datos. Desde la terminal integrada de VS Code:

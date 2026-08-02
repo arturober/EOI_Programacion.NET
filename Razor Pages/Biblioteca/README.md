@@ -98,8 +98,7 @@ También puedes copiar `appsettings.Local.example.json` como
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET permite ejecutar aplicaciones ASP.NET Core con .NET 10. Como el
 proyecto se trabaja principalmente desde Visual Studio Code, el procedimiento

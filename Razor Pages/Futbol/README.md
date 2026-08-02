@@ -113,8 +113,7 @@ Los dos guiones bajos representan los dos puntos de la clave de configuración.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 MonsterASP.NET admite aplicaciones ASP.NET Core con .NET 10. Para trabajar
 desde Visual Studio Code, la opción recomendada es generar una publicación,

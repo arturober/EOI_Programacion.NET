@@ -113,8 +113,7 @@ posterior compatible con .NET 10.
 
 ## Publicación en MonsterASP.NET
 
-> **Método recomendado:** utiliza WebFTP. El archivo ZIP se conserva como
-> alternativa.
+> **Método recomendado:** utiliza WebFTP.
 
 Open Weather no utiliza cuentas ni Identity, pero el servidor necesita la clave
 de OpenWeather para consultar la API. MonsterASP.NET permite ejecutar el
