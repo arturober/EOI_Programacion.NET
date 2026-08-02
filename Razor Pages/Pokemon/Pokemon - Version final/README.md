@@ -89,7 +89,7 @@ dotnet restore
 dotnet publish -c Release -o publicacion
 ```
 
-En PowerShell:
+Comprime la carpeta en un fichero ZIP. En Windows se puede hacer de la siguiente forma con PowerShell:
 
 ```powershell
 Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force

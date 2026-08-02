@@ -102,7 +102,7 @@ Otra opción es utilizar una variable de entorno:
 export Tmdb__TokenAcceso="PEGA_AQUI_TU_TOKEN_DE_LECTURA"
 ```
 
-En PowerShell:
+En Windows puedes ejecutar el siguiente comando con PowerShell:
 
 ```powershell
 $env:Tmdb__TokenAcceso = "PEGA_AQUI_TU_TOKEN_DE_LECTURA"
@@ -144,7 +144,7 @@ dotnet restore
 dotnet publish -c Release -o publicacion
 ```
 
-En PowerShell:
+Comprime la carpeta en un fichero ZIP. En Windows se puede hacer de la siguiente forma con PowerShell:
 
 ```powershell
 Compress-Archive -Path .\publicacion\* -DestinationPath .\publicacion.zip -Force
