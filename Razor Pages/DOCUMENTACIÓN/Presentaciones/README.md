@@ -165,7 +165,7 @@ Con esta ampliación, el conjunto queda formado por tres presentaciones y seis m
 - ASP.NET Core Identity.
 - Programación asíncrona con `async` y `await`.
 
-## Estructura recomendada de la carpeta
+## Estructura de la carpeta
 
 ```text
 presentaciones/

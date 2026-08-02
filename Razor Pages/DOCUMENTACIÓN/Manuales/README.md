@@ -228,7 +228,7 @@ Este orden sigue la evolución natural del proyecto: primero se construye la apl
 9. Probar los flujos críticos mediante Playwright.
 10. Revisar accesibilidad, seguridad, rendimiento y publicación.
 
-## Estructura recomendada de la carpeta
+## Estructura de la carpeta
 
 ```text
 manuales/
