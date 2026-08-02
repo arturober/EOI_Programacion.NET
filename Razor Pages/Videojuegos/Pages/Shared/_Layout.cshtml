@@ -44,7 +44,7 @@
       data-mensaje="@(error ?? mensaje)"
       data-icono="@(error is null ? "success" : "error")"
       data-titulo="@(error is null ? "Operación completada" : "Ha ocurrido un problema")">
-    <nav class="navbar navbar-expand-xl bg-primary sticky-top shadow-sm"
+    <nav class="navbar navbar-expand-xxl bg-primary sticky-top shadow-sm"
          data-bs-theme="dark">
         <div class="container">
             <a class="navbar-brand fw-bold" asp-page="/Index">
@@ -102,7 +102,7 @@
                             <a class="nav-link rounded-pill px-3 @(biblioteca ? "bg-white text-primary fw-semibold" : "text-white")"
                                asp-page="/Biblioteca/Index">
                                 <i class="bi bi-collection-play-fill me-1"></i>
-                                Mi biblioteca
+                                Mis juegos
                             </a>
                         </li>
                     }
@@ -149,7 +149,7 @@
                                 <a class="dropdown-item"
                                    asp-page="/Biblioteca/Index">
                                     <i class="bi bi-collection me-2"></i>
-                                    Mi biblioteca
+                                    Mis juegos
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider" /></li>
