@@ -1,13 +1,3 @@
-// Temas oscuros disponibles en el selector.
-const temasOscuros = [
-    "bootstrap-dark",
-    "bootswatch-cyborg",
-    "bootswatch-darkly",
-    "bootswatch-slate",
-    "bootswatch-solar",
-    "bootswatch-superhero",
-    "bootswatch-vapor"
-];
 const claveTema = "tema-recetas";
 const selectorTema = document.getElementById("selectorTema");
 const enlaceBootstrap = document.getElementById("temaCss");
@@ -28,9 +18,8 @@ function aplicarTema(tema) {
     enlaceBootstrap.dataset.tema = tema;
 
     // Bootstrap Icons y algunos componentes necesitan saber si el fondo es claro u oscuro.
-    document.documentElement.setAttribute(
-        "data-bs-theme",
-        temasOscuros.includes(tema) ? "dark" : "light");
+    document.documentElement.setAttribute("data-bs-theme",
+        tema === "bootstrap-dark" ? "dark" : "light");
 }
 
 // Recupera la elección anterior del usuario. Si no existe, usa Bootstrap.
