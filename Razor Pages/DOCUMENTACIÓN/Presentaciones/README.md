@@ -1,5 +1,7 @@
 # Presentaciones sobre Razor Pages e Identity en .NET 10
 
+> **Colección actualizada:** 3 presentaciones y 6 manuales, incluido **ASP.NET Core con .NET 10**. En total son 9 documentos y 191 páginas de manuales.
+
 Esta carpeta contiene tres presentaciones didácticas para introducir el desarrollo de aplicaciones web con ASP.NET Core, Razor Pages, Entity Framework Core e Identity en .NET 10.
 
 Los materiales están organizados para poder utilizarlos tanto en explicaciones de aula como en sesiones de trabajo guiado. Las dos primeras presentaciones desarrollan Razor Pages con distinto nivel de profundidad y la tercera aborda la autenticación, la autorización y la gestión de cuentas mediante ASP.NET Core Identity.
@@ -129,6 +131,21 @@ Presentación centrada en la seguridad y la gestión del ciclo de vida de las cu
 3. Desarrollo de una aplicación CRUD propia.
 4. [Identity en .NET 10](Identity_NET10.pdf).
 5. Incorporación de usuarios, permisos y datos asociados a cada cuenta.
+
+## Continuidad con los manuales
+
+Las tres presentaciones pueden ampliarse con los seis manuales de la colección. El nuevo manual de ASP.NET Core desarrolla con mayor profundidad la plataforma web, la creación de APIs y las alternativas a REST.
+
+| Manual | Ampliación que aporta |
+| --- | --- |
+| [ASP.NET Core con .NET 10](../manuales/Manual_ASPNET_Core_NET_10.pdf) | Minimal APIs, Controllers, diseño REST, validación, `ProblemDetails`, servicios, configuración, EF Core, OpenAPI, seguridad, RPC, webhooks, SignalR, WebSockets y gRPC. |
+| [Razor Pages con .NET 10](../manuales/Manual_Razor_Pages_NET_10.pdf) | Desarrollo completo de aplicaciones Razor Pages, acceso a datos, consumo de API, seguridad y publicación. |
+| [Bootstrap y Bootstrap Icons](../manuales/Manual_Bootstrap_Bootstrap_Icons.pdf) | Diseño responsive, componentes, formularios, iconos y temas. |
+| [SweetAlert2 con Razor Pages](../manuales/Manual_SweetAlert2_Razor_Pages.pdf) | Confirmaciones, avisos, formularios POST, seguridad e integración con Razor Pages. |
+| [Pruebas con xUnit y .NET 10](../manuales/Manual_xUnit_NET_10.pdf) | Pruebas unitarias y de integración para servicios, EF Core, Razor Pages y APIs. |
+| [Playwright para .NET 10](../manuales/Manual_Playwright_NET_10.pdf) | Automatización de navegación, formularios, responsive y flujos completos. |
+
+Con esta ampliación, el conjunto queda formado por tres presentaciones y seis manuales: nueve documentos coordinados y 191 páginas de manuales.
 
 ## Requisitos previos
 

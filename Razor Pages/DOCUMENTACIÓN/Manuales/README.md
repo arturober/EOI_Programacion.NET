@@ -1,6 +1,8 @@
 # Manuales de desarrollo web con .NET 10
 
-Esta carpeta reúne cinco manuales complementarios para aprender a desarrollar, diseñar y probar aplicaciones ASP.NET Core con Razor Pages y .NET 10.
+> **Colección actualizada:** 6 manuales, incluido **ASP.NET Core con .NET 10**. Los manuales suman 191 páginas.
+
+Esta carpeta reúne seis manuales complementarios para aprender a desarrollar, diseñar y probar aplicaciones web y APIs con ASP.NET Core y .NET 10.
 
 La colección cubre el ciclo completo de un proyecto: arquitectura, acceso a datos, consumo y publicación de API, interfaz responsive, confirmaciones de usuario, pruebas automatizadas y pruebas de navegador.
 
@@ -8,6 +10,7 @@ La colección cubre el ciclo completo de un proyecto: arquitectura, acceso a dat
 
 | Manual | Páginas | Contenido principal |
 | --- | ---: | --- |
+| [ASP.NET Core con .NET 10](Manual_ASPNET_Core_NET_10.pdf) | 49 | Minimal APIs, Controllers, REST, validación, ProblemDetails, servicios, configuración, EF Core, OpenAPI, seguridad y alternativas no REST. |
 | [Razor Pages con .NET 10](Manual_Razor_Pages_NET_10.pdf) | 41 | Arquitectura, Razor, handlers, formularios, EF Core, SQLite, API, caché, seguridad, SignalR y publicación. |
 | [Bootstrap y Bootstrap Icons](Manual_Bootstrap_Bootstrap_Icons.pdf) | 26 | Rejilla, utilidades, componentes, formularios, navegación, iconos, temas y responsive. |
 | [SweetAlert2 con Razor Pages](Manual_SweetAlert2_Razor_Pages.pdf) | 29 | Alertas, confirmaciones de borrado, toasts, `TempData`, operaciones asíncronas, seguridad y Playwright. |
@@ -25,7 +28,35 @@ La colección cubre el ciclo completo de un proyecto: arquitectura, acceso a dat
 - Referencias a documentación oficial.
 - Franja superior libre para incorporar logotipos o un encabezado institucional.
 
-## 1. Razor Pages con .NET 10
+## 1. ASP.NET Core con .NET 10
+
+Manual para comprender la plataforma web de .NET y construir APIs HTTP mantenibles con los dos modelos de programación principales: Minimal APIs y Controllers.
+
+### Contenidos destacados
+
+- ASP.NET Core, Kestrel, hosting, middleware, routing y endpoints.
+- Anatomía y semántica de HTTP.
+- Creación de APIs con Minimal APIs.
+- Routing, model binding, grupos y filtros de endpoint.
+- Creación de APIs mediante `ControllerBase` y `[ApiController]`.
+- Comparación razonada entre Minimal APIs y Controllers.
+- Diseño REST: recursos, rutas, métodos, idempotencia y cabeceras.
+- Códigos de estado y respuestas tipadas.
+- DTO, mapeo, proyección y evolución de contratos.
+- Validación integrada de Minimal APIs en .NET 10.
+- `ProblemDetails`, tratamiento global de errores y trazabilidad.
+- Inyección de dependencias, ciclos de vida y servicios de aplicación.
+- Configuración tipada, Options, secretos, logging y cancelación.
+- Entity Framework Core 10, SQLite, migraciones, CRUD y relaciones.
+- Consultas eficientes, paginación, transacciones y concurrencia.
+- OpenAPI 3.1, documentación y versionado.
+- Autenticación, autorización, CORS, rate limiting y caché.
+- Pruebas unitarias, de integración y de contrato.
+- RPC, webhooks, SignalR, WebSockets y gRPC.
+- Publicación, health checks, observabilidad y diagnóstico.
+- Proyecto integrador de una API de biblioteca.
+
+## 2. Razor Pages con .NET 10
 
 Manual principal de la colección. Explica el funcionamiento de Razor Pages desde una petición HTTP hasta el HTML que recibe el navegador y continúa con persistencia, API, JavaScript, seguridad, pruebas y publicación.
 
@@ -56,7 +87,7 @@ Manual principal de la colección. Explica el funcionamiento de Razor Pages desd
 
 El manual permite comprender proyectos de listas, agendas, tareas, juegos de preguntas, clientes de API externas, CRUD con SQLite y aplicaciones que exponen una API propia.
 
-## 2. Bootstrap y Bootstrap Icons
+## 3. Bootstrap y Bootstrap Icons
 
 Manual para construir interfaces responsive y accesibles reduciendo al mínimo el CSS personalizado.
 
@@ -78,7 +109,7 @@ Manual para construir interfaces responsive y accesibles reduciendo al mínimo e
 - Bootswatch y selector persistente de temas.
 - Auditoría de clases redundantes o contradictorias.
 
-## 3. SweetAlert2 con Razor Pages
+## 4. SweetAlert2 con Razor Pages
 
 Manual centrado en la integración correcta de SweetAlert2 con formularios Razor Pages.
 
@@ -99,7 +130,7 @@ Manual centrado en la integración correcta de SweetAlert2 con formularios Razor
 - Accesibilidad, prevención de XSS y Content Security Policy.
 - Pruebas de confirmación y cancelación con Playwright.
 
-## 4. Pruebas con xUnit y .NET 10
+## 5. Pruebas con xUnit y .NET 10
 
 Manual para introducir pruebas automatizadas en proyectos C# y ASP.NET Core.
 
@@ -120,7 +151,7 @@ Manual para introducir pruebas automatizadas en proyectos C# y ASP.NET Core.
 - Cobertura y Microsoft Testing Platform.
 - Diagnóstico de errores frecuentes.
 
-## 5. Playwright para .NET 10
+## 6. Playwright para .NET 10
 
 Manual para probar la aplicación desde el punto de vista del navegador y del usuario.
 
@@ -144,11 +175,12 @@ Manual para probar la aplicación desde el punto de vista del navegador y del us
 
 ## Orden de estudio recomendado
 
-1. [Razor Pages con .NET 10](Manual_Razor_Pages_NET_10.pdf).
-2. [Bootstrap y Bootstrap Icons](Manual_Bootstrap_Bootstrap_Icons.pdf).
-3. [SweetAlert2 con Razor Pages](Manual_SweetAlert2_Razor_Pages.pdf).
-4. [Pruebas con xUnit y .NET 10](Manual_xUnit_NET_10.pdf).
-5. [Playwright para .NET 10](Manual_Playwright_NET_10.pdf).
+1. [ASP.NET Core con .NET 10](Manual_ASPNET_Core_NET_10.pdf).
+2. [Razor Pages con .NET 10](Manual_Razor_Pages_NET_10.pdf).
+3. [Bootstrap y Bootstrap Icons](Manual_Bootstrap_Bootstrap_Icons.pdf).
+4. [SweetAlert2 con Razor Pages](Manual_SweetAlert2_Razor_Pages.pdf).
+5. [Pruebas con xUnit y .NET 10](Manual_xUnit_NET_10.pdf).
+6. [Playwright para .NET 10](Manual_Playwright_NET_10.pdf).
 
 Este orden sigue la evolución natural del proyecto: primero se construye la aplicación, después se mejora su interfaz y, finalmente, se comprueba su comportamiento.
 
@@ -163,15 +195,17 @@ Este orden sigue la evolución natural del proyecto: primero se construye la apl
 
 ### Pruebas automatizadas
 
-1. Secciones de arquitectura y servicios del manual de Razor Pages.
-2. xUnit.
-3. Playwright.
+1. ASP.NET Core.
+2. Secciones de arquitectura y servicios del manual de Razor Pages.
+3. xUnit.
+4. Playwright.
 
 ### Desarrollo de API
 
-1. Secciones de `HttpClient`, DTO, API propia y CORS del manual de Razor Pages.
-2. Pruebas de integración y API con xUnit.
-3. Intercepción y observación de red con Playwright.
+1. Manual de ASP.NET Core completo.
+2. Secciones de `HttpClient`, DTO, API propia y CORS del manual de Razor Pages.
+3. Pruebas de integración y API con xUnit.
+4. Intercepción y observación de red con Playwright.
 
 ## Requisitos previos
 
@@ -183,20 +217,23 @@ Este orden sigue la evolución natural del proyecto: primero se construye la apl
 
 ## Propuesta de trabajo
 
-1. Crear un proyecto Razor Pages básico.
-2. Añadir un CRUD con Entity Framework Core y SQLite.
-3. Mejorar navegación, formularios y listados con Bootstrap.
-4. Incorporar Bootstrap Icons y temas Bootswatch.
-5. Añadir confirmaciones SweetAlert2 a las operaciones destructivas.
-6. Escribir pruebas unitarias y de integración con xUnit.
-7. Probar los flujos críticos mediante Playwright.
-8. Revisar accesibilidad, seguridad, rendimiento y publicación.
+1. Crear una API básica y recorrer su canalización HTTP.
+2. Implementar los mismos recursos con Minimal APIs y Controllers.
+3. Conectar la API a Entity Framework Core y SQLite.
+4. Crear un proyecto Razor Pages que consuma o complemente la API.
+5. Mejorar navegación, formularios y listados con Bootstrap.
+6. Incorporar Bootstrap Icons y temas Bootswatch.
+7. Añadir confirmaciones SweetAlert2 a las operaciones destructivas.
+8. Escribir pruebas unitarias y de integración con xUnit.
+9. Probar los flujos críticos mediante Playwright.
+10. Revisar accesibilidad, seguridad, rendimiento y publicación.
 
 ## Estructura recomendada de la carpeta
 
 ```text
 manuales/
 ├── README.md
+├── Manual_ASPNET_Core_NET_10.pdf
 ├── Manual_Razor_Pages_NET_10.pdf
 ├── Manual_Bootstrap_Bootstrap_Icons.pdf
 ├── Manual_SweetAlert2_Razor_Pages.pdf

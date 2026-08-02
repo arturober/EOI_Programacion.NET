@@ -1,14 +1,16 @@
-# Materiales de Razor Pages, Identity, interfaz y pruebas con .NET 10
+# Materiales de ASP.NET Core, Razor Pages, Identity, interfaz y pruebas con .NET 10
 
-Esta colección reúne ocho documentos didácticos para aprender a desarrollar aplicaciones web completas con ASP.NET Core y .NET 10.
+> **Colección actualizada:** 3 presentaciones y 6 manuales, incluido **ASP.NET Core con .NET 10**. En total son 9 documentos y 191 páginas de manuales.
 
-Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con cinco manuales de consulta y trabajo autónomo. En conjunto, los materiales cubren Razor Pages, Entity Framework Core, SQLite, consumo y creación de API, Bootstrap, Bootstrap Icons, Bootswatch, SweetAlert2, Identity, xUnit y Playwright.
+Esta colección reúne nueve documentos didácticos para aprender a desarrollar aplicaciones web y APIs completas con ASP.NET Core y .NET 10.
+
+Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con seis manuales de consulta y trabajo autónomo. En conjunto, los materiales cubren la plataforma ASP.NET Core, Minimal APIs, Controllers, REST, Razor Pages, Entity Framework Core, SQLite, protocolos alternativos, Bootstrap, Bootstrap Icons, Bootswatch, SweetAlert2, Identity, xUnit y Playwright.
 
 ## Resumen de la colección
 
 - **3 presentaciones:** 102 diapositivas.
-- **5 manuales:** 142 páginas.
-- **Total:** 8 documentos coordinados.
+- **6 manuales:** 191 páginas.
+- **Total:** 9 documentos coordinados.
 - **Nivel:** desde iniciación hasta desarrollo y pruebas de una aplicación completa.
 
 ## Documentos incluidos
@@ -25,6 +27,7 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con cin
 
 | Documento | Páginas | Finalidad |
 | --- | ---: | --- |
+| [ASP.NET Core con .NET 10](Manual_ASPNET_Core_NET_10.pdf) | 49 | APIs con Minimal APIs y Controllers, REST, validación, errores, EF Core, OpenAPI, seguridad y alternativas no REST. |
 | [Razor Pages con .NET 10](Manual_Razor_Pages_NET_10.pdf) | 41 | Manual general de arquitectura, datos, API, seguridad y publicación. |
 | [Bootstrap y Bootstrap Icons](Manual_Bootstrap_Bootstrap_Icons.pdf) | 26 | Diseño responsive, componentes, formularios, iconos y temas. |
 | [SweetAlert2 con Razor Pages](Manual_SweetAlert2_Razor_Pages.pdf) | 29 | Confirmaciones, toasts, formularios POST, seguridad y pruebas. |
@@ -38,6 +41,9 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con cin
 | Comprender la arquitectura básica | Razor Pages en .NET 10: introducción | Razor Pages con .NET 10 |
 | Construir el primer CRUD | Razor Pages en ASP.NET Core | Razor Pages con .NET 10 |
 | Añadir persistencia | Razor Pages en ASP.NET Core | Razor Pages con .NET 10 |
+| Diseñar y publicar una API HTTP | Ejemplos de API de las presentaciones | ASP.NET Core con .NET 10 |
+| Comparar Minimal APIs y Controllers | - | ASP.NET Core con .NET 10 |
+| Incorporar tiempo real o RPC | - | ASP.NET Core con .NET 10 |
 | Mejorar la interfaz | Ejemplos visuales de las presentaciones | Bootstrap y Bootstrap Icons |
 | Confirmar borrados y mostrar avisos | Ejemplos del CRUD | SweetAlert2 con Razor Pages |
 | Incorporar usuarios y permisos | Identity en .NET 10 | Capítulo de seguridad del manual de Razor Pages |
@@ -60,7 +66,16 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con cin
 3. Crear la Lista de tareas con Entity Framework Core y SQLite.
 4. Utilizar [Razor Pages con .NET 10](Manual_Razor_Pages_NET_10.pdf) para profundizar en routing, relaciones, LINQ, paginación, API y publicación.
 
-### Fase 3. Diseñar la interfaz
+### Fase 3. Diseñar y construir servicios HTTP
+
+1. Estudiar [ASP.NET Core con .NET 10](Manual_ASPNET_Core_NET_10.pdf).
+2. Implementar una API de recursos mediante Minimal APIs.
+3. Repetir una parte con Controllers y comparar ambos modelos.
+4. Aplicar REST, validación, códigos de estado y `ProblemDetails`.
+5. Conectar los endpoints a Entity Framework Core y documentarlos con OpenAPI.
+6. Comparar REST con RPC, webhooks, SignalR, WebSockets y gRPC.
+
+### Fase 4. Diseñar la interfaz
 
 1. Aplicar [Bootstrap y Bootstrap Icons](Manual_Bootstrap_Bootstrap_Icons.pdf).
 2. Construir una barra de navegación responsive.
@@ -68,14 +83,14 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con cin
 4. Añadir iconos con nombres accesibles.
 5. Incorporar temas claros, oscuros y Bootswatch.
 
-### Fase 4. Mejorar la interacción
+### Fase 5. Mejorar la interacción
 
 1. Estudiar [SweetAlert2 con Razor Pages](Manual_SweetAlert2_Razor_Pages.pdf).
 2. Añadir una confirmación reutilizable a todos los formularios de borrado.
 3. Mostrar mensajes procedentes de `TempData`.
 4. Revisar antifalsificación, accesibilidad y prevención de XSS.
 
-### Fase 5. Incorporar cuentas y permisos
+### Fase 6. Incorporar cuentas y permisos
 
 1. Estudiar [Identity en .NET 10](Identity_NET10.pdf).
 2. Crear un proyecto con cuentas individuales.
@@ -83,7 +98,7 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con cin
 4. Añadir roles, claims o políticas cuando el caso de uso lo requiera.
 5. Relacionar los datos de negocio con el identificador del usuario autenticado.
 
-### Fase 6. Automatizar las pruebas
+### Fase 7. Automatizar las pruebas
 
 1. Comenzar con [Pruebas con xUnit y .NET 10](Manual_xUnit_NET_10.pdf).
 2. Probar reglas de negocio, servicios y `PageModel`.
@@ -110,7 +125,7 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con cin
 ### Proyecto trimestral
 
 - Las tres presentaciones.
-- Los cinco manuales como documentación de consulta.
+- Los seis manuales como documentación de consulta.
 - Aplicación CRUD con API propia, autenticación, interfaz responsive y pruebas automatizadas.
 
 ## Resultados de aprendizaje
@@ -118,6 +133,10 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con cin
 Al completar el itinerario, el alumnado podrá:
 
 - Explicar cómo ASP.NET Core procesa una petición HTTP.
+- Crear APIs HTTP con Minimal APIs y Controllers.
+- Diseñar recursos, rutas, verbos, códigos y cabeceras REST coherentes.
+- Validar entradas y normalizar errores mediante `ProblemDetails`.
+- Utilizar inyección de dependencias, servicios y configuración tipada.
 - Crear y organizar proyectos Razor Pages dirigidos a `net10.0`.
 - Utilizar sintaxis Razor, Tag Helpers, handlers y model binding.
 - Validar formularios en cliente y servidor.
@@ -125,6 +144,8 @@ Al completar el itinerario, el alumnado podrá:
 - Modelar relaciones y escribir consultas LINQ eficientes.
 - Consumir API externas mediante `IHttpClientFactory` y DTO.
 - Exponer una API propia y configurar CORS cuando sea necesario.
+- Documentar contratos mediante OpenAPI y planificar su evolución.
+- Elegir entre REST, RPC, webhooks, SignalR, WebSockets y gRPC.
 - Diseñar interfaces responsive con Bootstrap y Bootstrap Icons.
 - Mantener temas mediante Bootswatch, `localStorage` y `data-bs-theme`.
 - Integrar SweetAlert2 sin romper formularios ni antifalsificación.
@@ -136,12 +157,14 @@ Al completar el itinerario, el alumnado podrá:
 ## Tecnologías cubiertas
 
 - .NET 10 y C#.
-- ASP.NET Core y Razor Pages.
+- ASP.NET Core, Minimal APIs, Controllers y Razor Pages.
+- HTTP, REST, `ProblemDetails` y OpenAPI.
 - Sintaxis Razor y Tag Helpers.
 - Entity Framework Core 10.
 - SQLite.
 - ASP.NET Core Identity.
 - `HttpClient`, JSON, DTO, caché y CORS.
+- RPC, webhooks, SignalR, WebSockets y gRPC.
 - Bootstrap 5.3.
 - Bootstrap Icons y Bootswatch.
 - SweetAlert2.
@@ -167,6 +190,7 @@ materiales-razor-pages-net10/
 ├── razor_pages_introduccion.pdf
 ├── Razor Pages en ASP.NET.pdf
 ├── Identity_NET10.pdf
+├── Manual_ASPNET_Core_NET_10.pdf
 ├── Manual_Razor_Pages_NET_10.pdf
 ├── Manual_Bootstrap_Bootstrap_Icons.pdf
 ├── Manual_SweetAlert2_Razor_Pages.pdf
@@ -188,6 +212,7 @@ materiales-razor-pages-net10/
 │   └── Identity_NET10.pdf
 └── manuales/
     ├── README.md
+    ├── Manual_ASPNET_Core_NET_10.pdf
     ├── Manual_Razor_Pages_NET_10.pdf
     ├── Manual_Bootstrap_Bootstrap_Icons.pdf
     ├── Manual_SweetAlert2_Razor_Pages.pdf
