@@ -3,7 +3,7 @@ using TrivialApi.Models;
 
 namespace TrivialApi.Data;
 
-// El contexto representa la conexión de Entity Framework con la base SQLite.
+// El contexto representa la conexión de Entity Framework con la base de datos SQLite.
 // El constructor primario recibe las opciones registradas anteriormente en Program.cs.
 public class TrivialContext(DbContextOptions<TrivialContext> opciones)
     : DbContext(opciones)

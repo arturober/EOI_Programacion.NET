@@ -274,7 +274,7 @@ acción.
 
 ## DTO
 
-Una entidad describe cómo trabaja la aplicación con la base. Un DTO describe
+Una entidad describe cómo trabaja la aplicación con la base de datos. Un DTO describe
 qué datos publica la API.
 
 `Categoria` incluye una colección de preguntas. `CategoriaDto` contiene:
