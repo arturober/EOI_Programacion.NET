@@ -65,7 +65,7 @@ CDN. No es necesario instalarlos con npm.
 El proyecto utiliza el token largo de lectura como credencial `Bearer`. No
 utiliza la clave corta de API v3 en el parámetro `api_key`.
 
-## 2. Configurar el secreto
+## 2. Configurar el token de acceso
 
 Abre un terminal en la carpeta que contiene `Peliculas.csproj` y ejecuta:
 

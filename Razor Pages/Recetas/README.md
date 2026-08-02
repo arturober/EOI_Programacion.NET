@@ -64,7 +64,7 @@ que se inicia la aplicación.
 
 TheMealDB permite usar la clave de prueba `1` para desarrollo y uso educativo.
 El proyecto ya la incluye en `appsettings.json`, por lo que puede ejecutarse sin
-configurar ningún secreto.
+configurar ninguna clave o token de acceso.
 
 Si tienes una clave de colaborador, es recomendable guardarla con User Secrets:
 
