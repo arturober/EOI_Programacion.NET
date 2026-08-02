@@ -82,7 +82,7 @@ MazmorraOnline.sln
 
 ## Ejecución local
 
-Desde la carpeta que contiene la solución:
+Desde la carpeta que contiene el código de la aplicación:
 
 ```powershell
 dotnet run --project .\MazmorraOnline

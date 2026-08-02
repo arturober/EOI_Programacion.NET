@@ -24,7 +24,7 @@ cliente de Godot del trivial, que utiliza `net8.0` por compatibilidad con Godot
 4.7.1 y se comunica con la API mediante HTTP.
 
 > Cada subcarpeta es independiente. No debe intentarse ejecutar toda la carpeta
-> `Razor Pages` como si fuese una única solución.
+> `Razor Pages` como si fuese una única aplicación.
 
 ## Índice general
 
