@@ -143,8 +143,6 @@ Las tres presentaciones pueden ampliarse con los seis manuales de la colección.
 | [Pruebas con xUnit y .NET 10](../manuales/Manual_xUnit_NET_10.pdf) | Pruebas unitarias y de integración para servicios, EF Core, Razor Pages y APIs. |
 | [Playwright para .NET 10](../manuales/Manual_Playwright_NET_10.pdf) | Automatización de navegación, formularios, responsive y flujos completos. |
 
-Con esta ampliación, el conjunto queda formado por tres presentaciones y seis manuales: nueve documentos coordinados y 191 páginas de manuales.
-
 ## Requisitos previos
 
 - Conocer los fundamentos de C#: variables, condiciones, bucles, métodos, clases y colecciones.
