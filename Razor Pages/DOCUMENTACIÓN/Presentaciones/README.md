@@ -1,7 +1,5 @@
 # Presentaciones sobre Razor Pages e Identity en .NET 10
 
-> **Colección actualizada:** 3 presentaciones y 6 manuales, incluido **ASP.NET Core con .NET 10**. En total son 9 documentos y 191 páginas de manuales.
-
 Esta carpeta contiene tres presentaciones didácticas para introducir el desarrollo de aplicaciones web con ASP.NET Core, Razor Pages, Entity Framework Core e Identity en .NET 10.
 
 Los materiales están organizados para poder utilizarlos tanto en explicaciones de aula como en sesiones de trabajo guiado. Las dos primeras presentaciones desarrollan Razor Pages con distinto nivel de profundidad y la tercera aborda la autenticación, la autorización y la gestión de cuentas mediante ASP.NET Core Identity.

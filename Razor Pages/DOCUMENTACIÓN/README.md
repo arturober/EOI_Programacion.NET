@@ -1,7 +1,5 @@
 # Materiales de ASP.NET Core, Razor Pages, Identity, interfaz y pruebas con .NET 10
 
-> **Colección actualizada:** 3 presentaciones y 6 manuales, incluido **ASP.NET Core con .NET 10**. En total son 9 documentos y 191 páginas de manuales.
-
 Esta colección reúne nueve documentos didácticos para aprender a desarrollar aplicaciones web y APIs completas con ASP.NET Core y .NET 10.
 
 Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con seis manuales de consulta y trabajo autónomo. En conjunto, los materiales cubren la plataforma ASP.NET Core, Minimal APIs, Controllers, REST, Razor Pages, Entity Framework Core, SQLite, protocolos alternativos, Bootstrap, Bootstrap Icons, Bootswatch, SweetAlert2, Identity, xUnit y Playwright.
