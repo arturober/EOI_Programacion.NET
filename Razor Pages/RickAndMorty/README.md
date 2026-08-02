@@ -280,7 +280,7 @@ temas Bootswatch. La elección se conserva en el navegador.
 - Las URL de retorno se validan con `Url.IsLocalUrl`.
 - Los errores externos no muestran trazas internas en la interfaz.
 
-## Posibles ampliaciones para clase
+## Posibles ampliaciones
 
 - Añadir notas personales a los favoritos.
 - Permitir ordenar personajes por nombre o número de episodios.

@@ -289,7 +289,7 @@ El proyecto no instala paquetes front-end:
 Se necesita conexión a internet tanto para estos recursos como para consultar
 football-data.org.
 
-## Posibles ampliaciones para clase
+## Posibles ampliaciones
 
 - Crear migraciones de Entity Framework en lugar de `EnsureCreated`.
 - Guardar competiciones favoritas además de equipos.
