@@ -1,7 +1,5 @@
 # Manuales de desarrollo web con .NET 10
 
-> **Colección actualizada:** 6 manuales, incluido **ASP.NET Core con .NET 10**. Los manuales suman 191 páginas.
-
 Esta carpeta reúne seis manuales complementarios para aprender a desarrollar, diseñar y probar aplicaciones web y APIs con ASP.NET Core y .NET 10.
 
 La colección cubre el ciclo completo de un proyecto: arquitectura, acceso a datos, consumo y publicación de API, interfaz responsive, confirmaciones de usuario, pruebas automatizadas y pruebas de navegador.
