@@ -132,7 +132,7 @@ WebDeploy puede utilizarse como
 
 ### Configurar la clave de NASA
 
-Los secretos guardados con `dotnet user-secrets` no se publican. Abre:
+Las claves guardadas con `dotnet user-secrets` no se publican. Abre:
 
 ```text
 Websites → Manage website → Scripting → Environment Variables

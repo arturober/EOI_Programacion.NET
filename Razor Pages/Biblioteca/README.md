@@ -310,7 +310,7 @@ Crear una base nueva:
 2. Borra `Data/biblioteca.db`.
 3. Ejecuta de nuevo `dotnet run`.
 
-Ver los secretos asociados al proyecto:
+Ver las claves asociadas al proyecto:
 
 ```bash
 dotnet user-secrets list

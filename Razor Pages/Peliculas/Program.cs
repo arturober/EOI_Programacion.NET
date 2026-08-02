@@ -8,7 +8,7 @@ using Peliculas.Servicios;
 // CreateBuilder prepara la configuración, los servicios y el servidor web.
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Este archivo opcional permite trabajar con secretos locales sin subirlos a Git.
+// Este archivo opcional permite trabajar con claves locales sin subirlos a Git.
 // Las variables de entorno se añaden después para que tengan mayor prioridad.
 builder.Configuration
     .AddJsonFile("appsettings.Local.json", optional: true)
@@ -68,7 +68,7 @@ builder.Services.ConfigureApplicationCookie(opciones =>
     opciones.SlidingExpiration = true;
 });
 
-// Los datos se leen desde appsettings, secretos o variables de entorno.
+// Los datos se leen desde appsettings, claves o variables de entorno.
 builder.Services.Configure<TmdbOpciones>(
     builder.Configuration.GetSection(TmdbOpciones.Seccion));
 

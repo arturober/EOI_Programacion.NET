@@ -235,7 +235,7 @@ La clave se utiliza exclusivamente en el servidor. Por eso no se encuentra en
 el HTML, en JavaScript ni en las respuestas de la API propia.
 
 `launchSettings.json` inicia `dotnet run` en el entorno `Development`, por lo
-que los secretos de usuario se cargan automáticamente durante el desarrollo.
+que las claves de usuario se cargan automáticamente durante el desarrollo.
 
 ## API JSON incluida
 

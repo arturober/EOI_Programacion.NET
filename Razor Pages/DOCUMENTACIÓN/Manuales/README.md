@@ -46,7 +46,7 @@ Manual para comprender la plataforma web de .NET y construir APIs HTTP mantenibl
 - Validación integrada de Minimal APIs en .NET 10.
 - `ProblemDetails`, tratamiento global de errores y trazabilidad.
 - Inyección de dependencias, ciclos de vida y servicios de aplicación.
-- Configuración tipada, Options, secretos, logging y cancelación.
+- Configuración tipada, Options, claves, logging y cancelación.
 - Entity Framework Core 10, SQLite, migraciones, CRUD y relaciones.
 - Consultas eficientes, paginación, transacciones y concurrencia.
 - OpenAPI 3.1, documentación y versionado.
@@ -69,7 +69,7 @@ Manual principal de la colección. Explica el funcionamiento de Razor Pages desd
 - Routing, parámetros y Tag Helpers.
 - Model binding, formularios, validación y `ModelState`.
 - Layouts, parciales, `ViewData` y `TempData`.
-- Inyección de dependencias, configuración, secretos y logging.
+- Inyección de dependencias, configuración, claves y logging.
 - Entity Framework Core 10 y SQLite.
 - CRUD asíncrono y relaciones.
 - LINQ, búsqueda, normalización y paginación.

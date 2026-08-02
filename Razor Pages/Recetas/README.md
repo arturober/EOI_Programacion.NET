@@ -73,7 +73,7 @@ dotnet user-secrets set "TheMealDb:ApiKey" "TU_CLAVE"
 dotnet run
 ```
 
-Puedes comprobar los secretos configurados con:
+Puedes comprobar las claves configuradas con:
 
 ```bash
 dotnet user-secrets list

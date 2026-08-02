@@ -345,7 +345,7 @@ migraciones de Entity Framework Core.
 - Solo se aceptan redirecciones internas después de modificar favoritos.
 - Las páginas y endpoints privados requieren autenticación.
 - Las contraseñas las administra Identity y no se registran en logs.
-- `appsettings.Local.json`, los secretos y la base de datos no se versionan.
+- `appsettings.Local.json`, las claves y la base de datos no se versionan.
 
 ## Atribución
 

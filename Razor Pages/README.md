@@ -142,9 +142,9 @@ otra aplicación utilizándolos o si se elige un perfil distinto.
 
 Para detener el servidor, pulsa `Ctrl+C`.
 
-## Configuración de claves y secretos
+## Configuración para el uso de claves
 
-Los secretos de desarrollo no deben escribirse en Git. Los proyectos que los
+Las claves no deben escribirse en Git. Los proyectos que los
 necesitan incluyen un `UserSecretsId` y, generalmente, un archivo
 `appsettings.Local.example.json` que puede copiarse como
 `appsettings.Local.json`. La copia local está excluida mediante `.gitignore`.
@@ -830,7 +830,7 @@ Antes de publicar:
 4. Revisa la ruta y los permisos de escritura de SQLite.
 5. Decide si deben conservarse cuentas y datos entre despliegues.
 6. Prueba la interfaz con distintos anchos y temas.
-7. Revisa logs y respuestas HTTP sin mostrar secretos al usuario.
+7. Revisa logs y respuestas HTTP sin mostrar ninguna clave al usuario.
 
 ### Publicar desde Visual Studio Code
 
@@ -887,7 +887,7 @@ Valor:  TU_API_READ_ACCESS_TOKEN
 
 Los `user-secrets` no se publican y solo deben considerarse una solución de
 desarrollo. En producción deben utilizarse variables de entorno o un almacén
-de secretos del proveedor.
+de claves del proveedor.
 
 ### Consideraciones sobre SQLite al publicar
 

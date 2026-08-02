@@ -24,7 +24,7 @@ dotnet run
 
 ## Publicación en MonsterASP.NET
 
-La aplicación no necesita secretos, usuarios ni SQLite. Desde la terminal
+La aplicación no necesita claves, usuarios ni SQLite. Desde la terminal
 integrada de VS Code:
 
 ```bash

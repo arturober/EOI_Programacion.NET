@@ -13,7 +13,7 @@ Data/*.db-wal
 *.user
 *.suo
 
-# Secretos locales
+# Claves locales
 appsettings.Local.json
 .env
 
