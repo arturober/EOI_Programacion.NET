@@ -102,7 +102,7 @@ Agenda de teléfonos/
 ## Publicación en MonsterASP.NET
 
 MonsterASP.NET permite ejecutar aplicaciones ASP.NET Core con .NET 10. El
-procedimiento recomendado para el alumnado utiliza VS Code y un archivo ZIP.
+procedimiento recomendado utiliza VS Code y un archivo ZIP.
 
 ### Preparar la publicación
 
@@ -181,7 +181,7 @@ y desactivarlos después del diagnóstico.
 - Las consultas utilizan parámetros; no concatenes datos del usuario en SQL.
 - El tipo real de la imagen se comprueba con ImageSharp.
 - La imagen se limita a 2 MB y se redimensiona.
-- La aplicación es una práctica docente, no una agenda pública preparada para
+- La aplicación es una práctica, no una agenda pública preparada para
   información personal.
 - SQLite es adecuado para un despliegue pequeño con una sola instancia.
 

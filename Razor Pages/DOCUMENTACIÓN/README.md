@@ -130,8 +130,6 @@ Incluye tres presentaciones para explicaciones y sesiones guiadas, junto con sei
 
 ## Resultados de aprendizaje
 
-Al completar el itinerario, el alumnado podrá:
-
 - Explicar cómo ASP.NET Core procesa una petición HTTP.
 - Crear APIs HTTP con Minimal APIs y Controllers.
 - Diseñar recursos, rutas, verbos, códigos y cabeceras REST coherentes.

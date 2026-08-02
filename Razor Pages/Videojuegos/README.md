@@ -4,7 +4,7 @@ Aplicación educativa desarrollada con **ASP.NET Core Razor Pages** para buscar
 videojuegos en [RAWG](https://rawg.io/), consultar sus fichas y mantener una
 biblioteca privada.
 
-El proyecto está pensado para alumnado que está aprendiendo C#: las
+El proyecto está pensado para alumnos que está aprendiendo C#: las
 responsabilidades están separadas, los nombres y comentarios están en español
 y el JavaScript se limita a los temas, SweetAlert2 y las imágenes alternativas.
 

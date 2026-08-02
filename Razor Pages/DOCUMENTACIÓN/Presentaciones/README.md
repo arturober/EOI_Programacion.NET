@@ -91,7 +91,7 @@ Curso de iniciación formado por 50 diapositivas. Desarrolla los conceptos desde
 
 ### Proyecto 1: Agenda de teléfonos
 
-Permite aprender el flujo completo de Razor Pages sin introducir todavía una base de datos. El alumnado puede concentrarse en páginas, formularios, validación, handlers y operaciones CRUD.
+Permite aprender el flujo completo de Razor Pages sin introducir todavía una base de datos. Los alumnos puede concentrarse en páginas, formularios, validación, handlers y operaciones CRUD.
 
 ### Proyecto 2: Lista de tareas
 
@@ -153,14 +153,6 @@ Con esta ampliación, el conjunto queda formado por tres presentaciones y seis m
 - Disponer del SDK de .NET 10.
 - Utilizar Visual Studio, Visual Studio Code u otro editor compatible con C#.
 - Conocer HTML básico resulta conveniente, aunque no es imprescindible para la presentación introductoria.
-
-## Propuesta de uso en el aula
-
-- Utilizar la presentación breve para explicar el modelo mental de Razor Pages.
-- Continuar con la presentación de 50 diapositivas y reproducir cada ejemplo en un proyecto real.
-- Pedir al alumnado que transforme la Agenda en una aplicación con SQLite.
-- Introducir Identity cuando el CRUD básico y las migraciones ya estén comprendidos.
-- Finalizar relacionando datos de negocio con el identificador del usuario autenticado.
 
 ## Tecnologías tratadas
 

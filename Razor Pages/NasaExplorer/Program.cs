@@ -31,7 +31,7 @@ string cadenaConexion = builder.Configuration.GetConnectionString("NasaContext")
 builder.Services.AddDbContext<NasaContext>(opciones =>
     opciones.UseSqlite(cadenaConexion));
 
-// No se exige confirmar el correo: es un proyecto docente y local.
+// No se exige confirmar el correo: es un proyecto básico.
 builder.Services
     .AddIdentity<Usuario, IdentityRole>(opciones =>
     {
@@ -108,7 +108,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
 
-// EnsureCreated simplifica el primer arranque para el alumnado.
+// EnsureCreated simplifica el primer arranque para alumnos que están aprendiendo.
 // En un proyecto real convendría sustituirlo por migraciones de EF Core.
 using (IServiceScope scope = app.Services.CreateScope())
 {

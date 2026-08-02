@@ -7,7 +7,7 @@ y operaciones CRUD sencillas y avanzan hacia consumo de APIs, autenticación,
 Entity Framework Core, servicios JSON, pruebas de integración, SignalR y
 clientes externos.
 
-El código prioriza la legibilidad y el uso docente:
+El código prioriza la legibilidad:
 
 - nombres descriptivos, generalmente en español;
 - comentarios normales `//` y `@* *@`, sin documentación XML innecesaria;

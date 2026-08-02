@@ -1,6 +1,6 @@
 # NASA Explorer
 
-Aplicación docente construida con **ASP.NET Core Razor Pages y .NET 10** para
+Aplicación  construida con **ASP.NET Core Razor Pages y .NET 10** para
 explorar varias fuentes de datos oficiales de NASA desde una única interfaz.
 
 Incluye autenticación local con ASP.NET Core Identity y una colección de
@@ -95,9 +95,7 @@ de Identity y favoritos.
 
 ## Publicación en MonsterASP.NET
 
-MonsterASP.NET permite alojar este proyecto con .NET 10. Para alumnos que
-utilizan Visual Studio Code, se recomienda publicar desde la terminal integrada
-y subir el resultado comprimido.
+MonsterASP.NET permite alojar este proyecto con .NET 10. Si se va a utilizar Visual Studio Code, se recomienda utilizar la opción "Publicar" (desde el menú contextual) o ejecutar el respectivo comando desde la terminal integrada y subir el código generado.
 
 ### Preparar la publicación desde VS Code
 

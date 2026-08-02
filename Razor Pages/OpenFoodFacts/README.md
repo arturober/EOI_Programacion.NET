@@ -5,7 +5,7 @@ Consulta productos alimentarios de
 [Open Food Facts](https://world.openfoodfacts.org/), permite crear una cuenta
 local y guarda en SQLite los productos favoritos de cada usuario.
 
-El proyecto está preparado para utilizarlo con alumnado que está aprendiendo
+El proyecto está preparado para alumnos que está aprendiendo
 C#: emplea nombres claros, comentarios normales en español y separa las
 páginas, el cliente de la API y la persistencia local.
 
@@ -246,8 +246,8 @@ Por este motivo:
 - la portada realiza una sola búsqueda;
 - los códigos HTTP 429 y 503 muestran mensajes comprensibles.
 
-No elimines estas precauciones en un ejercicio que vaya a ser utilizado por
-muchos alumnos desde la misma conexión.
+Se deben tener en cuenta especialmente estas consideraciones si el proyecto va a ser utilizado por
+muchas personas desde la misma conexión.
 
 ## Estructura del proyecto
 

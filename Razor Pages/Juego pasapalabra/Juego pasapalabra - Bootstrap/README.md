@@ -96,7 +96,7 @@ entre peticiones.
 
 ## Base de datos y mapeo
 
-No se utiliza Entity Framework para que el alumnado pueda estudiar las
+No se utiliza Entity Framework para que los alumnos pueda estudiar las
 consultas SQL, sus parámetros y el mapeo de cada fila a un objeto.
 
 `BaseDatos.cs` solo abre la conexión. Los modelos crean sus tablas y contienen
