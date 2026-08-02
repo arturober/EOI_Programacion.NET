@@ -1,0 +1,136 @@
+@page
+@model RickAndMorty.Pages.AyudaApiModel
+@{
+    ViewData["Title"] = "Ayuda de la API";
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <p class="text-primary fw-semibold mb-1">Guía de consulta</p>
+        <h1 class="display-6 fw-bold">Ayuda de la API</h1>
+        <p class="lead">
+            La aplicación consume The Rick and Morty API, un servicio REST
+            público que devuelve personajes, episodios y ubicaciones en JSON.
+        </p>
+
+        <div class="alert alert-info" role="alert">
+            Esta aplicación no publica una API propia. Las direcciones de esta
+            página pertenecen a la API externa que utiliza el proyecto.
+        </div>
+
+        <h2 class="h4 mt-4">Dirección base y recursos</h2>
+        <p>
+            Todas las consultas son peticiones <code>GET</code> mediante HTTPS.
+            La dirección base es
+            <a href="https://rickandmortyapi.com/api"
+               target="_blank"
+               rel="noopener">https://rickandmortyapi.com/api</a>.
+        </p>
+
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Recurso</th>
+                        <th scope="col">Listado</th>
+                        <th scope="col">Ejemplo individual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Personajes</td>
+                        <td><code>/character</code></td>
+                        <td><code>/character/1</code></td>
+                    </tr>
+                    <tr>
+                        <td>Ubicaciones</td>
+                        <td><code>/location</code></td>
+                        <td><code>/location/3</code></td>
+                    </tr>
+                    <tr>
+                        <td>Episodios</td>
+                        <td><code>/episode</code></td>
+                        <td><code>/episode/28</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2 class="h4 mt-4">Filtros y paginación</h2>
+        <p>
+            Los listados devuelven un máximo de veinte resultados por página.
+            El objeto <code>info</code> indica el total, el número de páginas y
+            las direcciones de la página anterior y de la siguiente.
+        </p>
+        <ul>
+            <li>
+                Personajes: <code>name</code>, <code>status</code>,
+                <code>species</code>, <code>type</code> y <code>gender</code>.
+            </li>
+            <li>
+                Ubicaciones: <code>name</code>, <code>type</code> y
+                <code>dimension</code>.
+            </li>
+            <li>
+                Episodios: <code>name</code> y <code>episode</code>.
+            </li>
+            <li>
+                Cualquier listado: <code>page</code> para elegir la página.
+            </li>
+        </ul>
+
+        <p>Por ejemplo:</p>
+        <pre class="bg-body-tertiary border rounded p-3"><code>GET https://rickandmortyapi.com/api/character?name=rick&amp;status=alive
+GET https://rickandmortyapi.com/api/episode?episode=S03
+GET https://rickandmortyapi.com/api/location?page=2</code></pre>
+
+        <h2 class="h4 mt-4">Cómo la utiliza el proyecto</h2>
+        <ol>
+            <li>El PageModel solicita los datos a <code>IRickAndMortyServicio</code>.</li>
+            <li>El servicio construye la URL y realiza la petición con <code>HttpClient</code>.</li>
+            <li>El JSON se convierte en los DTO de la carpeta <code>DTOs</code>.</li>
+            <li>La respuesta se guarda temporalmente en <code>IMemoryCache</code>.</li>
+            <li>La página Razor muestra los datos ya preparados.</li>
+        </ol>
+
+        <p>
+            Los campos que relacionan recursos contienen URL. Por ejemplo, un
+            episodio incluye las direcciones de sus personajes. El servicio
+            extrae los identificadores y consulta varios elementos juntos para
+            evitar una petición independiente por cada uno.
+        </p>
+    </div>
+
+    <aside class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Prueba la API</h2>
+                <p class="text-body-secondary">
+                    Estos enlaces abren directamente la respuesta JSON en una
+                    pestaña nueva.
+                </p>
+                <div class="d-grid gap-2">
+                    <a class="btn btn-outline-primary"
+                       href="https://rickandmortyapi.com/api/character/1"
+                       target="_blank"
+                       rel="noopener">Ver un personaje</a>
+                    <a class="btn btn-outline-primary"
+                       href="https://rickandmortyapi.com/api/episode/1"
+                       target="_blank"
+                       rel="noopener">Ver un episodio</a>
+                    <a class="btn btn-outline-primary"
+                       href="https://rickandmortyapi.com/api/location/1"
+                       target="_blank"
+                       rel="noopener">Ver una ubicación</a>
+                </div>
+                <hr />
+                <a class="btn btn-primary w-100"
+                   href="https://rickandmortyapi.com/documentation"
+                   target="_blank"
+                   rel="noopener">
+                    Documentación oficial
+                </a>
+            </div>
+        </div>
+    </aside>
+</div>

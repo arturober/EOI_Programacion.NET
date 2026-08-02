@@ -6,7 +6,6 @@
     bool episodios = pagina.StartsWith("/Episodios");
     bool localizaciones = pagina.StartsWith("/Localizaciones");
     bool favoritos = pagina.StartsWith("/Favoritos");
-    bool acerca = pagina == "/Acerca";
 
     // Los PageModel envían avisos mediante ViewData o TempData.
     string? mensaje = ViewData["Mensaje"] as string
@@ -92,12 +91,6 @@
                         </li>
                     }
 
-                    <li class="nav-item">
-                        <a class="nav-link rounded-pill px-3 @(acerca ? "bg-white text-primary fw-semibold" : "text-white")"
-                           asp-page="/Acerca">
-                            <i class="bi bi-info-circle me-1"></i>Acerca de
-                        </a>
-                    </li>
                 </ul>
 
                 @if (User.Identity?.IsAuthenticated == true)
@@ -186,12 +179,20 @@
             <span class="d-block">
                 Proyecto educativo con ASP.NET Core, Identity y SQLite.
             </span>
-            <a href="https://rickandmortyapi.com/"
-               target="_blank"
-               rel="noopener"
-               class="link-secondary">
-                Datos e imágenes: The Rick and Morty API
-            </a>
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-1">
+                <a asp-page="/Acerca" class="link-secondary">Acerca de</a>
+                <span aria-hidden="true">·</span>
+                <a asp-page="/AyudaApi" class="link-secondary">
+                    Ayuda de la API
+                </a>
+                <span aria-hidden="true">·</span>
+                <a href="https://rickandmortyapi.com/"
+                   target="_blank"
+                   rel="noopener"
+                   class="link-secondary">
+                    Datos e imágenes: The Rick and Morty API
+                </a>
+            </div>
         </div>
     </footer>
 

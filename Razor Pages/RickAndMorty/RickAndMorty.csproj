@@ -10,11 +10,13 @@
   <ItemGroup>
     <!-- Identity y Entity Framework guardan usuarios y favoritos en SQLite. -->
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore"
-                      Version="10.0.0" />
+                      Version="10.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"
-                      Version="10.0.0" />
+                      Version="10.0.10" />
+    <!-- Se fija una versión reciente para no recuperar la dependencia vulnerable
+         que todavía admite el proveedor de Entity Framework Core. -->
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3"
-                      Version="2.1.11" />
+                      Version="3.0.5" />
   </ItemGroup>
 
 </Project>

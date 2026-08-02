@@ -17,6 +17,7 @@ La API es pública y no requiere token, clave ni registro.
 - Catálogo de ubicaciones con nombre, tipo y dimensión.
 - Detalle de localización y selección de residentes.
 - Navegación entre recursos relacionados.
+- Página de ayuda con recursos, filtros y ejemplos de la API.
 - Registro e inicio de sesión con ASP.NET Core Identity.
 - Registro inmediato, sin confirmación obligatoria por correo.
 - Colección privada de personajes favoritos por usuario.
@@ -180,12 +181,18 @@ RickAndMorty/
 │   ├── Favoritos/        Colección privada y acciones POST
 │   ├── Localizaciones/   Listado, filtros y residentes
 │   ├── Personajes/       Catálogo, filtros y ficha completa
-│   └── Shared/           Layout, tarjetas y paginación
+│   ├── Shared/           Layout, tarjetas y paginación
+│   ├── Acerca.*          Información sobre el proyecto
+│   └── AyudaApi.*        Guía de la API externa
 ├── Servicios/            API, caché, favoritos y traducciones
 └── wwwroot/              JavaScript e imagen alternativa
 ```
 
 ## Endpoints externos utilizados
+
+La dirección base es `https://rickandmortyapi.com`. La aplicación no publica
+una API propia: consume los siguientes endpoints públicos y muestra los datos
+mediante Razor Pages.
 
 | Función | Endpoint |
 |---|---|
@@ -199,7 +206,8 @@ RickAndMorty/
 | Ubicación individual | `GET /api/location/{id}` |
 
 Todos los listados aceptan los filtros documentados por la API. Cada página
-contiene hasta 20 resultados.
+contiene hasta 20 resultados. La guía integrada se abre desde el enlace
+**Ayuda de la API** del pie de página.
 
 ## Cómo funciona el servicio de la API
 
@@ -263,6 +271,8 @@ temas Bootswatch. La elección se conserva en el navegador.
 
 ## Seguridad
 
+- Las dependencias de Identity, Entity Framework Core y SQLite se mantienen en
+  versiones corregidas de .NET 10.
 - Los cambios en favoritos utilizan formularios POST.
 - Razor Pages añade automáticamente el token antifalsificación.
 - Las páginas privadas llevan el atributo `[Authorize]`.
